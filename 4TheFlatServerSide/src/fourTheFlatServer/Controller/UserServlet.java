@@ -15,6 +15,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 
+import fourTheFlatServer.General.Authentication;
 import fourTheFlatServer.General.UserMethods;
 import fourTheFlatServer.Model.User;
 import fourTheFlatServer.lib.CassandraConnection;
@@ -25,8 +26,6 @@ import fourTheFlatServer.lib.CassandraConnection;
 @WebServlet({"/user","/user/*"})
 public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-	Cluster cluster;
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -43,8 +42,14 @@ public class UserServlet extends HttpServlet {
 		String[] urlSplit = requestURI.split("/");
 		String username = urlSplit[3];
 		String password = urlSplit[4];
-			
-		User user = UserMethods.getUserByUsername(username);
+		
+		User user = Authentication.validateLoginCredentials(username,password);
+		
+		if(user == null)
+		{
+			System.out.println("Incorrect username and password combination.");
+			return;
+		}
 		
 		System.out.println(username +" is shopping: "+user.getIsShopping());
 	}

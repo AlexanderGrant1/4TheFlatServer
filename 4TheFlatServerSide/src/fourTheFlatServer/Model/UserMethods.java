@@ -1,4 +1,6 @@
-package fourTheFlatServer.Model;
+ package fourTheFlatServer.Model;
+
+import java.util.Set;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
@@ -46,6 +48,10 @@ public class UserMethods {
 		//TODO add more attributes like pending_approval etc
 		user.setUsername(username);
 		user.setIsShopping(r.getBool("is_shopping"));
+		
+		user.setMoneyToGet(r.getSet("money_to_get", Integer.class));
+		user.setPendingApproval(r.getSet("pending_approval", String.class));
+
 		return user;
 	}
 

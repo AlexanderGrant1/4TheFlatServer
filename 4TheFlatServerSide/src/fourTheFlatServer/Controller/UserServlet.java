@@ -19,6 +19,7 @@ import fourTheFlatServer.Model.Authentication;
 import fourTheFlatServer.Model.UserMethods;
 import fourTheFlatServer.Stores.User;
 import fourTheFlatServer.lib.CassandraConnection;
+import fourTheFlatServer.lib.PojoMapper;
 
 /**
  * Servlet implementation class User
@@ -51,7 +52,9 @@ public class UserServlet extends HttpServlet {
 			return;
 		}
 		
-		System.out.println(username +" is shopping: "+user.getIsShopping());
+		String jason = PojoMapper.toJson(user, true);
+		
+		response.getWriter().print(jason);
 	}
 
 	/**

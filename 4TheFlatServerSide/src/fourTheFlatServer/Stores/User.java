@@ -1,13 +1,13 @@
 package fourTheFlatServer.Stores;
 
-import java.util.LinkedList;
+import java.util.Set;
 
 public class User {
 	
 	private String username;
 	private boolean isShopping;
-	private LinkedList<String> pendingApproval;
-	private LinkedList<Integer> moneyToGet;
+	private Set<String> pendingApproval;
+	private Set<Integer> moneyToGet;
 	
 	public String getUsername()
 	{
@@ -19,22 +19,22 @@ public class User {
 		username = newUsername;
 	}
 	
-	public void setPendingApproval(LinkedList<String> newList)
+	public void setPendingApproval(Set<String> newList)
 	{
 		pendingApproval = newList;
 	}
 	
-	public LinkedList<String> getPendingApproval()
+	public Set<String> getPendingApproval()
 	{
 		return pendingApproval;
 	}
 	
-	public void setMoneyToGet(LinkedList<Integer> newList)
+	public void setMoneyToGet(Set<Integer> newList)
 	{
 		moneyToGet = newList;
 	}
 	
-	public LinkedList<Integer> getMoneyToGet()
+	public Set<Integer> getMoneyToGet()
 	{
 		return moneyToGet;
 	}

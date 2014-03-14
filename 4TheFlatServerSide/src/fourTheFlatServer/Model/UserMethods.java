@@ -1,31 +1,43 @@
-package fourTheFlatServer.General;
-
+package fourTheFlatServer.Model;
 
 import com.datastax.driver.core.BoundStatement;
+import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 
-import fourTheFlatServer.Model.User;
+import fourTheFlatServer.Stores.User;
 import fourTheFlatServer.lib.CassandraConnection;
 
-public class Authentication {
-
+public class UserMethods {
 	
-	public static User validateLoginCredentials(String username, String password)
+	public static boolean userExists(String username)
 	{
-		if(!UserMethods.userExists(username))
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+		
+		PreparedStatement statement = session
+				.prepare("SELECT * from users where user_name = ?");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(username);
+		ResultSet rs = session.execute(boundStatement);
+		return rs.one() != null;
+	}
+	
+	public static User getUserByUsername(String username)
+	{
+		if(!userExists(username))
 		{
 			return null;
 		}
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 		
 		PreparedStatement statement = session
-				.prepare("SELECT * from users where user_name = ? AND password=?");
+				.prepare("SELECT * from users where user_name = ?");
 
 		BoundStatement boundStatement = new BoundStatement(statement);
-		boundStatement.bind(username,password);
+		boundStatement.bind(username);
 		ResultSet rs = session.execute(boundStatement);
 		Row r = rs.one();
 		
@@ -36,4 +48,5 @@ public class Authentication {
 		user.setIsShopping(r.getBool("is_shopping"));
 		return user;
 	}
+
 }

@@ -1,4 +1,4 @@
-package fourTheFlatServer.Model;
+package fourTheFlatServer.Stores;
 
 import java.util.LinkedList;
 

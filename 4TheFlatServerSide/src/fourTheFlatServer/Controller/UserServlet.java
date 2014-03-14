@@ -15,9 +15,9 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 
-import fourTheFlatServer.General.Authentication;
-import fourTheFlatServer.General.UserMethods;
-import fourTheFlatServer.Model.User;
+import fourTheFlatServer.Model.Authentication;
+import fourTheFlatServer.Model.UserMethods;
+import fourTheFlatServer.Stores.User;
 import fourTheFlatServer.lib.CassandraConnection;
 
 /**

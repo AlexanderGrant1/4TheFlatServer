@@ -47,7 +47,6 @@ public  final class CassandraConnection {
 			   Host ch=it.next();
 			   sHosts[i]=(String)ch.getAddress().toString();
 
-		       System.out.println("Hosts"+ch.getAddress().toString());
 		       i++;
 		   }
 
@@ -57,7 +56,7 @@ public  final class CassandraConnection {
 		cluster = Cluster.builder()
 		         .addContactPoint(Host).build();
 			getHosts(cluster);
-			//KeyspaceCreator.SetUpKeySpaces(cluster);
+			KeyspaceCreator.SetUpKeySpaces(cluster);
 		return cluster;
 
 	}	

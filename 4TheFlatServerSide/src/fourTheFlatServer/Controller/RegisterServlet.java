@@ -8,31 +8,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.Session;
-
 import fourTheFlatServer.Model.Authentication;
 import fourTheFlatServer.Model.UserMethods;
 import fourTheFlatServer.Stores.User;
-import fourTheFlatServer.lib.CassandraConnection;
 import fourTheFlatServer.lib.PojoMapper;
 
 /**
- * Servlet implementation class User
+ * Servlet implementation class RegisterServlet
  */
-@WebServlet({"/user","/user/*"})
-public class UserServlet extends HttpServlet {
+@WebServlet({"/register/*"})
+public class RegisterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+       
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UserServlet() {
+    public RegisterServlet() {
         super();
+        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -48,18 +41,17 @@ public class UserServlet extends HttpServlet {
 		}
 		String username = urlSplit[3];
 		String password = urlSplit[4];
+
 		
-		User user = Authentication.validateLoginCredentials(username,password);
+		boolean register = Authentication.registerUser(username, password);
 		
-		if(user == null)
+		User user = UserMethods.getUserByUsername(username);
+		
+		if(user != null)
 		{
-			System.out.println("Incorrect username and password combination.");
-			return;
+			String jason = PojoMapper.toJson(user, true);
+			response.getWriter().print(jason);
 		}
-		
-		String jason = PojoMapper.toJson(user, true);
-		
-		response.getWriter().print(jason);
 	}
 
 	/**

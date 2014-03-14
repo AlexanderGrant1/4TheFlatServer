@@ -41,4 +41,21 @@ public class Authentication {
 			return null;
 		}
 	}
+	
+	public static boolean registerUser(String username, String password) {
+		if (UserMethods.userExists(username)) {
+			System.out.println("Username already registered");
+			return false;
+		}
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+
+		PreparedStatement statement = session
+				.prepare("INSERT INTO users(user_name,password) VALUES(?,?)");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(username,password);
+		ResultSet rs = session.execute(boundStatement);
+		Row r = rs.one();
+		return true;
+	}
 }

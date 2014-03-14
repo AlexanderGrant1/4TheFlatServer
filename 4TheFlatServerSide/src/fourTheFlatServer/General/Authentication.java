@@ -22,7 +22,7 @@ public class Authentication {
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 		
 		PreparedStatement statement = session
-				.prepare("SELECT * from users where user_name = '?' AND password='?'");
+				.prepare("SELECT * from users where user_name = ? AND password=?");
 
 		BoundStatement boundStatement = new BoundStatement(statement);
 		boundStatement.bind(username,password);

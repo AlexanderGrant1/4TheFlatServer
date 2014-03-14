@@ -17,7 +17,7 @@ public class UserMethods {
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 		
 		PreparedStatement statement = session
-				.prepare("SELECT * from users where user_name = '?'");
+				.prepare("SELECT * from users where user_name = ?");
 
 		BoundStatement boundStatement = new BoundStatement(statement);
 		boundStatement.bind(username);
@@ -34,7 +34,7 @@ public class UserMethods {
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 		
 		PreparedStatement statement = session
-				.prepare("SELECT * from users where user_name = '?'");
+				.prepare("SELECT * from users where user_name = ?");
 
 		BoundStatement boundStatement = new BoundStatement(statement);
 		boundStatement.bind(username);

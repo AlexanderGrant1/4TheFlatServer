@@ -1,6 +1,7 @@
 package fourTheFlatServer.Controller;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,22 +9,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fourTheFlatServer.Model.Authentication;
+import fourTheFlatServer.Model.GroupMethods;
 import fourTheFlatServer.Model.UserMethods;
-import fourTheFlatServer.Stores.User;
+import fourTheFlatServer.Stores.Group;
 import fourTheFlatServer.lib.PojoMapper;
 
 /**
- * Servlet implementation class RegisterServlet
+ * Servlet implementation class GroupServlet
  */
-@WebServlet({"/register/*"})
-public class RegisterServlet extends HttpServlet {
+@WebServlet("/group/*")
+public class GroupServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public RegisterServlet() {
+    public GroupServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,24 +35,32 @@ public class RegisterServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
-		if(urlSplit.length != 5)
+		if(urlSplit.length != 4)
 		{
 			System.out.println("Invalid url");
 			return;
 		}
 		String username = urlSplit[3];
-		String password = urlSplit[4];
 
 		
-		boolean register = Authentication.registerUser(username, password);
+		UUID groupID = UserMethods.getGroupIdByUsername(username);
 		
-		User user = UserMethods.getUserByUsername(username);
 		
-		if(user != null)
+		System.out.println("GROUP ID FOUND: "+groupID.toString());
+		
+		if(groupID == null)
 		{
-			String jason = PojoMapper.toJson(user, true);
-			response.getWriter().print(jason);
+			System.out.println("Group not found!");
+			return;
 		}
+		
+		Group group = GroupMethods.getGroupByUUID(groupID);
+		
+		if(group != null){
+			response.getWriter().print(PojoMapper.toJson(group, true));
+			
+		}
+		
 	}
 
 	/**

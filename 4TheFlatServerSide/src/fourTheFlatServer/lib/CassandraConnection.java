@@ -56,7 +56,10 @@ public  final class CassandraConnection {
 		cluster = Cluster.builder()
 		         .addContactPoint(Host).build();
 			getHosts(cluster);
-			KeyspaceCreator.SetUpKeySpaces(cluster);
+			
+			//UNCOMMENT TO CALL DB CREATOR METHOD
+			
+			//KeyspaceCreator.SetUpKeySpaces(cluster);
 		return cluster;
 
 	}	

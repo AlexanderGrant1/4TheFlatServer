@@ -37,6 +37,7 @@ public final class KeyspaceCreator {
 					+ "money_to_get set <int>,"
 					+ "shopping_locations varchar,"
 					+ "is_shopping boolean,"
+					+ "group timeuuid,"
 					+ "pending_approval set <varchar>, "
 					+ "PRIMARY KEY(user_name));";
 

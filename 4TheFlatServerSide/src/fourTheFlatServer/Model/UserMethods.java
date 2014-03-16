@@ -1,6 +1,7 @@
  package fourTheFlatServer.Model;
 
 import java.util.Set;
+import java.util.UUID;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
@@ -25,6 +26,25 @@ public class UserMethods {
 		boundStatement.bind(username);
 		ResultSet rs = session.execute(boundStatement);
 		return rs.one() != null;
+	}
+	
+	public static UUID getGroupIdByUsername(String username)
+	{
+		if(!userExists(username))
+		{
+			return null;
+		}
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+		
+		PreparedStatement statement = session
+				.prepare("SELECT group from users where user_name = ?");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(username);
+		ResultSet rs = session.execute(boundStatement);
+		Row r = rs.one();
+
+		return r.getUUID("group");
 	}
 	
 	public static User getUserByUsername(String username)

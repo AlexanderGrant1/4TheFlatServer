@@ -26,15 +26,17 @@ public class GroupMethods {
 		boundStatement.bind(groupID);
 		ResultSet rs = session.execute(boundStatement);
 
-		if (!rs.one().equals(null)) {
+
+		Row details = rs.one();
+
+
+		if(!details.equals(null))
+		{
 
 			Set<String> emptySet = new HashSet<String>();
-
-			Row details = rs.one();
-
 			Group groupDetails = new Group();
 
-			groupDetails.setGroupID(groupID);
+			groupDetails.setGroupID(details.getUUID("group_id"));
 			// groupDetails.setAddress(details.getString("address"));
 
 			try {
@@ -50,13 +52,12 @@ public class GroupMethods {
 			} catch (java.lang.NullPointerException e) {
 				groupDetails.setShoppingList(emptySet);
 			}
-
-			 groupDetails.setUsers(details.getSet("users", String.class));
+			
+			groupDetails.setUsers(details.getSet("users", String.class));
 			groupDetails.setUserShopping(details.getBool("user_shopping"));
 
 			return groupDetails;
 		}
-
 		return null;
 
 	}

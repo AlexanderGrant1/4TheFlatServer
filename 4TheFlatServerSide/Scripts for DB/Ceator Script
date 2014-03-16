@@ -1,0 +1,36 @@
+drop keyspace flat_db;
+
+CREATE KEYSPACE flat_db WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 };
+
+use flat_db;
+
+CREATE TABLE user_group(
+  group_id timeuuid,
+  users set<varchar>,
+  address varchar,
+  allowed_products set<varchar>,
+  shopping_list set<varchar>,
+  user_shopping boolean,
+ PRIMARY KEY(group_id));
+
+CREATE TABLE users (
+   user_name varchar,
+   password varchar,
+   money_to_get set <int>,
+   money_to_give set <int>,
+   shopping_locations varchar,
+   is_shopping boolean,
+   pending_approval set <varchar>, 
+   group timeuuid,
+   PRIMARY KEY(user_name)); 
+   
+CREATE TABLE product_list(
+  product_name varchar,
+  group_id timeuuid,
+  last_bought timestamp,
+  purchase_frquency int,
+  purchase_date timestamp,
+ PRIMARY KEY((product_name), group_id));
+ 
+ 
+ 

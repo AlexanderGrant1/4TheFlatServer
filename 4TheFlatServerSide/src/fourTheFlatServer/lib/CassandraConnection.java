@@ -59,7 +59,7 @@ public  final class CassandraConnection {
 			
 			//UNCOMMENT TO CALL DB CREATOR METHOD
 			
-			//KeyspaceCreator.SetUpKeySpaces(cluster);
+			KeyspaceCreator.SetUpKeySpaces(cluster);
 		return cluster;
 
 	}	

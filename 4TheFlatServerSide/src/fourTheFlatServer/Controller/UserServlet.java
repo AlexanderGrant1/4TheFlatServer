@@ -1,6 +1,8 @@
 package fourTheFlatServer.Controller;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,7 +17,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 
-import fourTheFlatServer.Model.AuthenticatUser;
+import fourTheFlatServer.Model.AuthenticateUser;
 import fourTheFlatServer.Model.UserMethods;
 import fourTheFlatServer.Stores.User;
 import fourTheFlatServer.lib.CassandraConnection;
@@ -24,48 +26,60 @@ import fourTheFlatServer.lib.PojoMapper;
 /**
  * Servlet implementation class User
  */
-@WebServlet({"/user","/user/*"})
+@WebServlet({ "/user", "/user/*" })
 public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public UserServlet() {
-        super();
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public UserServlet() {
+		super();
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
-		if(urlSplit.length != 5)
-		{
+		if (urlSplit.length != 5) {
 			System.out.println("Invalid url");
 			return;
 		}
 		String username = urlSplit[3];
 		String password = urlSplit[4];
-		
-		User user = AuthenticatUser.validateLoginCredentials(username,password);
-		
-		if(user == null)
-		{
+
+		User user = AuthenticateUser.validateLoginCredentials(username,
+				password);
+
+		if (user == null) {
 			System.out.println("Incorrect username and password combination.");
 			return;
 		}
-		
+
 		String jason = PojoMapper.toJson(user, true);
-		
+
+		 response.setContentType("application/json");
 		response.getWriter().print(jason);
+
+		
+		//ObjectOutputStream os;
+		//os = new ObjectOutputStream(response.getOutputStream());
+
+		//os.writeObject(jason);
+		//os.close();
+
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	}
 

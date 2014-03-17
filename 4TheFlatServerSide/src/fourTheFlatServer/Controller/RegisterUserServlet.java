@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fourTheFlatServer.Model.AuthenticatUser;
+import fourTheFlatServer.Model.AuthenticateUser;
 import fourTheFlatServer.Model.UserMethods;
 import fourTheFlatServer.Stores.User;
 import fourTheFlatServer.lib.PojoMapper;
@@ -42,8 +42,13 @@ public class RegisterUserServlet extends HttpServlet {
 		String username = urlSplit[3];
 		String password = urlSplit[4];
 
+		//Check that the username is alphanumeric
+		if(username.matches("^.*[^a-zA-Z ].*$"))
+		{
+			response.getWriter().print("Usernames must be alphanumeric.");
+		}
 		
-		boolean register = AuthenticatUser.registerUser(username, password);
+		boolean register = AuthenticateUser.registerUser(username, password);
 		
 		User user = UserMethods.getUserByUsername(username);
 		

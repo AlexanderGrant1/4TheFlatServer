@@ -94,11 +94,7 @@ public class GetAllData {
 				// Set user object attributes
 				User user = new User();
 				//TODO add more attributes like pending_approval etc
-				user.setUsername(row.getString("user_name"));
-				
-
-		    	System.out.println("MODEL UN: "+user.getUsername());
-		    	
+				user.setUsername(row.getString("user_name"));		
 				user.setIsShopping(row.getBool("is_shopping"));
 				user.setGroupID(row.getUUID("group"));
 				user.setMoneyToGet(row.getSet("money_to_get", Integer.class));

@@ -37,22 +37,11 @@ public class GroupMethods {
 			Group groupDetails = new Group();
 
 			groupDetails.setGroupID(details.getUUID("group_id"));
-			// groupDetails.setAddress(details.getString("address"));
-
-			try {
+			 groupDetails.setAddress(details.getString("address"));
 				groupDetails.setAllowedProducts(details.getSet(
 						"allowed_products", String.class));
-			} catch (java.lang.NullPointerException e) {
-				groupDetails.setAllowedProducts(emptySet);
-			}
-
-			try {
 				groupDetails.setShoppingList(details.getSet("shopping_list",
 						String.class));
-			} catch (java.lang.NullPointerException e) {
-				groupDetails.setShoppingList(emptySet);
-			}
-			
 			groupDetails.setUsers(details.getSet("users", String.class));
 			groupDetails.setUserShopping(details.getBool("user_shopping"));
 
@@ -61,7 +50,7 @@ public class GroupMethods {
 		return null;
 
 	}
-
+	
 	public static Group createNewGroup(String userName) {
 
 		
@@ -83,8 +72,13 @@ System.out.println("GENERATED UUID: "+groupID);
 		return newGroup;
 	}
 
-	public static void addUserToGroup(String userName, UUID group) {
+	public static boolean addUserToGroup(String userName, UUID group) {
 
+		if(UserMethods.getGroupIdByUsername(userName) != null)
+		{
+			return false;
+		}
+		
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 	
 		PreparedStatement addUserToGroup = session
@@ -100,6 +94,7 @@ System.out.println("GENERATED UUID: "+groupID);
 		boundStatement2.bind(group, userName);
 		session.execute(boundStatement2);		
 		
+		return true;
 		
 	}
 

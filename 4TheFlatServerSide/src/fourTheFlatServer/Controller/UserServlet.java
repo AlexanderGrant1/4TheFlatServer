@@ -64,14 +64,6 @@ public class UserServlet extends HttpServlet {
 
 		 response.setContentType("application/json");
 		response.getWriter().print(jason);
-
-		
-		//ObjectOutputStream os;
-		//os = new ObjectOutputStream(response.getOutputStream());
-
-		//os.writeObject(jason);
-		//os.close();
-
 	}
 
 	/**

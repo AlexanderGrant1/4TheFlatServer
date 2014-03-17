@@ -1,10 +1,12 @@
 package fourTheFlatServer.Stores;
 
 import java.util.Set;
+import java.util.UUID;
 
 public class User {
 	
 	private String username;
+	private UUID group;
 	private boolean isShopping;
 	private Set<String> pendingApproval;
 	private Set<Integer> moneyToGet;
@@ -47,6 +49,14 @@ public class User {
 	public boolean getIsShopping()
 	{
 		return isShopping;
+	}
+
+	public UUID getGroupID() {
+		return group;
+	}
+
+	public void setGroupID(UUID group) {
+		this.group = group;
 	}
 
 }

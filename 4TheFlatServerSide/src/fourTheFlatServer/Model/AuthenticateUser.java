@@ -34,10 +34,12 @@ public class AuthenticateUser {
 			user.setGroupID(r.getUUID("group"));
 			user.setMoneyToGet(r.getSet("money_to_get", Integer.class));
 			user.setPendingApproval(r.getSet("pending_approval", String.class));
+			session.close();
 			return user;
 		}
 		else
 		{
+			session.close();
 			return null;
 		}
 	}
@@ -56,6 +58,26 @@ public class AuthenticateUser {
 		boundStatement.bind(username,password);
 		ResultSet rs = session.execute(boundStatement);
 		Row r = rs.one();
-		return true;
+		session.close();
+		return r != null;
+	}
+	
+	public static boolean changePassword(String username, String newPassword)
+	{
+		if (UserMethods.userExists(username)) {
+			System.out.println("Username already registered");
+			return false;
+		}
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+
+		PreparedStatement statement = session
+				.prepare("UPDATE users SET password = ? where username = ?");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(newPassword,username);
+		ResultSet rs = session.execute(boundStatement);
+		Row r = rs.one();
+		session.close();
+		return r != null;
 	}
 }

@@ -44,9 +44,10 @@ public class GroupMethods {
 						String.class));
 			groupDetails.setUsers(details.getSet("users", String.class));
 			groupDetails.setUserShopping(details.getBool("user_shopping"));
-
+			session.close();
 			return groupDetails;
 		}
+		session.close();
 		return null;
 
 	}
@@ -68,7 +69,7 @@ System.out.println("GENERATED UUID: "+groupID);
 		addUserToGroup(userName, groupID);
 	
 		Group newGroup = getGroupByUUID(groupID);		
-		
+		session.close();
 		return newGroup;
 	}
 
@@ -93,7 +94,7 @@ System.out.println("GENERATED UUID: "+groupID);
 		BoundStatement boundStatement2 = new BoundStatement(addGroupToUser);
 		boundStatement2.bind(group, userName);
 		session.execute(boundStatement2);		
-		
+		session.close();
 		return true;
 		
 	}

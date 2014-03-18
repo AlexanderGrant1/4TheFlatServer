@@ -25,7 +25,9 @@ public class UserMethods {
 		BoundStatement boundStatement = new BoundStatement(statement);
 		boundStatement.bind(username);
 		ResultSet rs = session.execute(boundStatement);
-		return rs.one() != null;
+		ResultSet details = rs;
+		session.close();
+		return details.one() != null;
 	}
 	
 	public static UUID getGroupIdByUsername(String username)
@@ -43,8 +45,11 @@ public class UserMethods {
 		boundStatement.bind(username);
 		ResultSet rs = session.execute(boundStatement);
 		Row r = rs.one();
+		
+		UUID groupID = r.getUUID("group");
+		session.close();
 
-		return r.getUUID("group");
+		return groupID;
 	}
 	
 	public static User getUserByUsername(String username)
@@ -71,7 +76,7 @@ public class UserMethods {
 		user.setGroupID(r.getUUID("group"));
 		user.setMoneyToGet(r.getSet("money_to_get", Integer.class));
 		user.setPendingApproval(r.getSet("pending_approval", String.class));
-
+		session.close();
 		return user;
 	}
 

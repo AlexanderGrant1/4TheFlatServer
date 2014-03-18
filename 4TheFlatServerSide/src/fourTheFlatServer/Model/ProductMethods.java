@@ -21,7 +21,9 @@ public class ProductMethods {
 		BoundStatement boundStatement = new BoundStatement(statement);
 		boundStatement.bind(product);
 		ResultSet rs = session.execute(boundStatement);
-		return rs.one() != null;
+		Row r = rs.one();
+		session.close();
+		return r != null;
 	}
 
 	public static LinkedList<String> getAllProdNames() {

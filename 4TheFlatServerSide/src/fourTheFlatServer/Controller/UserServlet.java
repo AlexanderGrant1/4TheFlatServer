@@ -52,8 +52,7 @@ public class UserServlet extends HttpServlet {
 		String username = urlSplit[3];
 		String password = urlSplit[4];
 
-		User user = AuthenticateUser.validateLoginCredentials(username,
-				password);
+		User user = AuthenticateUser.validateLoginCredentials(username,password);
 
 		if (user == null) {
 			System.out.println("Incorrect username and password combination.");
@@ -113,7 +112,17 @@ public class UserServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("hello");
+		response.getWriter().print("hello");
+	}
+	
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doDelete(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		response.getWriter().print("hello");
 	}
 
 }

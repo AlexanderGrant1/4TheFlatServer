@@ -58,7 +58,7 @@ public final class KeyspaceCreator {
 					//2. COMMENT OUT dropKeyspace statment, uploaded and run
 					//3. COMMENT OUT THE KEYSPACE CREATOR IN "CassandraConnection" (LINE 61) and upload again
 			
-			
+			/*
 			try {
 
 				PreparedStatement statement = session
@@ -71,6 +71,7 @@ public final class KeyspaceCreator {
 				System.out.println("Can't drop keyspace " + et);
 			}
 			
+		*/
 			try {
 
 				PreparedStatement statement = session
@@ -99,7 +100,7 @@ public final class KeyspaceCreator {
 				session.close();
 			}
 			
-			
+				
 			for (int i = 0; i < 3; i++) {
 				// now add some column families
 				session = c.connect("flat_db");

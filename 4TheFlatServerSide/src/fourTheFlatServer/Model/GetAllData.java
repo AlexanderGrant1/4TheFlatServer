@@ -58,6 +58,7 @@ public class GetAllData {
 					groupDetails.setShoppingList(emptySet);
 				}
 
+				groupDetails.setAddress(row.getString("address"));
 				groupDetails.setUsers(row.getSet("users", String.class));
 				groupDetails.setUserShopping(row.getBool("user_shopping"));
 

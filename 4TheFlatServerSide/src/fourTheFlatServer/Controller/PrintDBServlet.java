@@ -1,6 +1,10 @@
 package fourTheFlatServer.Controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.LinkedList;
 
 import javax.servlet.ServletException;
@@ -35,7 +39,7 @@ public class PrintDBServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		//PRINT USER_GROUPS
+		//PRINT USER_GROUPS TABLE
 		LinkedList<Group> groupList = GetAllData.getAllGroups();
 		
 	    response.getWriter().println("GROUPS!");
@@ -50,7 +54,7 @@ public class PrintDBServlet extends HttpServlet {
 	    response.getWriter().println("");
 	    
 	    
-		//PRINT USERS
+		//PRINT USERS TABLE
 	    LinkedList<User> userList = GetAllData.getAllUsers();
 	
 	    response.getWriter().println("Users!");
@@ -62,8 +66,28 @@ public class PrintDBServlet extends HttpServlet {
 	    }
 		
 	    response.getWriter().println("");
-		//PRINT PRODUCTS
+	    
+		//PRINT AVAILABLE_PRODUCTS TEXT FILE
 		
+	    PrintWriter writer = response.getWriter();
+
+	    
+	    response.getWriter().println("Available Products in text file!");
+	    response.getWriter().println("");
+        // foo.txt is at the root directory of the web app
+        InputStream in = getServletContext().getResourceAsStream("/Available_Products.txt");
+             
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        
+        String text;
+        while ((text = reader.readLine()) != null) {
+        	System.out.println(text);
+            writer.println(text);
+        }
+	    
+	    
+	    
+	    //PRINT PRODUCTS_LIST TABLE
 	}
 
 	/**

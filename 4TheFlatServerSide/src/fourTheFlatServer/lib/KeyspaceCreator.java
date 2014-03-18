@@ -14,10 +14,10 @@ public final class KeyspaceCreator {
 	}
 
 	public static void SetUpKeySpaces(Cluster c) {
-		//try {
-			// Add some keyspaces here
+	
 			String[] moreCreates = new String[4];
-
+			String  testData[] = new String[3];
+			
 			String dropKeyspace = "Drop keyspace if exists flat_db";
 			String createKeyspace = "create keyspace flat_db  WITH replication = {'class':'SimpleStrategy', 'replication_factor':1}";
 
@@ -43,6 +43,14 @@ public final class KeyspaceCreator {
 					+ "purchase_date timestamp,"
 					+ "PRIMARY KEY((product_name), group_id));";
 
+			
+			//Create TEST user_group
+			testData[0] = "Insert into user_group(group_id, address, allowed_products, user_shopping, users) values (cc4bcc90-ad52-11e3-a13d-74e543b5285b,'123 Test Street', {'tea', 'eggs'}, false, {'test','test2'});";
+			
+			//Create TEST users
+			testData[1] = "Insert into users(user_name, group, is_shopping, password) values ('test',cc4bcc90-ad52-11e3-a13d-74e543b5285b, false, 'test');";
+			testData[2] = "Insert into users(user_name, group, is_shopping, password) values ('test2',cc4bcc90-ad52-11e3-a13d-74e543b5285b, false, 'test');";
+			
 			Session session = c.connect();
 
 			//UPDLOAD AS WAR IN THE FOLLOWING WAY TO CREATE A NEW DATABASE:
@@ -50,7 +58,7 @@ public final class KeyspaceCreator {
 					//2. COMMENT OUT dropKeyspace statment, uploaded and run
 					//3. COMMENT OUT THE KEYSPACE CREATOR IN "CassandraConnection" (LINE 61) and upload again
 			
-			/*
+			
 			try {
 
 				PreparedStatement statement = session
@@ -62,7 +70,7 @@ public final class KeyspaceCreator {
 			} catch (Exception et) {
 				System.out.println("Can't drop keyspace " + et);
 			}
-			*/
+			
 			try {
 
 				PreparedStatement statement = session
@@ -86,14 +94,26 @@ public final class KeyspaceCreator {
 							moreCreates[i]);
 					session.execute(cqlQuery);
 				} catch (Exception et) {
-					System.out.println("Can't create tweet table " + et);
+					System.out.println("Can't table: " + et);
 				}
 				session.close();
 			}
+			
+			
+			for (int i = 0; i < 3; i++) {
+				// now add some column families
+				session = c.connect("flat_db");
+				System.out.println("" + testData[i]);
 
-		//} catch (Exception et) {
-			//System.out.println("Other keyspace or coulm definition error" + et);
-	    //}
+				try {
+					SimpleStatement cqlQuery = new SimpleStatement(
+							testData[i]);
+					session.execute(cqlQuery);
+				} catch (Exception et) {
+					System.out.println("Can't create test data:  " + et);
+				}
+				session.close();
+			}
 
 	}
 }

@@ -64,6 +64,46 @@ public class UserServlet extends HttpServlet {
 
 		 response.setContentType("application/json");
 		response.getWriter().print(jason);
+
+	}
+	
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 *      Registers a user
+	 */
+	protected void doPut(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		String requestURI = request.getRequestURI();
+		String[] urlSplit = requestURI.split("/");
+		if(urlSplit.length != 5)
+		{
+			System.out.println("Invalid url");
+			return;
+		}
+		String username = urlSplit[3];
+		String password = urlSplit[4];
+
+		//Check that the username is alphanumeric
+		if(username.matches("^.*[^a-zA-Z ].*$"))
+		{
+			response.getWriter().print("Usernames must be alphanumeric.");
+		}
+		
+		boolean register = AuthenticateUser.registerUser(username, password);
+		
+		User user = UserMethods.getUserByUsername(username);
+		
+		if(register)
+		{
+			String jason = PojoMapper.toJson(user, true);
+			response.getWriter().print(jason);
+		}
+		else
+		{
+			response.getWriter().print("User name already registered!");
+		}
+
 	}
 
 	/**
@@ -73,6 +113,7 @@ public class UserServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		System.out.println("hello");
 	}
 
 }

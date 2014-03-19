@@ -83,19 +83,18 @@ public class UserServlet extends HttpServlet {
 		String username = urlSplit[3];
 		String password = urlSplit[4];
 
+		response.getWriter().println(username);
+		
 		//Check that the username is alphanumeric
-		if(username.matches("^.*[^a-zA-Z ].*$"))
+		if(!username.matches("^[a-zA-Z0-9_]*$"))
 		{
 			response.getWriter().print("Username must be alphanumeric.");
 			return;
 		}
 		
-		boolean register = AuthenticateUser.registerUser(username, password);
-		
-		User user = UserMethods.getUserByUsername(username);
-		
-		if(register)
+		if(AuthenticateUser.registerUser(username, password))
 		{
+			User user = UserMethods.getUserByUsername(username);
 			String jason = PojoMapper.toJson(user, true);
 			response.getWriter().print(jason);
 		}

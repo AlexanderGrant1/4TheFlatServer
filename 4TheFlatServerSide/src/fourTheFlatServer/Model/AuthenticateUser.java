@@ -46,7 +46,7 @@ public class AuthenticateUser {
 	
 	public static boolean registerUser(String username, String password) {
 		if (UserMethods.userExists(username)) {
-			System.out.println("Username already registered");
+			//username already registered so return false
 			return false;
 		}
 		Session session = CassandraConnection.getCluster().connect("flat_db");
@@ -56,10 +56,9 @@ public class AuthenticateUser {
 
 		BoundStatement boundStatement = new BoundStatement(statement);
 		boundStatement.bind(username,password);
-		ResultSet rs = session.execute(boundStatement);
-		Row r = rs.one();
+		session.execute(boundStatement);
 		session.close();
-		return r != null;
+		return true;
 	}
 	
 	public static boolean changePassword(String username, String newPassword)
@@ -75,9 +74,8 @@ public class AuthenticateUser {
 
 		BoundStatement boundStatement = new BoundStatement(statement);
 		boundStatement.bind(newPassword,username);
-		ResultSet rs = session.execute(boundStatement);
-		Row r = rs.one();
+		session.execute(boundStatement);
 		session.close();
-		return r != null;
+		return true;
 	}
 }

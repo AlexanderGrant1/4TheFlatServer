@@ -51,17 +51,9 @@ public class ShoppingListServlet extends HttpServlet {
 			response.getWriter().println(s);
 		}
 	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-	}
-
 	
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPut(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
@@ -91,7 +83,8 @@ public class ShoppingListServlet extends HttpServlet {
 	}
 	
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doDelete(HttpServletRequest request, HttpServletResponse response)
+	 *shoppinglist/<groupUUID>/product
 	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();

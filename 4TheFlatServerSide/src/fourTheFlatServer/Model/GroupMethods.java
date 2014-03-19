@@ -143,6 +143,64 @@ public class GroupMethods {
 
 	}
 	
+	public static boolean removeItemFromShoppingList(UUID groupID, String product) {
+
+		if(getGroupByUUID(groupID) == null)
+		{
+			return false;
+		}
+		
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+
+		PreparedStatement statement = session
+				.prepare("UPDATE user_group SET shopping_list = shopping_list - {'"+product+"'} where group_id = ?");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(groupID);
+		ResultSet rs = session.execute(boundStatement);
+
+
+		Row details = rs.one();
+		if(details == null)
+		{
+			session.close();
+			return false;
+		}
+		session.close();
+		return true;
+	}
+	
+	public static boolean itemInShoppingList(UUID groupID, String product) {
+
+		if(getGroupByUUID(groupID) == null)
+		{
+			return false;
+		}
+		
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+
+		PreparedStatement statement = session
+				.prepare("SELECT * FROM user_group where group_id = ?");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(groupID);
+		ResultSet rs = session.execute(boundStatement);
+
+		Row r = rs.one();
+		
+		for(String s : r.getSet("shopping_list", String.class))
+		{
+			if(product.equals(s))
+			{
+				session.close();
+				return true;
+			}
+		}
+		session.close();
+		return false;
+
+	}
+	
 	public static Group createNewGroup(String userName) {
 
 		

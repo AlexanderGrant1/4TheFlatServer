@@ -35,7 +35,7 @@ public class ShoppingListServlet extends HttpServlet {
 		String[] urlSplit = requestURI.split("/");
 		if(urlSplit.length != 4)
 		{
-			System.out.println("Invalid url");
+			response.getWriter().print("Invalid URL.");
 			return;
 		}
 		String groupId = urlSplit[3];
@@ -43,6 +43,7 @@ public class ShoppingListServlet extends HttpServlet {
 		//Check that the group exists
 		if(GroupMethods.getGroupByUUID(groupUUID) == null)
 		{
+			response.getWriter().print("Group does not exist.");
 			return;
 		}
 		for(String s : GroupMethods.getShoppingList(groupUUID))
@@ -72,10 +73,12 @@ public class ShoppingListServlet extends HttpServlet {
 		}
 		String groupId = urlSplit[3];
 		String product = urlSplit[4];
+		product = product.replace("%20", " ");
 		UUID groupUUID = UUID.fromString(groupId);
 		//Check that the group exists
 		if(GroupMethods.getGroupByUUID(groupUUID) == null)
 		{
+			response.getWriter().print("Group does not exist.");
 			return;
 		}
 		if(GroupMethods.addItemToShoppingList(groupUUID, product))
@@ -85,5 +88,32 @@ public class ShoppingListServlet extends HttpServlet {
 		}
 		response.getWriter().print("Failure");
 				
+	}
+	
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String requestURI = request.getRequestURI();
+		String[] urlSplit = requestURI.split("/");
+		if(urlSplit.length != 5)
+		{
+			System.out.println("Invalid url");
+			return;
+		}
+		String group = urlSplit[3];
+		String product = urlSplit[4];
+		UUID groupID = UUID.fromString(group);
+		if(GroupMethods.itemInShoppingList(groupID, product))
+		{
+			GroupMethods.removeItemFromShoppingList(groupID, product);
+			for(String s : GroupMethods.getShoppingList(groupID))
+			{
+				response.getWriter().println(s);
+			}
+			return;
+		}
+		response.getWriter().print("Cannot delete an item that is not in the shopping list");
+		return;
 	}
 }

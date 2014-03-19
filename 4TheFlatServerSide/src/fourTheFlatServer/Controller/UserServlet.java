@@ -46,7 +46,7 @@ public class UserServlet extends HttpServlet {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
 		if (urlSplit.length != 5) {
-			System.out.println("Invalid url");
+			response.getWriter().print("Incorrect URL format.");
 			return;
 		}
 		String username = urlSplit[3];
@@ -55,7 +55,7 @@ public class UserServlet extends HttpServlet {
 		User user = AuthenticateUser.validateLoginCredentials(username,password);
 
 		if (user == null) {
-			System.out.println("Incorrect username and password combination.");
+			response.getWriter().print("Invalid username or password.");
 			return;
 		}
 
@@ -77,7 +77,7 @@ public class UserServlet extends HttpServlet {
 		String[] urlSplit = requestURI.split("/");
 		if(urlSplit.length != 5)
 		{
-			System.out.println("Invalid url");
+			response.getWriter().print("Invalid URL.");
 			return;
 		}
 		String username = urlSplit[3];
@@ -86,7 +86,8 @@ public class UserServlet extends HttpServlet {
 		//Check that the username is alphanumeric
 		if(username.matches("^.*[^a-zA-Z ].*$"))
 		{
-			response.getWriter().print("Usernames must be alphanumeric.");
+			response.getWriter().print("Username must be alphanumeric.");
+			return;
 		}
 		
 		boolean register = AuthenticateUser.registerUser(username, password);
@@ -100,7 +101,7 @@ public class UserServlet extends HttpServlet {
 		}
 		else
 		{
-			response.getWriter().print("User name already registered!");
+			response.getWriter().print("Username already registered.");
 		}
 
 	}

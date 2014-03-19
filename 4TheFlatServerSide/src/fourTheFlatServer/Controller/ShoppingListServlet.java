@@ -74,9 +74,17 @@ public class ShoppingListServlet extends HttpServlet {
 			response.getWriter().print("Group does not exist.");
 			return;
 		}
+		if(GroupMethods.itemInShoppingList(groupUUID, product))
+		{
+			response.getWriter().print("Item is already in the shopping list.");
+			return;
+		}
 		if(GroupMethods.addItemToShoppingList(groupUUID, product))
 		{
-			response.getWriter().print("success");
+			for(String s : GroupMethods.getShoppingList(groupUUID))
+			{
+				response.getWriter().println(s);
+			}
 			return;
 		}
 		response.getWriter().print("Failure");
@@ -99,6 +107,19 @@ public class ShoppingListServlet extends HttpServlet {
 		String group = urlSplit[3];
 		String product = urlSplit[4];
 		UUID groupID = UUID.fromString(group);
+		
+		if(GroupMethods.getGroupByUUID(groupID) == null)
+		{
+			response.getWriter().print("Group does not exist.");
+			return;
+		}
+		
+		if(!GroupMethods.itemInShoppingList(groupID,product))
+		{
+			response.getWriter().print("Item is not in shopping list.");
+			return;
+		}
+		
 		if(GroupMethods.removeItemFromShoppingList(groupID, product))
 		{
 			for(String s : GroupMethods.getShoppingList(groupID))

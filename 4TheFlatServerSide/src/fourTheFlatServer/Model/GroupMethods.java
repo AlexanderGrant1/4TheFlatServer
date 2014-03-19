@@ -117,16 +117,6 @@ public class GroupMethods {
 	
 	public static boolean addItemToShoppingList(UUID groupID, String product) {
 
-		//Check that the group exists
-		if(getGroupByUUID(groupID) == null)
-		{
-			return false;
-		}
-		//Check that the item is not already on the shopping list
-		if(itemInShoppingList(groupID,product))
-		{
-			return false;
-		}
 		
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 
@@ -142,17 +132,6 @@ public class GroupMethods {
 	}
 	
 	public static boolean removeItemFromShoppingList(UUID groupID, String product) {
-
-		//Make sure that the group exists
-		if(getGroupByUUID(groupID) == null)
-		{
-			return false;
-		}
-		//Make sure that the item is in the shopping list
-		if(!itemInShoppingList(groupID,product))
-		{
-			return false;
-		}
 		
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 
@@ -167,12 +146,6 @@ public class GroupMethods {
 	}
 	
 	public static boolean itemInShoppingList(UUID groupID, String product) {
-
-		if(getGroupByUUID(groupID) == null)
-		{
-			return false;
-		}
-		
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 
 		PreparedStatement statement = session
@@ -218,11 +191,6 @@ public class GroupMethods {
 	}
 
 	public static boolean addUserToGroup(String userName, UUID group) {
-
-		if(UserMethods.getGroupIdByUsername(userName) != null)
-		{
-			return false;
-		}
 		
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 	
@@ -237,6 +205,27 @@ public class GroupMethods {
 		
 		BoundStatement boundStatement2 = new BoundStatement(addGroupToUser);
 		boundStatement2.bind(group, userName);
+		session.execute(boundStatement2);		
+		session.close();
+		return true;
+		
+	}
+	
+	public static boolean removeUserFromGroup(String userName, UUID group) {
+
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+	
+		PreparedStatement addUserToGroup = session
+				.prepare("UPDATE user_group SET users = users - {'"+userName+"'} where group_id = ?");
+		
+		BoundStatement boundStatement = new BoundStatement(addUserToGroup);
+		boundStatement.bind(group);
+		session.execute(boundStatement);	
+		
+		PreparedStatement addGroupToUser = session.prepare("UPDATE users SET group = null where user_name = ?");
+		
+		BoundStatement boundStatement2 = new BoundStatement(addGroupToUser);
+		boundStatement2.bind(userName);
 		session.execute(boundStatement2);		
 		session.close();
 		return true;

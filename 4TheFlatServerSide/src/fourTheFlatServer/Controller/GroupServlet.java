@@ -64,9 +64,40 @@ public class GroupServlet extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 *group/<groupUUID>/<username> adds a user to a group
+	 *group/<username> adds a user to a group
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String requestURI = request.getRequestURI();
+		String[] urlSplit = requestURI.split("/");
+		urlSplit = General.Utils.formatStringArray(urlSplit);
+		if(urlSplit.length != 4)
+		{
+			response.getWriter().print("Incorrect URL format.");
+			return;
+		}
+		String username = urlSplit[3];
+		
+		//Check that the user exists
+		if(!UserMethods.userExists(username))
+		{
+			response.getWriter().print("User does not exist");
+			return;
+		}
+		//If the user is not already in a group, add them to a group
+		if(UserMethods.getGroupIdByUsername(username) == null)
+		{
+			Group newGroup = GroupMethods.createNewGroup(username);
+			response.getWriter().print(PojoMapper.toJson(newGroup, true));
+			return;
+		}
+	}
+	
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 *group/<groupID>/<username> creates a group with the given user in it
+	 */
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
 		urlSplit = General.Utils.formatStringArray(urlSplit);
@@ -99,36 +130,6 @@ public class GroupServlet extends HttpServlet {
 			return;
 		}
 	}
-	
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 *group/<username> creates a group with the given user in it
-	 */
-	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String requestURI = request.getRequestURI();
-		String[] urlSplit = requestURI.split("/");
-		urlSplit = General.Utils.formatStringArray(urlSplit);
-		if(urlSplit.length != 4)
-		{
-			response.getWriter().print("Incorrect URL format.");
-			return;
-		}
-		String username = urlSplit[3];
-		
-		//Check that the user exists
-		if(!UserMethods.userExists(username))
-		{
-			response.getWriter().print("User does not exist");
-			return;
-		}
-		//If the user is not already in a group, add them to a group
-		if(UserMethods.getGroupIdByUsername(username) == null)
-		{
-			Group newGroup = GroupMethods.createNewGroup(username);
-			response.getWriter().print(PojoMapper.toJson(newGroup, true));
-			return;
-		}
-	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -148,6 +149,14 @@ public class GroupServlet extends HttpServlet {
 		
 		UUID groupID = UUID.fromString(group);
 		
+		UUID userGroupID = UserMethods.getGroupIdByUsername(username);
+		
+		if(userGroupID == null)
+		{
+			response.getWriter().print("User is not in the given group.");
+			return;
+		}
+		
 		//Check that the group exists before continuing
 		if(GroupMethods.getGroupByUUID(groupID) == null)
 		{
@@ -163,11 +172,17 @@ public class GroupServlet extends HttpServlet {
 		}
 		
 		//If the user is in the given group then remove them and print the group's JSON
-		if(UserMethods.getGroupIdByUsername(username) == groupID)
+		if(UserMethods.getGroupIdByUsername(username).equals(groupID))
 		{
-			GroupMethods.addUserToGroup(username, groupID);
-			response.getWriter().print(PojoMapper.toJson(group, true));
+			if(GroupMethods.removeUserFromGroup(username, groupID))
+			{
+				Group userGroup = GroupMethods.getGroupByUUID(groupID);
+				response.getWriter().print(PojoMapper.toJson(userGroup, true));
+				return;
+			}
+			response.getWriter().print("Failed to remove user from group.");
 			return;
 		}
+		response.getWriter().print("User is not in the given group.");
 }
 }

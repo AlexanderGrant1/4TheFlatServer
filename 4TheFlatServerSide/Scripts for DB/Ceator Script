@@ -1,6 +1,7 @@
+
 drop keyspace flat_db;
 
-CREATE KEYSPACE flat_db WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 };
+CREATE KEYSPACE flat_db WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
 
 use flat_db;
 
@@ -31,6 +32,7 @@ CREATE TABLE product_list(
   purchase_frquency int,
   purchase_date timestamp,
  PRIMARY KEY((product_name), group_id));
+ 
  
  
  

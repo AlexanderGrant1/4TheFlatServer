@@ -38,7 +38,7 @@ public class AllowedProductsServlet extends HttpServlet {
 		String[] urlSplit = requestURI.split("/");
 		if(urlSplit.length != 4)
 		{
-			System.out.println("Invalid url");
+			response.getWriter().print("Incorrect URL format.");
 			return;
 		}
 		String groupId = urlSplit[3];
@@ -52,13 +52,6 @@ public class AllowedProductsServlet extends HttpServlet {
 		{
 			response.getWriter().println(s);
 		}
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 	}
 
 }

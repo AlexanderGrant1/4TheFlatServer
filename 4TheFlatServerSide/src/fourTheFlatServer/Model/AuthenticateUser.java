@@ -63,14 +63,14 @@ public class AuthenticateUser {
 	
 	public static boolean changePassword(String username, String newPassword)
 	{
-		if (UserMethods.userExists(username)) {
+		if (!UserMethods.userExists(username)) {
 			System.out.println("Username already registered");
 			return false;
 		}
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 
 		PreparedStatement statement = session
-				.prepare("UPDATE users SET password = ? where username = ?");
+				.prepare("UPDATE users SET password = ? where user_name = ?");
 
 		BoundStatement boundStatement = new BoundStatement(statement);
 		boundStatement.bind(newPassword,username);

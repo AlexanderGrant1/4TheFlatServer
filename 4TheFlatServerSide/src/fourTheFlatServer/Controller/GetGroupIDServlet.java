@@ -32,9 +32,10 @@ public class GetGroupIDServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
+		urlSplit = General.Utils.formatStringArray(urlSplit);
 		if(urlSplit.length != 4)
 		{
-			System.out.println("Invalid url");
+			response.getWriter().print("Incorrect URL format.");
 			return;
 		}
 		String username = urlSplit[3];
@@ -43,13 +44,6 @@ public class GetGroupIDServlet extends HttpServlet {
 		UUID groupID = UserMethods.getGroupIdByUsername(username);
 		
 		response.getWriter().print(groupID);
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 	}
 
 }

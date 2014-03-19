@@ -54,13 +54,4 @@ public class AllProductServlet extends HttpServlet {
             writer.println(text);
         }
 	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-
-	}
 }

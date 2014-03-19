@@ -117,7 +117,13 @@ public class GroupMethods {
 	
 	public static boolean addItemToShoppingList(UUID groupID, String product) {
 
+		//Check that the group exists
 		if(getGroupByUUID(groupID) == null)
+		{
+			return false;
+		}
+		//Check that the item is not already on the shopping list
+		if(itemInShoppingList(groupID,product))
 		{
 			return false;
 		}
@@ -129,15 +135,7 @@ public class GroupMethods {
 
 		BoundStatement boundStatement = new BoundStatement(statement);
 		boundStatement.bind(groupID);
-		ResultSet rs = session.execute(boundStatement);
-
-
-		Row details = rs.one();
-		if(details == null)
-		{
-			session.close();
-			return false;
-		}
+		session.execute(boundStatement);
 		session.close();
 		return true;
 
@@ -145,7 +143,13 @@ public class GroupMethods {
 	
 	public static boolean removeItemFromShoppingList(UUID groupID, String product) {
 
+		//Make sure that the group exists
 		if(getGroupByUUID(groupID) == null)
+		{
+			return false;
+		}
+		//Make sure that the item is in the shopping list
+		if(!itemInShoppingList(groupID,product))
 		{
 			return false;
 		}
@@ -157,15 +161,7 @@ public class GroupMethods {
 
 		BoundStatement boundStatement = new BoundStatement(statement);
 		boundStatement.bind(groupID);
-		ResultSet rs = session.execute(boundStatement);
-
-
-		Row details = rs.one();
-		if(details == null)
-		{
-			session.close();
-			return false;
-		}
+		session.execute(boundStatement);
 		session.close();
 		return true;
 	}
@@ -204,8 +200,7 @@ public class GroupMethods {
 	public static Group createNewGroup(String userName) {
 
 		
-		UUID groupID = java.util.UUID.fromString(new com.eaio.uuid.UUID().toString());
-System.out.println("GENERATED UUID: "+groupID);		
+		UUID groupID = java.util.UUID.fromString(new com.eaio.uuid.UUID().toString());	
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 
 		PreparedStatement createGroupStatment = session

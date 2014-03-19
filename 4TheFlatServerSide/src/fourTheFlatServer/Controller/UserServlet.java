@@ -45,6 +45,7 @@ public class UserServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
+		urlSplit = General.Utils.formatStringArray(urlSplit);
 		if (urlSplit.length != 5) {
 			response.getWriter().print("Incorrect URL format.");
 			return;
@@ -75,6 +76,7 @@ public class UserServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
+		urlSplit = General.Utils.formatStringArray(urlSplit);
 		if(urlSplit.length != 5)
 		{
 			response.getWriter().print("Invalid URL.");
@@ -82,8 +84,6 @@ public class UserServlet extends HttpServlet {
 		}
 		String username = urlSplit[3];
 		String password = urlSplit[4];
-
-		response.getWriter().println(username);
 		
 		//Check that the username is alphanumeric
 		if(!username.matches("^[a-zA-Z0-9_]*$"))
@@ -108,21 +108,40 @@ public class UserServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
+	 *      Changes the user's password
+	 *      user/<currentPassword>/<newPassword>
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().print(request.getHeader("hello"));
-	}
-	
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doDelete(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().print("hello");
+		
+		String requestURI = request.getRequestURI();
+		String[] urlSplit = requestURI.split("/");
+		urlSplit = General.Utils.formatStringArray(urlSplit);
+		if(urlSplit.length != 6)
+		{
+			response.getWriter().print("Invalid URL.");
+			return;
+		}
+		String username = urlSplit[3];
+		String currentPassword = urlSplit[4];
+		String newPassword = urlSplit[5];
+		
+		//Check that the username and current password provided are correct
+		if(AuthenticateUser.validateLoginCredentials(username, currentPassword) == null)
+		{
+			response.getWriter().print("Incorrect username or password.");
+			return;
+		}
+		//Change the user's password
+		if(AuthenticateUser.changePassword(username, newPassword))
+		{
+			//Print a success message
+			response.getWriter().print("Password changed.");
+			return;
+		}
+		//If we get here the password was not changed so display an error message
+		response.getWriter().print("An error has occurred.");
+		
 	}
 
 }

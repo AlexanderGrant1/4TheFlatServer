@@ -33,9 +33,10 @@ public class ShoppingListServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
+		urlSplit = General.Utils.formatStringArray(urlSplit);
 		if(urlSplit.length != 4)
 		{
-			response.getWriter().print("Invalid URL.");
+			response.getWriter().print("Incorrect URL format.");
 			return;
 		}
 		String groupId = urlSplit[3];
@@ -58,14 +59,14 @@ public class ShoppingListServlet extends HttpServlet {
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
+		urlSplit = General.Utils.formatStringArray(urlSplit);
 		if(urlSplit.length != 5)
 		{
-			System.out.println("Invalid url");
+			response.getWriter().print("Incorrect URL format.");
 			return;
 		}
 		String groupId = urlSplit[3];
 		String product = urlSplit[4];
-		product = product.replace("%20", " ");
 		UUID groupUUID = UUID.fromString(groupId);
 		//Check that the group exists
 		if(GroupMethods.getGroupByUUID(groupUUID) == null)
@@ -89,17 +90,17 @@ public class ShoppingListServlet extends HttpServlet {
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
+		urlSplit = General.Utils.formatStringArray(urlSplit);
 		if(urlSplit.length != 5)
 		{
-			System.out.println("Invalid url");
+			response.getWriter().print("Incorrect URL format.");
 			return;
 		}
 		String group = urlSplit[3];
 		String product = urlSplit[4];
 		UUID groupID = UUID.fromString(group);
-		if(GroupMethods.itemInShoppingList(groupID, product))
+		if(GroupMethods.removeItemFromShoppingList(groupID, product))
 		{
-			GroupMethods.removeItemFromShoppingList(groupID, product);
 			for(String s : GroupMethods.getShoppingList(groupID))
 			{
 				response.getWriter().println(s);

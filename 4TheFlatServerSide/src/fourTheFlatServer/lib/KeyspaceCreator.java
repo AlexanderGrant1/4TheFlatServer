@@ -48,8 +48,8 @@ public final class KeyspaceCreator {
 			testData[0] = "Insert into user_group(group_id, address, allowed_products, shopping_list, user_shopping, users) values (cc4bcc90-ad52-11e3-a13d-74e543b5285b,'123 Test Street', {'tea', 'eggs', 'milk', 'cheese', 'toilet paper'}, {'egg'}, false, {'test','test2'});";
 			
 			//Create TEST users
-			testData[1] = "Insert into users(user_name, group, is_shopping, password) values ('test',cc4bcc90-ad52-11e3-a13d-74e543b5285b, false, 'test');";
-			testData[2] = "Insert into users(user_name, group, is_shopping, password) values ('test2',cc4bcc90-ad52-11e3-a13d-74e543b5285b, false, 'test');";
+			testData[1] = "Insert into users(user_name, group, is_shopping, password) values ('test',cc4bcc90-ad52-11e3-a13d-74e543b5285b, false, '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08');";
+			testData[2] = "Insert into users(user_name, group, is_shopping, password) values ('test2',cc4bcc90-ad52-11e3-a13d-74e543b5285b, false, '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08');";
 			
 			Session session = c.connect();
 

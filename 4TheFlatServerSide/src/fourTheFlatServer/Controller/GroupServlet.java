@@ -46,9 +46,6 @@ public class GroupServlet extends HttpServlet {
 		
 		UUID groupID = UserMethods.getGroupIdByUsername(username);
 		
-		
-		System.out.println("GROUP ID FOUND: "+groupID.toString());
-		
 		if(groupID == null)
 		{
 			System.out.println("Group not found!");

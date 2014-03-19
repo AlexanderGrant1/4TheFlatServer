@@ -52,6 +52,97 @@ public class GroupMethods {
 
 	}
 	
+	public static Set<String> getAllowedProducts(UUID groupID) {
+
+		if(getGroupByUUID(groupID) == null)
+		{
+			return null;
+		}
+		
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+
+		PreparedStatement statement = session
+				.prepare("SELECT allowed_products from user_group where group_id = ?");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(groupID);
+		ResultSet rs = session.execute(boundStatement);
+
+
+		Row details = rs.one();
+
+
+		if(!details.equals(null))
+		{
+			Set<String> allowedProducts;
+			allowedProducts = details.getSet("allowed_products", String.class);
+			session.close();
+			return allowedProducts;
+		}
+		session.close();
+		return null;
+
+	}
+	
+	public static Set<String> getShoppingList(UUID groupID) {
+
+		if(getGroupByUUID(groupID) == null)
+		{
+			return null;
+		}
+		
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+
+		PreparedStatement statement = session
+				.prepare("SELECT shopping_list from user_group where group_id = ?");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(groupID);
+		ResultSet rs = session.execute(boundStatement);
+
+
+		Row details = rs.one();
+
+
+		if(!details.equals(null))
+		{
+			Set<String> shoppingList;
+			shoppingList = details.getSet("shopping_list", String.class);
+			session.close();
+			return shoppingList;
+		}
+		session.close();
+		return null;
+	}
+	
+	public static boolean addItemToShoppingList(UUID groupID, String product) {
+
+		if(getGroupByUUID(groupID) == null)
+		{
+			return false;
+		}
+		
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+
+		PreparedStatement statement = session
+				.prepare("UPDATE user_group SET shopping_list = shopping_list + {'"+product+"'} where group_id = ?");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(groupID);
+		ResultSet rs = session.execute(boundStatement);
+
+
+		Row details = rs.one();
+		if(details == null)
+		{
+			session.close();
+			return false;
+		}
+		session.close();
+		return true;
+
+	}
+	
 	public static Group createNewGroup(String userName) {
 
 		

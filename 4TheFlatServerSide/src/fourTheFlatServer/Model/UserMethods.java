@@ -80,5 +80,27 @@ public class UserMethods {
 		session.close();
 		return user;
 	}
+	
+	public static boolean checkApprovedProducts(String username, String product)
+	{
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+		
+		PreparedStatement statement = session
+				.prepare("SELECT products_to_add from users where user_name = ?");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(username);
+		ResultSet rs = session.execute(boundStatement);
+		Row r = rs.one();
+		Set<String> addedProducts = r.getSet("products_to_add",String.class);
+		for(String s : addedProducts)
+		{
+			if(s.equals(product))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 
 }

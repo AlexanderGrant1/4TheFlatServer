@@ -9,7 +9,7 @@ import fourTheFlatServer.lib.CassandraConnection;
 
 public class AddApprovalToUser {
 
-	public boolean newUserSuggestion(String suggestingUser, String userToAdd) {
+	public static boolean groupUserApproved(String suggestingUser, String userToAdd) {
 
 		try {
 			addToSet(suggestingUser, userToAdd, "users_to_add");
@@ -23,7 +23,7 @@ public class AddApprovalToUser {
 		}
 	}
 
-	public boolean newProductSuggestion(String suggestingUser, String productToAdd) {
+	public static boolean allowedProductApproved(String suggestingUser, String productToAdd) {
 
 		try {
 			addToSet(suggestingUser, productToAdd, "products_to_add");
@@ -38,7 +38,7 @@ public class AddApprovalToUser {
 	}
 	
 	
-	public boolean newAddressSuggestion(String suggestingUser, String addressToAdd) {
+	public static boolean groupAddressApproved(String suggestingUser, String addressToAdd) {
 
 		try {
 			try {
@@ -64,7 +64,7 @@ public class AddApprovalToUser {
 	}
 	
 	
-	private boolean addToSet(String suggestingUser, String toAdd,
+	private static boolean addToSet(String suggestingUser, String toAdd,
 			String setToChange) {
 
 		try {

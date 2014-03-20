@@ -52,6 +52,27 @@ public class GroupMethods {
 
 	}
 	
+	public static Set<String> getGroupUsers(UUID groupID) {
+		Set<String> users;
+
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+
+		PreparedStatement statement = session
+				.prepare("SELECT users  FROM user_group where group_id = ?");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(groupID);
+		ResultSet rs = session.execute(boundStatement);
+
+		Row set = rs.one();
+
+		users = set.getSet("users", String.class);
+
+		session.close();
+
+		return users;
+	}
+	
 	public static Set<String> getAllowedProducts(UUID groupID) {
 
 		if(getGroupByUUID(groupID) == null)

@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fourTheFlatServer.Model.AddApprovalToUser;
-import fourTheFlatServer.Model.MessageOtherUsers;
+import fourTheFlatServer.Model.MessageMethods;
 
 /**
  * Servlet implementation class NewSuggestionServlet
@@ -33,6 +33,15 @@ public class NewSuggestionServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 	
+		
+	}
+	
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
 		urlSplit = General.Utils.formatStringArray(urlSplit);
@@ -46,12 +55,12 @@ public class NewSuggestionServlet extends HttpServlet {
 		String suggestion = urlSplit[5];
 		
 		AddApprovalToUser aau = new AddApprovalToUser(); 
-		MessageOtherUsers mos = new MessageOtherUsers();
+		MessageMethods mos = new MessageMethods();
 		
 		//SUGGEST PRODUCT FOR ALLOWED PRODUCT LIST
 		if(type.equals("0"))
 		{
-			aau.newProductSuggestion(user,suggestion);
+			aau.allowedProductApproved(user,suggestion);
 			
 			mos.sendMessages(user, suggestion, 0);
 			response.getWriter().print("Product Suggestion: "+suggestion);				
@@ -60,7 +69,7 @@ public class NewSuggestionServlet extends HttpServlet {
 		//SUGGEST USER BE ADDED TO GROUP
 		else if(type.equals("1"))
 		{
-			aau.newUserSuggestion(user, suggestion);
+			aau.groupUserApproved(user, suggestion);
 			
 			mos.sendMessages(user, suggestion, 1);
 			response.getWriter().print("New user: "+suggestion);	
@@ -69,7 +78,7 @@ public class NewSuggestionServlet extends HttpServlet {
 		//CHANGE ADDRESS OF FLAT
 		else if(type.equals("2"))
 		{
-			aau.newAddressSuggestion(user, suggestion);
+			aau.groupAddressApproved(user, suggestion);
 			
 			mos.sendMessages(user, suggestion, 2);
 			
@@ -80,6 +89,22 @@ public class NewSuggestionServlet extends HttpServlet {
 		{
 			response.getWriter().print("Not a valid type!");
 		}
+	}
+	
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPut(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+	}
+	
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doDelete(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
 	}
 
 }

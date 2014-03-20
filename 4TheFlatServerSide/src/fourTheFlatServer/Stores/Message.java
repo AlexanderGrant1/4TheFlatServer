@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class Message {
 
-	private UUID alertID;
+	private UUID messageID;
 	
 	//Contains the one word need to convey decision, 
 	//eg if message for a new user to be added to the group only contains user name	
@@ -12,12 +12,12 @@ public class Message {
 	private String message; 
 	private int type;
 
-	public UUID getAlertID() {
-		return alertID;
+	public UUID getMessageID() {
+		return messageID;
 	}
 
-	public void setAlertID(UUID alertID) {
-		this.alertID = alertID;
+	public void setMessageID(UUID messageID) {
+		this.messageID = messageID;
 	}
 
 	public String getMessage() {

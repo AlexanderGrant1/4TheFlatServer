@@ -73,6 +73,18 @@ public class GroupMethods {
 		return users;
 	}
 	
+	public static void addAllowedProduct(UUID groupID, String product) {
+		
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+
+		PreparedStatement statement = session
+				.prepare("UPDATE user_group SET allowed_products = allowed_products + {'"+product+"'} where group_id = ?");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(groupID);
+		ResultSet rs = session.execute(boundStatement);
+	}
+	
 	public static Set<String> getAllowedProducts(UUID groupID) {
 
 		if(getGroupByUUID(groupID) == null)

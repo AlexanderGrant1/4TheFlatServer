@@ -102,5 +102,18 @@ public class UserMethods {
 		}
 		return false;
 	}
+	
+	public static void removeApprovedProduct(String username, String product)
+	{
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+		
+		PreparedStatement statement = session
+				.prepare("UPDATE users SET products_to_add = products_to_add - {'"+product+"'} where user_name = ?");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(username);
+		ResultSet rs = session.execute(boundStatement);
+		session.close();
+	}
 
 }

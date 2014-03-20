@@ -40,6 +40,27 @@ public class MessageMethods {
 
 	}
 	
+	public static void sendSuggestionOutcome(Set<String> receivers, String text, boolean successful) {
+
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+
+		for (String s : receivers) {
+
+				UUID mesageID = java.util.UUID
+						.fromString(new com.eaio.uuid.UUID().toString());
+
+				PreparedStatement statement = session
+						.prepare("INSERT into user_messages (user_name, message_id, text, type) values (?, ?, ?, ?)");
+				BoundStatement boundStatement = new BoundStatement(statement);
+				boundStatement.bind(s, mesageID, text, 3);//3 = suggestion outcome
+				session.execute(boundStatement);
+
+			
+
+		}
+
+	}
+	
 	public static boolean messageExists(UUID messageID, String username)
 	{
 			Session session = CassandraConnection.getCluster().connect("flat_db");

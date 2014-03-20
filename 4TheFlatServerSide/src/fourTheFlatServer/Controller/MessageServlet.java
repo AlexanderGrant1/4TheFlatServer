@@ -100,6 +100,12 @@ public class MessageServlet extends HttpServlet {
 							}
 						}
 					}
+					for(String user : groupUsers)
+					{
+						UserMethods.removeApprovedProduct(user, subject);
+					}
+					String outcome = "Suggestion to add "+subject + " to be bought was successfully approved.";
+					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, true);
 					//success
 					break;
 				}
@@ -124,6 +130,12 @@ public class MessageServlet extends HttpServlet {
 				case 0:
 				{
 					//don't add a new product
+					for(String s : groupUsers)
+					{
+						UserMethods.removeApprovedProduct(s, subject);
+					}
+					String outcome = "Suggestion to add "+subject + " to be bought failed.";
+					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, false);
 					break;
 				}
 				case 1:

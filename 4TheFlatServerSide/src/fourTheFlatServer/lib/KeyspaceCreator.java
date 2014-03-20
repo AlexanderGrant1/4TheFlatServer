@@ -16,7 +16,7 @@ public final class KeyspaceCreator {
 	public static void SetUpKeySpaces(Cluster c) {
 	
 			String[] moreCreates = new String[4];
-			String  testData[] = new String[3];
+			String  testData[] = new String[8];
 			
 			String dropKeyspace = "Drop keyspace if exists flat_db";
 			String createKeyspace = "create keyspace flat_db  WITH replication = {'class':'SimpleStrategy', 'replication_factor':1}";
@@ -54,18 +54,23 @@ public final class KeyspaceCreator {
 ;
 			
 			//Create TEST user_group
-			testData[0] = "Insert into user_group(group_id, address, allowed_products, shopping_list, user_shopping, users) values (cc4bcc90-ad52-11e3-a13d-74e543b5285b,'123 Test Street', {'tea', 'eggs', 'milk', 'cheese', 'toilet paper'}, {'egg'}, false, {'test','test2'});";
+			testData[0] = "Insert into user_group(group_id, address, allowed_products, shopping_list, user_shopping, users) values (cc4bcc90-ad52-11e3-a13d-74e543b5285b,'123 Test Street', {'tea', 'eggs', 'milk', 'cheese', 'toilet paper'}, {'egg'}, false, {'test1','test2','test3','test4','test5','test6','test7'});";
 			
 			//Create TEST users
-			testData[1] = "Insert into users(user_name, group, is_shopping, password) values ('test',cc4bcc90-ad52-11e3-a13d-74e543b5285b, false, '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08');";
+			testData[1] = "Insert into users(user_name, group, is_shopping, password) values ('test1',cc4bcc90-ad52-11e3-a13d-74e543b5285b, false, '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08');";
 			testData[2] = "Insert into users(user_name, group, is_shopping, password) values ('test2',cc4bcc90-ad52-11e3-a13d-74e543b5285b, false, '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08');";
+			testData[3] = "Insert into users(user_name, group, is_shopping, password) values ('test3',cc4bcc90-ad52-11e3-a13d-74e543b5285b, false, '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08');";
+			testData[4] = "Insert into users(user_name, group, is_shopping, password) values ('test4',cc4bcc90-ad52-11e3-a13d-74e543b5285b, false, '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08');";
+			testData[5] = "Insert into users(user_name, group, is_shopping, password) values ('test5',cc4bcc90-ad52-11e3-a13d-74e543b5285b, false, '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08');";
+			testData[6] = "Insert into users(user_name, group, is_shopping, password) values ('test6',cc4bcc90-ad52-11e3-a13d-74e543b5285b, false, '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08');";
+			testData[7] = "Insert into users(user_name, group, is_shopping, password) values ('test7',cc4bcc90-ad52-11e3-a13d-74e543b5285b, false, '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08');";
+			
 			
 			Session session = c.connect();
 
 			//UPDLOAD AS WAR IN THE FOLLOWING WAY TO CREATE A NEW DATABASE:
 					//1. UNCOMMENT dropKeyspace statment, uploaded and run
-					//2. COMMENT OUT dropKeyspace statment, uploaded and run
-					//3. COMMENT OUT THE KEYSPACE CREATOR IN "CassandraConnection" (LINE 61) and upload again
+					//2. COMMENT OUT THE KEYSPACE CREATOR IN "CassandraConnection" (LINE 61) and upload again
 			
 			
 			try {
@@ -109,11 +114,9 @@ public final class KeyspaceCreator {
 				session.close();
 			}
 			
-				
-			for (int i = 0; i < 3; i++) {
-				// now add some column families
+			//load in test data
+			for (int i = 0; i < 8; i++) {
 				session = c.connect("flat_db");
-				System.out.println("" + testData[i]);
 
 				try {
 					SimpleStatement cqlQuery = new SimpleStatement(

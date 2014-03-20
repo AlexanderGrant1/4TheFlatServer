@@ -21,13 +21,13 @@ public class MessageMethods {
 
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 
+		
+		UUID mesageID = java.util.UUID
+				.fromString(new com.eaio.uuid.UUID().toString());
+		
 		for (String s : users) {
 
 			if (!s.equals(sender)) {
-
-				UUID mesageID = java.util.UUID
-						.fromString(new com.eaio.uuid.UUID().toString());
-
 				PreparedStatement statement = session
 						.prepare("INSERT into user_messages (user_name, message_id, text, type) values (?, ?, ?, ?)");
 				BoundStatement boundStatement = new BoundStatement(statement);
@@ -135,7 +135,6 @@ public class MessageMethods {
 	public static boolean deleteUserMessage(UUID messageID, String username)
 	{
 			Session session = CassandraConnection.getCluster().connect("flat_db");
-
 			PreparedStatement statement = session
 					.prepare("DELETE FROM user_messages where message_id = ? AND user_name = ?");
 

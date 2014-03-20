@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import fourTheFlatServer.Model.GetAllData;
 import fourTheFlatServer.Model.GroupMethods;
 import fourTheFlatServer.Stores.Group;
+import fourTheFlatServer.Stores.Message;
 import fourTheFlatServer.Stores.User;
 import fourTheFlatServer.lib.PojoMapper;
 
@@ -67,6 +68,20 @@ public class PrintDBServlet extends HttpServlet {
 		
 	    response.getWriter().println("");
 	    
+	    
+	    //PRINT MESSAGE TABLE
+	    response.getWriter().println("Messages!");
+	    response.getWriter().println("");
+	    
+        LinkedList<Message> messages = GetAllData.getAllMessages();
+	    
+        for(Message m : messages)
+        {
+        	
+	    	response.getWriter().print(PojoMapper.toJson(m, true));
+	    	 response.getWriter().println("");
+        }
+	    
 		//PRINT AVAILABLE_PRODUCTS TEXT FILE
 		
 	    PrintWriter writer = response.getWriter();
@@ -81,12 +96,12 @@ public class PrintDBServlet extends HttpServlet {
         
         String text;
         while ((text = reader.readLine()) != null) {
-        	System.out.println(text);
             writer.println(text);
         }
-	    
-	    
-	    
+   	 
+        response.getWriter().println("");        
+        
+        
 	    //PRINT PRODUCTS_LIST TABLE
 	}
 

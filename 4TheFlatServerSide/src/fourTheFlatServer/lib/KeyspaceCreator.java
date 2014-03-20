@@ -33,7 +33,9 @@ public final class KeyspaceCreator {
 					+ "user_name varchar," + "password varchar,"
 					+ "money_to_get set <int>," + "shopping_locations varchar,"
 					+ "is_shopping boolean," + "group timeuuid,"
-					+ "pending_approval set <varchar>, "
+					+ "products_to_add set <varchar>, "
+					+ "users_to_add set<varchar>,"
+					+"preferred_address varchar,"
 					+ "PRIMARY KEY(user_name));";
 
 			// CREATE PRODUTS TABLE
@@ -43,6 +45,13 @@ public final class KeyspaceCreator {
 					+ "purchase_date timestamp,"
 					+ "PRIMARY KEY((product_name), group_id));";
 
+			moreCreates[3] = "CREATE TABLE user_messages("
+							+"user_name varchar,"
+							+"message_id timeUUID,"
+							+"text varchar,"
+							+"type int,"
+							+"PRIMARY KEY((user_name), message_id));"
+;
 			
 			//Create TEST user_group
 			testData[0] = "Insert into user_group(group_id, address, allowed_products, shopping_list, user_shopping, users) values (cc4bcc90-ad52-11e3-a13d-74e543b5285b,'123 Test Street', {'tea', 'eggs', 'milk', 'cheese', 'toilet paper'}, {'egg'}, false, {'test','test2'});";
@@ -58,7 +67,7 @@ public final class KeyspaceCreator {
 					//2. COMMENT OUT dropKeyspace statment, uploaded and run
 					//3. COMMENT OUT THE KEYSPACE CREATOR IN "CassandraConnection" (LINE 61) and upload again
 			
-			/*
+			
 			try {
 
 				PreparedStatement statement = session
@@ -71,7 +80,7 @@ public final class KeyspaceCreator {
 				System.out.println("Can't drop keyspace " + et);
 			}
 			
-		*/
+		
 			try {
 
 				PreparedStatement statement = session
@@ -85,7 +94,7 @@ public final class KeyspaceCreator {
 			}
 			
 			
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i < 4; i++) {
 				// now add some column families
 				session = c.connect("flat_db");
 				System.out.println("" + moreCreates[i]);
@@ -115,6 +124,7 @@ public final class KeyspaceCreator {
 				}
 				session.close();
 			}
+			
 
 	}
 }

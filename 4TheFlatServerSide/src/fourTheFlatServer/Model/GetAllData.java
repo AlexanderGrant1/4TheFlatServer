@@ -99,8 +99,8 @@ public class GetAllData {
 				user.setIsShopping(row.getBool("is_shopping"));
 				user.setGroupID(row.getUUID("group"));
 				user.setMoneyToGet(row.getSet("money_to_get", Integer.class));
-				user.setPendingApproval(row.getSet("pending_approval", String.class));
-				
+				user.setPendingProducts(row.getSet("products_to_add", String.class));
+				user.setPendingUsers(row.getSet("users_to_add", String.class));
 				userList.add(user);
 			}
 

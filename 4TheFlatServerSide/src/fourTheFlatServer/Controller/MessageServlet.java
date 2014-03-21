@@ -159,6 +159,7 @@ public class MessageServlet extends HttpServlet {
 		}
 		else
 		{
+			UUID messageGroupID = m.getMessageID();
 			switch(type)
 			{
 				case 0:
@@ -167,6 +168,7 @@ public class MessageServlet extends HttpServlet {
 					for(String s : groupUsers)
 					{
 						UserMethods.removeApprovedProduct(s, subject);
+						MessageMethods.deleteUserMessage(messageGroupID, username);
 					}
 					String outcome = "Suggestion to add "+subject + " to be bought failed.";
 					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, false);
@@ -178,6 +180,7 @@ public class MessageServlet extends HttpServlet {
 					for(String s : groupUsers)
 					{
 						UserMethods.removeApprovedUser(s, subject);
+						MessageMethods.deleteUserMessage(messageGroupID, username);
 					}
 					String outcome = "Suggestion to add "+subject + " to the group has failed.";
 					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, false);
@@ -189,6 +192,7 @@ public class MessageServlet extends HttpServlet {
 					for(String s : groupUsers)
 					{
 						UserMethods.removeApprovedAddress(s, subject);
+						MessageMethods.deleteUserMessage(messageGroupID, username);
 					}
 					String outcome = "Suggestion to change address to "+subject + " failed.";
 					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, false);

@@ -20,6 +20,7 @@ import com.datastax.driver.core.Session;
 import fourTheFlatServer.Model.AuthenticateUser;
 import fourTheFlatServer.Model.UserMethods;
 import fourTheFlatServer.Stores.User;
+import fourTheFlatServer.Stores.UserReturn;
 import fourTheFlatServer.lib.CassandraConnection;
 import fourTheFlatServer.lib.PojoMapper;
 
@@ -59,8 +60,10 @@ public class UserServlet extends HttpServlet {
 			response.getWriter().print("Invalid username or password.");
 			return;
 		}
-
-		String jason = PojoMapper.toJson(user, true);
+		UserReturn userReturn = new UserReturn();
+		userReturn.setUsername(user.getUsername());
+		userReturn.setGroupID(user.getGroupID());
+		String jason = PojoMapper.toJson(userReturn, true);
 
 		 response.setContentType("application/json");
 		response.getWriter().print(jason);
@@ -94,8 +97,12 @@ public class UserServlet extends HttpServlet {
 		
 		if(AuthenticateUser.registerUser(username, password))
 		{
+			
 			User user = UserMethods.getUserByUsername(username);
-			String jason = PojoMapper.toJson(user, true);
+			UserReturn userReturn = new UserReturn();
+			userReturn.setUsername(user.getUsername());
+			userReturn.setGroupID(user.getGroupID());
+			String jason = PojoMapper.toJson(userReturn, true);
 			response.getWriter().print(jason);
 		}
 		else

@@ -11,6 +11,7 @@ public class Message {
 	//have a template string on app "Do you want " + username + " to be added to the group?"
 	private String message; 
 	private int type;
+	private String receiver;
 
 	public UUID getMessageID() {
 		return messageID;
@@ -34,6 +35,14 @@ public class Message {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+
+	public String getReceiver() {
+		return receiver;
+	}
+
+	public void setReceiver(String receiver) {
+		this.receiver = receiver;
 	}
 
 }

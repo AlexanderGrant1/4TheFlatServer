@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fourTheFlatServer.Model.AddApprovalToUser;
+import fourTheFlatServer.Model.Approvals;
 import fourTheFlatServer.Model.GroupMethods;
 import fourTheFlatServer.Model.MessageMethods;
 import fourTheFlatServer.Model.UserMethods;
@@ -89,7 +89,7 @@ public class MessageServlet extends HttpServlet {
 				case 0:
 				{
 					//add a new product
-					AddApprovalToUser.allowedProductApproved(username, subject);
+					Approvals.allowedProductApproved(username, subject);
 					for(String user : groupUsers)
 					{
 						if(!user.equals(username))
@@ -112,7 +112,7 @@ public class MessageServlet extends HttpServlet {
 				case 1:
 				{
 					//add a new user
-					AddApprovalToUser.groupUserApproved(username, subject);
+					Approvals.groupUserApproved(username, subject);
 					for(String user : groupUsers)
 					{
 						if(!user.equals(username))
@@ -135,7 +135,7 @@ public class MessageServlet extends HttpServlet {
 				case 2:
 				{
 					//agree with new address
-					AddApprovalToUser.groupAddressApproved(username, subject);
+					Approvals.groupAddressApproved(username, subject);
 					for(String user : groupUsers)
 					{
 						if(!user.equals(username))

@@ -7,7 +7,7 @@ import com.datastax.driver.core.Session;
 
 import fourTheFlatServer.lib.CassandraConnection;
 
-public class AddApprovalToUser {
+public class Approvals {
 
 	public static boolean groupUserApproved(String suggestingUser, String userToAdd) {
 

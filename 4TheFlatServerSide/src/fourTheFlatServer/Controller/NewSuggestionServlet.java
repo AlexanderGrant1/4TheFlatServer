@@ -1,6 +1,7 @@
 package fourTheFlatServer.Controller;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,8 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fourTheFlatServer.Model.AddApprovalToUser;
+import fourTheFlatServer.Model.Approvals;
+import fourTheFlatServer.Model.GroupMethods;
 import fourTheFlatServer.Model.MessageMethods;
+import fourTheFlatServer.Model.UserMethods;
+import fourTheFlatServer.Stores.Group;
 
 /**
  * Servlet implementation class NewSuggestionServlet
@@ -51,36 +55,68 @@ public class NewSuggestionServlet extends HttpServlet {
 			return;
 		}
 		String user = urlSplit[3];
-		String type = urlSplit[4];
+		int type = Integer.parseInt(urlSplit[4]);
 		String suggestion = urlSplit[5];
+		UUID userGroup = UserMethods.getGroupIdByUsername(user);
 		
-		AddApprovalToUser aau = new AddApprovalToUser(); 
-		MessageMethods mos = new MessageMethods();
+		if(userGroup != null)
+		{
+			Group group = GroupMethods.getGroupByUUID(userGroup);
+			if(group.getUsers().size() == 1)
+			{
+				switch(type)
+				{
+					case 0:
+					{
+						//add a new product
+						Approvals.allowedProductApproved(user, suggestion);
+						//success
+						break;
+					}
+					case 1:
+					{
+						//add a new user
+						Approvals.groupUserApproved(user, suggestion);
+						//success
+						break;
+					}
+					case 2:
+					{
+						//agree with new address
+						Approvals.groupAddressApproved(user, suggestion);
+						//success
+						break;
+					}
+				}
+				return;
+			}
+		}
+	
 		
 		//SUGGEST PRODUCT FOR ALLOWED PRODUCT LIST
-		if(type.equals("0"))
+		if(type== 0)
 		{
-			aau.allowedProductApproved(user,suggestion);
+			Approvals.allowedProductApproved(user,suggestion);
 			
-			mos.sendMessages(user, suggestion, 0);
+			MessageMethods.sendMessages(user, suggestion, 0);
 			response.getWriter().print("Product Suggestion: "+suggestion);				
 		}
 		
 		//SUGGEST USER BE ADDED TO GROUP
-		else if(type.equals("1"))
+		else if(type == 1)
 		{
-			aau.groupUserApproved(user, suggestion);
+			Approvals.groupUserApproved(user, suggestion);
 			
-			mos.sendMessages(user, suggestion, 1);
+			MessageMethods.sendMessages(user, suggestion, 1);
 			response.getWriter().print("New user: "+suggestion);	
 		}	
 		
 		//CHANGE ADDRESS OF FLAT
-		else if(type.equals("2"))
+		else if(type == 2)
 		{
-			aau.groupAddressApproved(user, suggestion);
+			Approvals.groupAddressApproved(user, suggestion);
 			
-			mos.sendMessages(user, suggestion, 2);
+			MessageMethods.sendMessages(user, suggestion, 2);
 			
 			
 			response.getWriter().print("Change flat address: "+suggestion);

@@ -58,7 +58,7 @@ public  final class CassandraConnection {
 			getHosts(cluster);
 			
 			//UNCOMMENT TO CALL DB CREATOR METHOD			
-			KeyspaceCreator.SetUpKeySpaces(cluster);
+			//KeyspaceCreator.SetUpKeySpaces(cluster);
 		return cluster;
 
 	}	

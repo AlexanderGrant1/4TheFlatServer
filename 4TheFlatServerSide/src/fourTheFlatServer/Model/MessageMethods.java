@@ -95,6 +95,7 @@ public class MessageMethods {
 				Message m = new Message();
 				m.setMessageID(r.getUUID("message_id"));
 				m.setMessage(r.getString("text"));
+				m.setReceiver(r.getString("user_name"));
 				m.setType(r.getInt("type"));
 				messageList.add(m);
 			}

@@ -132,6 +132,7 @@ public class GetAllData {
 				Message m = new Message();
 				m.setMessageID(r.getUUID("message_id"));
 				m.setMessage(r.getString("text"));
+				m.setReceiver(r.getString("user_name"));
 				m.setType(r.getInt("type"));
 
 				allM.add(m);

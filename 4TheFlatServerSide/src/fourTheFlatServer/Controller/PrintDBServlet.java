@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import fourTheFlatServer.Model.GetAllData;
 import fourTheFlatServer.Model.GroupMethods;
 import fourTheFlatServer.Stores.Group;
+import fourTheFlatServer.Stores.Message;
 import fourTheFlatServer.Stores.User;
 import fourTheFlatServer.lib.PojoMapper;
 
@@ -38,25 +39,25 @@ public class PrintDBServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		//PRINT USER_GROUPS TABLE
 		LinkedList<Group> groupList = GetAllData.getAllGroups();
-		
+
 	    response.getWriter().println("GROUPS!");
 	    response.getWriter().println("");
-	    
+
 	    for(Group g: groupList)
 	    {
 	    	response.getWriter().print(PojoMapper.toJson(g, true));
 	    	 response.getWriter().println("");
 	    }
-	    
+
 	    response.getWriter().println("");
-	    
-	    
+
+
 		//PRINT USERS TABLE
 	    LinkedList<User> userList = GetAllData.getAllUsers();
-	
+
 	    response.getWriter().println("Users!");
 	    response.getWriter().println("");
 	    for(User u: userList)
@@ -64,14 +65,28 @@ public class PrintDBServlet extends HttpServlet {
 	    	response.getWriter().print(PojoMapper.toJson(u, true));
 	    	 response.getWriter().println("");
 	    }
-		
+
 	    response.getWriter().println("");
-	    
+
+
+	    //PRINT MESSAGE TABLE
+	    response.getWriter().println("Messages!");
+	    response.getWriter().println("");
+
+        LinkedList<Message> messages = GetAllData.getAllMessages();
+
+        for(Message m : messages)
+        {
+        	
+	    	response.getWriter().print(PojoMapper.toJson(m, true));
+	    	 response.getWriter().println("");
+        }
+
 		//PRINT AVAILABLE_PRODUCTS TEXT FILE
-		
+
 	    PrintWriter writer = response.getWriter();
 
-	    
+
 	    response.getWriter().println("Available Products in text file!");
 	    response.getWriter().println("");
         // foo.txt is at the root directory of the web app
@@ -81,12 +96,12 @@ public class PrintDBServlet extends HttpServlet {
         
         String text;
         while ((text = reader.readLine()) != null) {
-        	System.out.println(text);
             writer.println(text);
         }
-	    
-	    
-	    
+   	 
+        response.getWriter().println("");        
+        
+        
 	    //PRINT PRODUCTS_LIST TABLE
 	}
 

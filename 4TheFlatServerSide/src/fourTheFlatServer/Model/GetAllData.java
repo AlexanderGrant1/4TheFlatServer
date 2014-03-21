@@ -12,6 +12,7 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 
 import fourTheFlatServer.Stores.Group;
+import fourTheFlatServer.Stores.Message;
 import fourTheFlatServer.Stores.User;
 import fourTheFlatServer.lib.CassandraConnection;
 
@@ -107,8 +108,36 @@ public class GetAllData {
 		}
 
 		session.close();
-		
+
 		return userList;
+	}
+
+	public static LinkedList<Message> getAllMessages()
+	{
+
+			LinkedList<Message> allM = new LinkedList<Message>();
+
+			Session session = CassandraConnection.getCluster().connect("flat_db");
+
+			PreparedStatement statement = session
+					.prepare("SELECT * FROM user_messages");
+
+			BoundStatement boundStatement = new BoundStatement(statement);
+			ResultSet rs = session.execute(boundStatement);
+
+			session.close();
+
+			for(Row r : rs)
+			{
+				Message m = new Message();
+				m.setMessageID(r.getUUID("message_id"));
+				m.setMessage(r.getString("text"));
+				m.setType(r.getInt("type"));
+
+				allM.add(m);
+			}
+
+			return allM;
 	}
 
 }

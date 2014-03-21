@@ -93,6 +93,7 @@ public class UserMethods {
 		ResultSet rs = session.execute(boundStatement);
 		Row r = rs.one();
 		Set<String> addedProducts = r.getSet("products_to_add",String.class);
+		session.close();
 		for(String s : addedProducts)
 		{
 			if(s.equals(product))
@@ -103,12 +104,82 @@ public class UserMethods {
 		return false;
 	}
 	
+	public static boolean checkApprovedUsers(String username, String product)
+	{
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+		
+		PreparedStatement statement = session
+				.prepare("SELECT users_to_add from users where user_name = ?");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(username);
+		ResultSet rs = session.execute(boundStatement);
+		Row r = rs.one();
+		Set<String> addedUsers = r.getSet("users_to_add",String.class);
+		session.close();
+		for(String s : addedUsers)
+		{
+			if(s.equals(product))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean checkApprovedAddress(String username, String address)
+	{
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+		
+		PreparedStatement statement = session
+				.prepare("SELECT preferred_address from users where user_name = ?");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(username);
+		ResultSet rs = session.execute(boundStatement);
+		Row r = rs.one();
+		String approvedAddress = r.getString("preferred_address");
+		session.close();
+		if(approvedAddress.equals(address))
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean removeApprovedAddress(String username, String address)
+	{
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+		
+		PreparedStatement statement = session
+				.prepare("UPDATE users SET preferred_address = ? where user_name = ?");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(address, username);
+		ResultSet rs = session.execute(boundStatement);
+		session.close();
+		return false;
+	}
+	
 	public static void removeApprovedProduct(String username, String product)
 	{
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 		
 		PreparedStatement statement = session
 				.prepare("UPDATE users SET products_to_add = products_to_add - {'"+product+"'} where user_name = ?");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(username);
+		ResultSet rs = session.execute(boundStatement);
+		session.close();
+	}
+	
+	public static void removeApprovedUser(String username, String approvedUser)
+	{
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+		
+		PreparedStatement statement = session
+				.prepare("UPDATE users SET users_to_add = users_to_add - {'"+approvedUser+"'} where user_name = ?");
 
 		BoundStatement boundStatement = new BoundStatement(statement);
 		boundStatement.bind(username);

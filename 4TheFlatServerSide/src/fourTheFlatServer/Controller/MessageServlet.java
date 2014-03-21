@@ -113,12 +113,46 @@ public class MessageServlet extends HttpServlet {
 				{
 					//add a new user
 					AddApprovalToUser.groupUserApproved(username, subject);
+					for(String user : groupUsers)
+					{
+						if(!user.equals(username))
+						{
+							if(!UserMethods.checkApprovedUsers(username, subject))
+							{
+								return;
+							}
+						}
+					}
+					for(String user : groupUsers)
+					{
+						UserMethods.removeApprovedUser(username, subject);
+					}
+					String outcome = "Suggestion to add "+subject + " to the group was successfully approved.";
+					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, true);
+					//success
 					break;
 				}
 				case 2:
 				{
-					//agree with new addres
+					//agree with new address
 					AddApprovalToUser.groupAddressApproved(username, subject);
+					for(String user : groupUsers)
+					{
+						if(!user.equals(username))
+						{
+							if(!UserMethods.checkApprovedAddress(username, subject))
+							{
+								return;
+							}
+						}
+					}
+					for(String user : groupUsers)
+					{
+						UserMethods.removeApprovedAddress(username, subject);
+					}
+					String outcome = "Suggestion to change the address to "+subject + " was successfully approved.";
+					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, true);
+					//success
 					break;
 				}
 			}
@@ -141,11 +175,23 @@ public class MessageServlet extends HttpServlet {
 				case 1:
 				{
 					//don't add a new user
+					for(String s : groupUsers)
+					{
+						UserMethods.removeApprovedUser(s, subject);
+					}
+					String outcome = "Suggestion to add "+subject + " to the group has failed.";
+					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, false);
 					break;
 				}
 				case 2:
 				{
 					//disagree with new address
+					for(String s : groupUsers)
+					{
+						UserMethods.removeApprovedAddress(s, subject);
+					}
+					String outcome = "Suggestion to change address to "+subject + " failed.";
+					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, false);
 					break;
 				}
 			}

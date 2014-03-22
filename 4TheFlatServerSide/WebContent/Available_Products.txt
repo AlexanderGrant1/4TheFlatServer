@@ -1,11 +1,11 @@
 Eggs
 Tea
 Pasta
-Pasta sauce
-Curry sauce
-Toilet paper
-Washing up liquid
-Washing powder
+Pasta Sauce
+Curry Sauce
+Toilet Paper
+Washing-up Liquid
+Washing Powder
 Chicken
 Beef 
 Lamb
@@ -13,8 +13,8 @@ Rice
 Bread
 Milk
 Coffee
-Olive oil
-Tin foil
+Olive Oil
+Tin Foil
 Bleach
 Cheese
 Juice

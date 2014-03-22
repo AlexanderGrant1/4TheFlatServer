@@ -49,7 +49,7 @@ public class NewSuggestionServlet extends HttpServlet {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
 		urlSplit = General.Utils.formatStringArray(urlSplit);
-		
+		urlSplit = General.Utils.formatStringArray(urlSplit);
 		if (urlSplit.length != 6) {
 			response.getWriter().print("Incorrect URL format.");
 			return;

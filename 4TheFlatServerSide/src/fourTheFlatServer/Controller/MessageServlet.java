@@ -105,6 +105,8 @@ public class MessageServlet extends HttpServlet {
 					{
 						UserMethods.removeApprovedProduct(user, subject);
 					}
+					MessageMethods.deleteUserMessage(m.getMessageID(), username);
+					GroupMethods.addAllowedProduct(UserMethods.getGroupIdByUsername(username), subject);
 					String outcome = "Suggestion to add "+subject + " to be bought was successfully approved.";
 					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, true);
 					//success
@@ -129,6 +131,8 @@ public class MessageServlet extends HttpServlet {
 					{
 						UserMethods.removeApprovedUser(user, subject);
 					}
+					MessageMethods.deleteUserMessage(m.getMessageID(), username);
+					GroupMethods.addUserToGroup(UserMethods.getGroupIdByUsername(username), subject);
 					String outcome = "Suggestion to add "+subject + " to the group was successfully approved.";
 					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, true);
 					//success
@@ -144,6 +148,7 @@ public class MessageServlet extends HttpServlet {
 						{
 							if(!UserMethods.checkApprovedAddress(user, subject))
 							{
+								MessageMethods.deleteUserMessage(m.getMessageID(), username);
 								return;
 							}
 						}
@@ -152,6 +157,8 @@ public class MessageServlet extends HttpServlet {
 					{
 						UserMethods.removeApprovedAddress(user, subject);
 					}
+					MessageMethods.deleteUserMessage(m.getMessageID(), username);
+					GroupMethods.changeGroupAddress(UserMethods.getGroupIdByUsername(username), subject);
 					String outcome = "Suggestion to change the address to "+subject + " was successfully approved.";
 					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, true);
 					//success

@@ -216,14 +216,14 @@ public class GroupMethods {
 		boundStatement.bind(groupID);
 		session.execute(boundStatement);
 		
-		addUserToGroup(userName, groupID);
+		addUserToGroup(groupID, userName);
 	
 		Group newGroup = getGroupByUUID(groupID);		
 		session.close();
 		return newGroup;
 	}
 
-	public static boolean addUserToGroup(String userName, UUID group) {
+	public static boolean addUserToGroup(UUID group, String userName) {
 		
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 	
@@ -242,6 +242,21 @@ public class GroupMethods {
 		session.close();
 		return true;
 		
+	}
+	
+	public static boolean changeGroupAddress(UUID groupID, String newAddress)
+	{
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+		
+		PreparedStatement addUserToGroup = session
+				.prepare("UPDATE user_group SET adddress = ?  where group_id = ?");
+		
+		BoundStatement boundStatement = new BoundStatement(addUserToGroup);
+		boundStatement.bind(groupID, newAddress);
+		session.execute(boundStatement);
+		session.close();
+
+		return true;
 	}
 	
 	public static boolean removeUserFromGroup(String userName, UUID group) {

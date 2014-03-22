@@ -140,7 +140,7 @@ public class UserMethods {
 		Row r = rs.one();
 		String approvedAddress = r.getString("preferred_address");
 		session.close();
-		if(approvedAddress.equals(address))
+		if(approvedAddress != null &&  approvedAddress.equals(address))
 		{
 			return true;
 		}

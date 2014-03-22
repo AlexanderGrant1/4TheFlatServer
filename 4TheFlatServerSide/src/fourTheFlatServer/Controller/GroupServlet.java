@@ -125,7 +125,7 @@ public class GroupServlet extends HttpServlet {
 		//If the user doesn't already have a group then add them to the given group
 		if(UserMethods.getGroupIdByUsername(username) == null)
 		{
-			GroupMethods.addUserToGroup(username, groupID);
+			GroupMethods.addUserToGroup(groupID, username);
 			response.getWriter().print(PojoMapper.toJson(group, true));
 			return;
 		}

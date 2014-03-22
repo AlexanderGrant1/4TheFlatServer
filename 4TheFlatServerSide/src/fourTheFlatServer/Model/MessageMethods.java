@@ -21,17 +21,18 @@ public class MessageMethods {
 
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 
+
+		UUID messageID = java.util.UUID
+				.fromString(new com.eaio.uuid.UUID().toString());
+System.out.println("UUID: "+messageID);	
 		for (String s : users) {
 
 			if (!s.equals(sender)) {
 
-				UUID mesageID = java.util.UUID
-						.fromString(new com.eaio.uuid.UUID().toString());
-
 				PreparedStatement statement = session
 						.prepare("INSERT into user_messages (user_name, message_id, text, type) values (?, ?, ?, ?)");
 				BoundStatement boundStatement = new BoundStatement(statement);
-				boundStatement.bind(s, mesageID, text, type);
+				boundStatement.bind(s, messageID, text, type);
 				session.execute(boundStatement);
 
 			}

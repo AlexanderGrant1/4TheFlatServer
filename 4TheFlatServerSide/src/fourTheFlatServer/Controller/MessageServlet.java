@@ -94,8 +94,9 @@ public class MessageServlet extends HttpServlet {
 					{
 						if(!user.equals(username))
 						{
-							if(!UserMethods.checkApprovedProducts(username, subject))
-							{
+							if(!UserMethods.checkApprovedProducts(user, subject))
+							{		
+								MessageMethods.deleteUserMessage(m.getMessageID(), username);
 								return;
 							}
 						}
@@ -117,15 +118,16 @@ public class MessageServlet extends HttpServlet {
 					{
 						if(!user.equals(username))
 						{
-							if(!UserMethods.checkApprovedUsers(username, subject))
+							if(!UserMethods.checkApprovedUsers(user, subject))
 							{
+								MessageMethods.deleteUserMessage(m.getMessageID(), username);
 								return;
 							}
 						}
 					}
 					for(String user : groupUsers)
 					{
-						UserMethods.removeApprovedUser(username, subject);
+						UserMethods.removeApprovedUser(user, subject);
 					}
 					String outcome = "Suggestion to add "+subject + " to the group was successfully approved.";
 					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, true);
@@ -140,7 +142,7 @@ public class MessageServlet extends HttpServlet {
 					{
 						if(!user.equals(username))
 						{
-							if(!UserMethods.checkApprovedAddress(username, subject))
+							if(!UserMethods.checkApprovedAddress(user, subject))
 							{
 								return;
 							}
@@ -148,7 +150,7 @@ public class MessageServlet extends HttpServlet {
 					}
 					for(String user : groupUsers)
 					{
-						UserMethods.removeApprovedAddress(username, subject);
+						UserMethods.removeApprovedAddress(user, subject);
 					}
 					String outcome = "Suggestion to change the address to "+subject + " was successfully approved.";
 					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, true);

@@ -86,9 +86,10 @@ public class MessageServlet extends HttpServlet {
 		{
 			switch(type)
 			{
+			
+				//APPROVE ADD PRODUCT
 				case 0:
 				{
-					//add a new product
 					Approvals.allowedProductApproved(username, subject);
 					for(String user : groupUsers)
 					{
@@ -107,11 +108,13 @@ public class MessageServlet extends HttpServlet {
 					}
 					MessageMethods.deleteUserMessage(m.getMessageID(), username);
 					GroupMethods.addAllowedProduct(UserMethods.getGroupIdByUsername(username), subject);
-					String outcome = "Suggestion to add "+subject + " to be bought was successfully approved.";
+					String outcome = "Aprove product "+subject + " succeeded";
 					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, true);
 					//success
 					break;
 				}
+				
+				//APPROVE ADD USER
 				case 1:
 				{
 					//add a new user
@@ -133,11 +136,13 @@ public class MessageServlet extends HttpServlet {
 					}
 					MessageMethods.deleteUserMessage(m.getMessageID(), username);
 					GroupMethods.addUserToGroup(UserMethods.getGroupIdByUsername(username), subject);
-					String outcome = "Suggestion to add "+subject + " to the group was successfully approved.";
+					String outcome = "Add user "+subject + " succeeded";
 					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, true);
 					//success
 					break;
 				}
+				
+				//APPROVE CHANGE ADDRESS
 				case 2:
 				{
 					//agree with new address
@@ -159,7 +164,7 @@ public class MessageServlet extends HttpServlet {
 					}
 					MessageMethods.deleteUserMessage(m.getMessageID(), username);
 					GroupMethods.changeGroupAddress(UserMethods.getGroupIdByUsername(username), subject);
-					String outcome = "Suggestion to change the address to "+subject + " was successfully approved.";
+					String outcome = "Change address to "+subject + " succeeded";
 					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, true);
 					//success
 					break;
@@ -179,7 +184,7 @@ public class MessageServlet extends HttpServlet {
 						UserMethods.removeApprovedProduct(s, subject);
 						MessageMethods.deleteUserMessage(messageGroupID, s);
 					}
-					String outcome = "Suggestion to add "+subject + " to be bought failed.";
+					String outcome = "Aprove product "+subject + " failed";
 					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, false);
 					break;
 				}
@@ -191,7 +196,7 @@ public class MessageServlet extends HttpServlet {
 						UserMethods.removeApprovedUser(s, subject);
 						MessageMethods.deleteUserMessage(messageGroupID, s);
 					}
-					String outcome = "Suggestion to add "+subject + " to the group has failed.";
+					String outcome = "Add user "+subject + " failed";
 					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, false);
 					break;
 				}
@@ -203,7 +208,7 @@ public class MessageServlet extends HttpServlet {
 						UserMethods.removeApprovedAddress(s, null);
 						MessageMethods.deleteUserMessage(messageGroupID, s);
 					}
-					String outcome = "Suggestion to change address to "+subject + " failed.";
+					String outcome = "Change address to "+subject + " failed";
 					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, false);
 					break;
 				}

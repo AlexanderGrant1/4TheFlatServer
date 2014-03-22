@@ -45,6 +45,8 @@ public class Approvals {
 				Session session = CassandraConnection.getCluster().connect(
 						"flat_db");
 
+				
+	System.out.println("UPDATE users SET preferred_address = "+addressToAdd+" where user_name = "+suggestingUser);
 				PreparedStatement statement = session.prepare("UPDATE users SET preferred_address = ? where user_name = ?");
 				BoundStatement boundStatement = new BoundStatement(statement);
 				boundStatement.bind(addressToAdd, suggestingUser);

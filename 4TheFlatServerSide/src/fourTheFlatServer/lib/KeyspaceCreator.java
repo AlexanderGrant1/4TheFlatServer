@@ -54,7 +54,7 @@ public final class KeyspaceCreator {
 ;
 
 			//Create TEST user_group
-			testData[0] = "Insert into user_group(group_id, address, allowed_products, shopping_list, user_shopping, users) values (cc4bcc90-ad52-11e3-a13d-74e543b5285b,'123 Test Street', {'tea', 'eggs', 'milk', 'cheese', 'toilet paper'}, {'egg'}, false, {'test1','test2','test3','test4','test5','test6','test7'});";
+			testData[0] = "Insert into user_group(group_id, address, allowed_products, shopping_list, user_shopping, users) values (cc4bcc90-ad52-11e3-a13d-74e543b5285b,'123 Test Street', {'tea', 'eggs', 'milk', 'cheese', 'toilet paper'}, {'Eggs'}, false, {'test1','test2','test3','test4','test5','test6','test7'});";
 
 			//Create TEST users
 			testData[1] = "Insert into users(user_name, group, is_shopping, password) values ('test1',cc4bcc90-ad52-11e3-a13d-74e543b5285b, false, '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08');";

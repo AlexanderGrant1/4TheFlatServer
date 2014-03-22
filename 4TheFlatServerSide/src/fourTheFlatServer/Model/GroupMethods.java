@@ -249,10 +249,10 @@ public class GroupMethods {
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 		
 		PreparedStatement addUserToGroup = session
-				.prepare("UPDATE user_group SET adddress = ?  where group_id = ?");
+				.prepare("UPDATE user_group SET address = ?  where group_id = ?");
 		
 		BoundStatement boundStatement = new BoundStatement(addUserToGroup);
-		boundStatement.bind(groupID, newAddress);
+		boundStatement.bind(newAddress, groupID);
 		session.execute(boundStatement);
 		session.close();
 

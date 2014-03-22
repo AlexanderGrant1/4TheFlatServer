@@ -102,6 +102,7 @@ public class GetAllData {
 				user.setMoneyToGet(row.getSet("money_to_get", Integer.class));
 				user.setPendingProducts(row.getSet("products_to_add", String.class));
 				user.setPendingUsers(row.getSet("users_to_add", String.class));
+				user.setPreferedAddress(row.getString("preferred_address"));
 				userList.add(user);
 			}
 

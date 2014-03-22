@@ -155,7 +155,7 @@ public class MessageServlet extends HttpServlet {
 					}
 					for(String user : groupUsers)
 					{
-						UserMethods.removeApprovedAddress(user, subject);
+						UserMethods.removeApprovedAddress(user, null);
 					}
 					MessageMethods.deleteUserMessage(m.getMessageID(), username);
 					GroupMethods.changeGroupAddress(UserMethods.getGroupIdByUsername(username), subject);
@@ -200,7 +200,7 @@ public class MessageServlet extends HttpServlet {
 					//disagree with new address
 					for(String s : groupUsers)
 					{
-						UserMethods.removeApprovedAddress(s, subject);
+						UserMethods.removeApprovedAddress(s, null);
 						MessageMethods.deleteUserMessage(messageGroupID, s);
 					}
 					String outcome = "Suggestion to change address to "+subject + " failed.";

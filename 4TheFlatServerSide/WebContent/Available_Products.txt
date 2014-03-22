@@ -1,20 +1,20 @@
-eggs
-tea
-pasta
-pasta sauce
-curry sauce
-toilet paper
-washing up liquid
-washing powder
-chicken
-beef 
-lamb
-rice
-bread
-milk
-coffee
-olive oil
-tin foil
-bleach
-cheese
-juice
+Eggs
+Tea
+Pasta
+Pasta sauce
+Curry sauce
+Toilet paper
+Washing up liquid
+Washing powder
+Chicken
+Beef 
+Lamb
+Rice
+Bread
+Milk
+Coffee
+Olive oil
+Tin foil
+Bleach
+Cheese
+Juice

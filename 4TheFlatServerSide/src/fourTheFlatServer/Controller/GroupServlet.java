@@ -88,7 +88,8 @@ public class GroupServlet extends HttpServlet {
 		if(UserMethods.getGroupIdByUsername(username) == null)
 		{
 			Group newGroup = GroupMethods.createNewGroup(username);
-			GroupMethods.changeGroupAddress(UserMethods.getGroupIdByUsername(username), address);
+			GroupMethods.changeGroupAddress(newGroup.getGroupID(), address);
+			newGroup = GroupMethods.getGroupByUUID(newGroup.getGroupID());
 			response.getWriter().print(PojoMapper.toJson(newGroup, true));
 			return;
 		}

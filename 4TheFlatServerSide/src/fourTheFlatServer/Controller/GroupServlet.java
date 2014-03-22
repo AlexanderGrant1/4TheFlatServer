@@ -64,18 +64,19 @@ public class GroupServlet extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 *group/<username> adds a user to a group
+	 *group/<username>/<address> Create new group and add user to it
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
 		urlSplit = General.Utils.formatStringArray(urlSplit);
-		if(urlSplit.length != 4)
+		if(urlSplit.length != 5)
 		{
 			response.getWriter().print("Incorrect URL format.");
 			return;
 		}
 		String username = urlSplit[3];
+		String address = urlSplit[4];
 		
 		//Check that the user exists
 		if(!UserMethods.userExists(username))
@@ -87,6 +88,7 @@ public class GroupServlet extends HttpServlet {
 		if(UserMethods.getGroupIdByUsername(username) == null)
 		{
 			Group newGroup = GroupMethods.createNewGroup(username);
+			GroupMethods.changeGroupAddress(UserMethods.getGroupIdByUsername(username), address);
 			response.getWriter().print(PojoMapper.toJson(newGroup, true));
 			return;
 		}
@@ -94,7 +96,7 @@ public class GroupServlet extends HttpServlet {
 	
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 *group/<groupID>/<username> creates a group with the given user in it
+	 *group/<groupID>/<username> add user to group
 	 */
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

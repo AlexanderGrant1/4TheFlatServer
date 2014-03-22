@@ -105,10 +105,30 @@ public class NewSuggestionServlet extends HttpServlet {
 		//SUGGEST USER BE ADDED TO GROUP
 		else if(type == 1)
 		{
-			Approvals.groupUserApproved(user, suggestion);
-			
-			MessageMethods.sendMessages(user, suggestion, 1);
-			response.getWriter().print("New user: "+suggestion);	
+			boolean userExists = UserMethods.userExists(user);
+			UUID groupID = UserMethods.getGroupIdByUsername(user);
+			if(userExists && groupID == null)
+			{
+				Approvals.groupUserApproved(user, suggestion);
+				
+				MessageMethods.sendMessages(user, suggestion, 1);
+				response.getWriter().print("New user: "+suggestion);	
+			}
+			else
+			{
+				if(!userExists)
+				{
+					response.getWriter().print("This user does not exist.");
+					return;
+				}
+				if(groupID != null)
+				{
+					response.getWriter().print("User is already in a group.");
+					return;
+				}
+				
+			}
+
 		}	
 		
 		//CHANGE ADDRESS OF FLAT

@@ -1,5 +1,6 @@
 package fourTheFlatServer.Stores;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -9,8 +10,8 @@ public class Group {
 	Set<String> users;
 	private String address;
 	private Set<String> allowedProducts;
-	private Set<String> shoppingList;
-	private boolean userShopping;
+	private Map<String, Integer> shoppingList;
+	private String userShopping;
 	
 	public UUID getGroupID()
 	{
@@ -54,25 +55,23 @@ public class Group {
 		return allowedProducts;
 	}
 	
-	public void setShoppingList(Set<String> shoppingList)
-	{
-		this.shoppingList =shoppingList;
-	}
 	
-	public Set<String> getShoppingList()
-	{
-		return shoppingList;
-	}
-
-	
-	public void setUserShopping(boolean userShopping)
+	public void setUserShopping(String userShopping)
 	{
 		this.userShopping = userShopping;
 	}
 	
-	public boolean getuserShopping()
+	public String getuserShopping()
 	{
 		return userShopping;
+	}
+
+	public Map<String, Integer> getShoppingList() {
+		return shoppingList;
+	}
+
+	public void setShoppingList(Map<String, Integer> shoppingList) {
+		this.shoppingList = shoppingList;
 	}
 
 	

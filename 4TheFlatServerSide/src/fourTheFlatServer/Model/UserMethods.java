@@ -186,5 +186,26 @@ public class UserMethods {
 		ResultSet rs = session.execute(boundStatement);
 		session.close();
 	}
+	
+	public static boolean setIsShopping(boolean value,String username)
+	{
+		try
+		{
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+		
+		PreparedStatement statement = session
+				.prepare("UPDATE users SET is_shopping = ? where user_name = ?");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(value, username);
+		ResultSet rs = session.execute(boundStatement);
+		session.close();
+		return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
 
 }

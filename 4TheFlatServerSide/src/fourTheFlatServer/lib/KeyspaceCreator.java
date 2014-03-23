@@ -31,7 +31,7 @@ public final class KeyspaceCreator {
 			// CREATE USER TABLE
 			moreCreates[1] = "CREATE TABLE if not exists users ("
 					+ "user_name varchar," + "password varchar,"
-					+ "money_to_get set <int>," + "shopping_locations varchar,"
+					+ "money map<varchar, int>," + "shopping_locations varchar,"
 					+ "is_shopping boolean," + "group timeuuid,"
 					+ "products_to_add set <varchar>, "
 					+ "users_to_add set<varchar>,"

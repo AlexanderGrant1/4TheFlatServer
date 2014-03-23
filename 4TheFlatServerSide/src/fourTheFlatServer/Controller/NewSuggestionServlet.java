@@ -69,21 +69,19 @@ public class NewSuggestionServlet extends HttpServlet {
 					case 0:
 					{
 						//add a new product
-						Approvals.allowedProductApproved(user, suggestion);
+						GroupMethods.addAllowedProduct(UserMethods.getGroupIdByUsername(user), suggestion);
 						//success
 						break;
 					}
 					case 1:
 					{
-						//add a new user
-						Approvals.groupUserApproved(user, suggestion);
+						GroupMethods.addUserToGroup(UserMethods.getGroupIdByUsername(user), suggestion);
 						//success
 						break;
 					}
 					case 2:
 					{
-						//agree with new address
-						Approvals.groupAddressApproved(user, suggestion);
+						GroupMethods.changeGroupAddress(UserMethods.getGroupIdByUsername(user), suggestion);
 						//success
 						break;
 					}

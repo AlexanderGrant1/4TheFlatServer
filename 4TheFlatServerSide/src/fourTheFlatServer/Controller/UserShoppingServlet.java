@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import fourTheFlatServer.Model.GroupMethods;
 import fourTheFlatServer.Model.MoneyMethods;
 import fourTheFlatServer.Model.UserMethods;
-import fourTheFlatServer.Stores.ShoppingList;
+import fourTheFlatServer.Stores.MapStore;
 import fourTheFlatServer.lib.PojoMapper;
 
 /**
@@ -22,7 +22,7 @@ import fourTheFlatServer.lib.PojoMapper;
 @WebServlet("/usershopping/*")
 public class UserShoppingServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final ShoppingList ShoppingList = null;
+	private static final MapStore ShoppingList = null;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -60,8 +60,8 @@ public class UserShoppingServlet extends HttpServlet {
 		UserMethods.setIsShopping(true, username);
 		GroupMethods.setShopper(username, groupID);
 	
-		ShoppingList list = new ShoppingList();
-		list.setList(GroupMethods.getShoppingList(groupID));
+		MapStore list = new MapStore();
+		list.seMap(GroupMethods.getShoppingList(groupID));
 		
 		String s = PojoMapper.toJson(list, true);
 		response.getWriter().println(s);	

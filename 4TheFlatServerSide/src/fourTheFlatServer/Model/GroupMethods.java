@@ -224,7 +224,7 @@ public class GroupMethods {
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 
 		PreparedStatement createGroupStatment = session
-				.prepare("Insert into user_group(group_id, user_shopping) VALUES (?, false)");
+				.prepare("Insert into user_group(group_id) VALUES (?)");
 
 		BoundStatement boundStatement = new BoundStatement(createGroupStatment);
 		boundStatement.bind(groupID);

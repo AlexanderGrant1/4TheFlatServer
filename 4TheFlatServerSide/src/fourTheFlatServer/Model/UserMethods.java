@@ -1,5 +1,7 @@
  package fourTheFlatServer.Model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -207,5 +209,23 @@ public class UserMethods {
 			return false;
 		}
 	}
-
+	
+	
+	public static Map<String, Integer> getUserBooks(String userName)
+	{
+		Map<String, Integer> data = new HashMap<String, Integer>();
+		// Start session
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+		// Prepare the Statement
+		PreparedStatement statement = session
+				.prepare("SELECT money FROM users where user_name=?");
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(userName);
+		ResultSet rs = session.execute(boundStatement);
+		Row details = rs.one();
+		
+		return details.getMap("money", String.class, Integer.class);
+	
+	}
+	
 }

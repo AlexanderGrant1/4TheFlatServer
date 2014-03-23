@@ -36,12 +36,17 @@ public class MoneyMethods {
 			String currentUser = iter.next();
 			//Get current amount owed by that user to user who did shopping
 			Map<String,Integer> owed = getUserMoneyOwed(currentUser);
-			Integer currentMoney = owed.get(currentUser);
+			Integer currentMoney;
+			try{
+				currentMoney = owed.get(currentUser);
+			}
+			catch(Exception e){
+				currentMoney=0;
+			}			
 			//Money now owed by that user to the shopper
 			int moneyOwedNow = currentMoney + indCost;
+			//Money owed by the shopper to that user
 			int reverseMoney = moneyOwedNow*-1;
-			//TODO: Need to reverse this amount, ie times by -1 to get the money the
-			//Shopper user now owes/is owed by the currentUser
 			//Start session
 			Session session = CassandraConnection.getCluster().connect("flat_db");
 			//Prepare the Statements - 1 to update the current non shopper
@@ -63,22 +68,20 @@ public class MoneyMethods {
 	{
 		Map<String,Integer> data = new Map<String,Integer>();
 		//Start session
-				Session session = CassandraConnection.getCluster().connect("flat_db");
-				//Prepare the Statement
-				PreparedStatement statement = session.prepare("SELECT money FROM users where user_name=?");	
-				BoundStatement boundStatement = new BoundStatement(statement);
-				boundStatement.bind(userName);
-				ResultSet rs = session.execute(boundStatement);
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+		//Prepare the Statement
+		PreparedStatement statement = session.prepare("SELECT money FROM users where user_name=?");	
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(userName);
+		ResultSet rs = session.execute(boundStatement);
 
-				Row details = rs.one();
-				if(!details.equals(null))
-				{
-					//TODO: Strip out resultset 
-					data = details.getMap("money", String, Integer);
-				}
-				session.close();
-				return null;
-		
+		Row details = rs.one();
+		if(!details.equals(null))
+		{
+			data = details.getMap("money", String, Integer);
+		}
+		session.close();
+		return data;		
 	}
 
 }

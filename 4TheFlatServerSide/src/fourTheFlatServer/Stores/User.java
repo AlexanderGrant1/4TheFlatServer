@@ -1,5 +1,6 @@
 package fourTheFlatServer.Stores;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -10,7 +11,7 @@ public class User {
 	private boolean isShopping;
 	private Set<String> pendingProducts;
 	private Set<String> pendingUsers;
-	private Set<Integer> moneyToGet;
+	private Map<String, Integer> money;
 	private String preferedAddress; 
 	
 	public String getUsername()
@@ -23,15 +24,6 @@ public class User {
 		username = newUsername;
 	}
 	
-	public void setMoneyToGet(Set<Integer> newList)
-	{
-		moneyToGet = newList;
-	}
-	
-	public Set<Integer> getMoneyToGet()
-	{
-		return moneyToGet;
-	}
 	
 	public void setIsShopping(boolean shopping)
 	{
@@ -73,6 +65,14 @@ public class User {
 
 	public void setPreferedAddress(String preferedAddress) {
 		this.preferedAddress = preferedAddress;
+	}
+
+	public Map<String, Integer> getMoney() {
+		return money;
+	}
+
+	public void setMoney(Map<String, Integer> money) {
+		this.money = money;
 	}
 
 }

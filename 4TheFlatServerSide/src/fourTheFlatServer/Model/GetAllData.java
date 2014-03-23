@@ -102,7 +102,7 @@ public class GetAllData {
 				user.setUsername(row.getString("user_name"));		
 				user.setIsShopping(row.getBool("is_shopping"));
 				user.setGroupID(row.getUUID("group"));
-				user.setMoneyToGet(row.getSet("money_to_get", Integer.class));
+				user.setMoney(row.getMap("money", String.class, Integer.class));
 				user.setPendingProducts(row.getSet("products_to_add", String.class));
 				user.setPendingUsers(row.getSet("users_to_add", String.class));
 				user.setPreferedAddress(row.getString("preferred_address"));

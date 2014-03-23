@@ -52,16 +52,25 @@ public  final class CassandraConnection {
 
 		   return sHosts;
 	}
-	public static Cluster getCluster(){
+	public static Cluster initialiseCluster(){
 		cluster = Cluster.builder()
 		         .addContactPoint(Host).build();
 			getHosts(cluster);
-			
+			System.out.println("initialising cluster");
 			//UNCOMMENT TO CALL DB CREATOR METHOD			
 			//KeyspaceCreator.SetUpKeySpaces(cluster);
 		return cluster;
 
 	}	
+	
+	public static Cluster getCluster()
+	{
+		if(cluster == null)
+		{
+			initialiseCluster();
+		}
+		return cluster;
+	}
 
 	public void close() {
 		   cluster.close();

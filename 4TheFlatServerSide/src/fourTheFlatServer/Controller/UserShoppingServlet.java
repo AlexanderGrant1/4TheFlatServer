@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fourTheFlatServer.Model.GroupMethods;
+import fourTheFlatServer.Model.MoneyMethods;
 import fourTheFlatServer.Model.UserMethods;
 import fourTheFlatServer.Stores.ShoppingList;
 import fourTheFlatServer.lib.PojoMapper;
@@ -56,8 +57,8 @@ public class UserShoppingServlet extends HttpServlet {
 		String username = urlSplit[3];
 		UUID groupID = UserMethods.getGroupIdByUsername(username);
 		
-		response.getWriter().println("User is shopping: "+UserMethods.setIsShopping(true, username));
-		response.getWriter().println("Group shopper: "+GroupMethods.setShopper(username, groupID));
+		UserMethods.setIsShopping(true, username);
+		GroupMethods.setShopper(username, groupID);
 	
 		ShoppingList list = new ShoppingList();
 		list.setList(GroupMethods.getShoppingList(groupID));
@@ -85,9 +86,38 @@ public class UserShoppingServlet extends HttpServlet {
 		
 		boolean sucsess = GroupMethods.setProductPrice(groupID, product, price);
 		
-		response.getWriter().println(sucsess);
-		
-		
+		response.getWriter().println(sucsess);			
 	}
+
+
+/**
+ * @see HttpServlet#doDelete(HttpServletRequest request, HttpServletResponse response)
+ *usershopping/<username>
+ */
+protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	String requestURI = request.getRequestURI();
+	String[] urlSplit = requestURI.split("/");
+	if(urlSplit.length != 4)
+	{
+		response.getWriter().print("Incorrect URL format.");
+		return;
+	}
+	String username = urlSplit[3];
+	
+	UUID groupID = UserMethods.getGroupIdByUsername(username);
+	
+	//GET TOTAL SHOP COST 	//REMOVE BOUGHT ITEMS FROM LIST
+	int cost = GroupMethods.shopCost(groupID);
+	
+	if(MoneyMethods.updateMoneyOwed(username, cost))
+	{
+		//Print a success message
+		response.getWriter().print("Money owed updated.");
+		return;
+	}
+		
+	UserMethods.setIsShopping(false, username);
+	GroupMethods.setShopper("null", groupID);
+}
 
 }

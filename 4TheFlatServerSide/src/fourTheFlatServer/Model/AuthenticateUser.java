@@ -32,7 +32,7 @@ public class AuthenticateUser {
 			user.setUsername(username);
 			user.setIsShopping(r.getBool("is_shopping"));
 			user.setGroupID(r.getUUID("group"));
-			user.setMoneyToGet(r.getSet("money_to_get", Integer.class));
+			user.setMoney(r.getMap("money", String.class, Integer.class));
 			user.setPendingProducts(r.getSet("products_to_add", String.class));
 			user.setPendingUsers(r.getSet("users_to_add", String.class));
 			session.close();

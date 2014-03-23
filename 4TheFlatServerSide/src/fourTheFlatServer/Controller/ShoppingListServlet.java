@@ -1,6 +1,7 @@
 package fourTheFlatServer.Controller;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.ServletException;
@@ -47,9 +48,11 @@ public class ShoppingListServlet extends HttpServlet {
 			response.getWriter().print("Group does not exist.");
 			return;
 		}
-		for(String s : GroupMethods.getShoppingList(groupUUID))
+		
+		Map<String, Integer> list =  GroupMethods.getShoppingList(groupUUID);
+		for(Map.Entry<String, Integer> m : list.entrySet())
 		{
-			response.getWriter().println(s);
+			response.getWriter().println(m.getKey());
 		}
 	}
 	
@@ -81,9 +84,10 @@ public class ShoppingListServlet extends HttpServlet {
 		}
 		if(GroupMethods.addItemToShoppingList(groupUUID, product))
 		{
-			for(String s : GroupMethods.getShoppingList(groupUUID))
+			Map<String, Integer> list =  GroupMethods.getShoppingList(groupUUID);
+			for(Map.Entry<String, Integer> m : list.entrySet())
 			{
-				response.getWriter().println(s);
+				response.getWriter().println(m.getKey());
 			}
 			return;
 		}
@@ -122,9 +126,10 @@ public class ShoppingListServlet extends HttpServlet {
 		
 		if(GroupMethods.removeItemFromShoppingList(groupID, product))
 		{
-			for(String s : GroupMethods.getShoppingList(groupID))
+			Map<String, Integer> list =  GroupMethods.getShoppingList(groupID);
+			for(Map.Entry<String, Integer> m : list.entrySet())
 			{
-				response.getWriter().println(s);
+				response.getWriter().println(m.getKey());
 			}
 			return;
 		}

@@ -1,6 +1,7 @@
 package fourTheFlatServer.Model;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.UUID;
 import java.util.Set;
 
@@ -40,10 +41,10 @@ public class GroupMethods {
 			 groupDetails.setAddress(details.getString("address"));
 				groupDetails.setAllowedProducts(details.getSet(
 						"allowed_products", String.class));
-				groupDetails.setShoppingList(details.getSet("shopping_list",
-						String.class));
+				groupDetails.setShoppingList(details.getMap("shopping_list",
+						String.class, Integer.class));
 			groupDetails.setUsers(details.getSet("users", String.class));
-			groupDetails.setUserShopping(details.getBool("user_shopping"));
+			groupDetails.setUserShopping(details.getString("user_shopping"));
 			session.close();
 			return groupDetails;
 		}
@@ -117,7 +118,7 @@ public class GroupMethods {
 
 	}
 	
-	public static Set<String> getShoppingList(UUID groupID) {
+	public static Map<String, Integer> getShoppingList(UUID groupID) {
 
 		if(getGroupByUUID(groupID) == null)
 		{
@@ -139,13 +140,36 @@ public class GroupMethods {
 
 		if(!details.equals(null))
 		{
-			Set<String> shoppingList;
-			shoppingList = details.getSet("shopping_list", String.class);
+			Map<String, Integer> shoppingList;
+			shoppingList = details.getMap("shopping_list", String.class, Integer.class);
 			session.close();
 			return shoppingList;
 		}
 		session.close();
 		return null;
+	}
+	
+	
+	public static boolean setShopper(String username, UUID groupID)
+	{
+		try
+		{
+			Session session = CassandraConnection.getCluster().connect("flat_db");
+
+			PreparedStatement statement = session
+					.prepare("UPDATE user_group SET user_shopping = ? where group_id = ?");
+
+			BoundStatement boundStatement = new BoundStatement(statement);
+			boundStatement.bind(username, groupID);
+			session.execute(boundStatement);
+			session.close();
+			return true;
+		}
+		catch (Exception e)
+		{
+			
+			return false;
+		}
 	}
 	
 	public static boolean addItemToShoppingList(UUID groupID, String product) {
@@ -280,4 +304,20 @@ public class GroupMethods {
 		
 	}
 
+	public static boolean setProductPrice(UUID groupID, String prod, int price)
+	{
+		
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+		
+		PreparedStatement statment = session
+				.prepare("UPDATE user_group SET shopping_list[?] = ? WHERE group_id = ?");
+		BoundStatement boundStatement = new BoundStatement(statment);
+		boundStatement.bind(prod, price, groupID);
+		session.execute(boundStatement);		
+		session.close();
+		
+		return true;
+	}
+	
+	
 }

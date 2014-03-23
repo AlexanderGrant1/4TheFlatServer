@@ -1,7 +1,9 @@
 package fourTheFlatServer.Model;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -40,6 +42,7 @@ public class GetAllData {
 
 			for (Row row : rs) {
 				Set<String> emptySet = new HashSet<String>();
+				Map<String, Integer> emptyMap = new HashMap<String, Integer>();
 				Group groupDetails = new Group();
 
 				groupDetails.setGroupID(row.getUUID("group_id"));
@@ -53,15 +56,15 @@ public class GetAllData {
 				}
 
 				try {
-					groupDetails.setShoppingList(row.getSet("shopping_list",
-							String.class));
+					groupDetails.setShoppingList(row.getMap("shopping_list",
+							String.class, Integer.class));
 				} catch (java.lang.NullPointerException e) {
-					groupDetails.setShoppingList(emptySet);
+					groupDetails.setShoppingList(emptyMap);
 				}
 
 				groupDetails.setAddress(row.getString("address"));
 				groupDetails.setUsers(row.getSet("users", String.class));
-				groupDetails.setUserShopping(row.getBool("user_shopping"));
+				groupDetails.setUserShopping(row.getString("user_shopping"));
 
 				groupList.add(groupDetails);
 			}

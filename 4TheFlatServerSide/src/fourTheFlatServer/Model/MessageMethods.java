@@ -148,6 +148,21 @@ System.out.println("UUID: "+messageID);
 
 			return true;
 	}
+	
+	public static boolean deleteUserMessages(String username)
+	{
+			Session session = CassandraConnection.getCluster().connect("flat_db");
+
+			PreparedStatement statement = session
+					.prepare("DELETE FROM user_messages where user_name = ?");
+
+			BoundStatement boundStatement = new BoundStatement(statement);
+			boundStatement.bind(username);
+			ResultSet rs = session.execute(boundStatement);
+			session.close();
+
+			return true;
+	}
 
 
 }

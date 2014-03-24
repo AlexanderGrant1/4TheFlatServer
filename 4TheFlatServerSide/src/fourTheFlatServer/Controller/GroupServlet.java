@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fourTheFlatServer.Model.GroupMethods;
+import fourTheFlatServer.Model.MessageMethods;
 import fourTheFlatServer.Model.UserMethods;
 import fourTheFlatServer.Stores.Group;
 import fourTheFlatServer.lib.PojoMapper;
@@ -180,6 +181,7 @@ public class GroupServlet extends HttpServlet {
 			if(GroupMethods.removeUserFromGroup(username, groupID))
 			{
 				Group userGroup = GroupMethods.getGroupByUUID(groupID);
+				MessageMethods.deleteUserMessages(username);
 				response.getWriter().print(PojoMapper.toJson(userGroup, true));
 				return;
 			}

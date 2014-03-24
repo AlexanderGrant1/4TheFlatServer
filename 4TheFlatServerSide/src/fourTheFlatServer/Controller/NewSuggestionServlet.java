@@ -70,18 +70,21 @@ public class NewSuggestionServlet extends HttpServlet {
 					{
 						//add a new product
 						GroupMethods.addAllowedProduct(UserMethods.getGroupIdByUsername(user), suggestion);
+						response.getWriter().print("Product added.");	
 						//success
 						break;
 					}
 					case 1:
 					{
 						GroupMethods.addUserToGroup(UserMethods.getGroupIdByUsername(user), suggestion);
+						response.getWriter().print("User added.");	
 						//success
 						break;
 					}
 					case 2:
 					{
 						GroupMethods.changeGroupAddress(UserMethods.getGroupIdByUsername(user), suggestion);
+						response.getWriter().print("Address changed.");	
 						//success
 						break;
 					}
@@ -97,7 +100,7 @@ public class NewSuggestionServlet extends HttpServlet {
 			Approvals.allowedProductApproved(user,suggestion);
 			
 			MessageMethods.sendMessages(user, suggestion, 0);
-			response.getWriter().print("Product Suggestion: "+suggestion);				
+			response.getWriter().print("Product suggested.");				
 		}
 		
 		//SUGGEST USER BE ADDED TO GROUP
@@ -110,7 +113,7 @@ public class NewSuggestionServlet extends HttpServlet {
 				Approvals.groupUserApproved(user, suggestion);
 				
 				MessageMethods.sendMessages(user, suggestion, 1);
-				response.getWriter().print("New user: "+suggestion);	
+				response.getWriter().print("User suggested.");	
 			}
 			else
 			{

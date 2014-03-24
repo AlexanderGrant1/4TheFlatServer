@@ -115,10 +115,11 @@ protected void doDelete(HttpServletRequest request, HttpServletResponse response
 	{
 		//Print a success message
 		response.getWriter().print("Money owed updated.");
+		return;
 	}
 		
 	UserMethods.setIsShopping(false, username);
-	GroupMethods.setShopper(null, groupID);
+	GroupMethods.setShopper("null", groupID);
 }
 
 }

@@ -119,7 +119,7 @@ public class NewSuggestionServlet extends HttpServlet {
 			{
 				if(!userExists)
 				{
-					response.getWriter().print("This user does not exist.");
+					response.getWriter().print("User does not exist.");
 					return;
 				}
 				if(groupID != null)

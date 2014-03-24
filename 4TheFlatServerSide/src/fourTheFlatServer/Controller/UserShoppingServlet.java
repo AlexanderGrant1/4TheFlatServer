@@ -92,22 +92,24 @@ public class UserShoppingServlet extends HttpServlet {
 
 /**
  * @see HttpServlet#doDelete(HttpServletRequest request, HttpServletResponse response)
- *usershopping/<username>
+ *usershopping/<username>/<shop name>
  */
 protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	String requestURI = request.getRequestURI();
 	String[] urlSplit = requestURI.split("/");
-	if(urlSplit.length != 4)
+	urlSplit = General.Utils.formatStringArray(urlSplit);
+	if(urlSplit.length != 5)
 	{
 		response.getWriter().print("Incorrect URL format.");
 		return;
 	}
 	String username = urlSplit[3];
-	
+	String where = urlSplit[4];
+			
 	UUID groupID = UserMethods.getGroupIdByUsername(username);
 	
 	//GET TOTAL SHOP COST 	//REMOVE BOUGHT ITEMS FROM LIST
-	int cost = GroupMethods.shopCost(groupID);
+	int cost = GroupMethods.shopCost(groupID, username, where);
 	
 	if(MoneyMethods.updateMoneyOwed(username, cost))
 	{

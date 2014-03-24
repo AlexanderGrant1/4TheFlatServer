@@ -41,8 +41,9 @@ public final class KeyspaceCreator {
 			// CREATE PRODUTS TABLE
 			moreCreates[2] = "CREATE TABLE if not exists product_list("
 					+ "product_name varchar," + "group_id timeuuid,"
-					+ "last_bought timestamp," + "purchase_frquency int,"
-					+ "purchase_date timestamp,"
+					+ "last_bought_where map<timestamp, varchar>," 
+					+ "last_bought_who map<timestamp, varchar>,"
+					+ "purchase_frquency int,"
 					+ "PRIMARY KEY((product_name), group_id));";
 
 			moreCreates[3] = "CREATE TABLE user_messages("

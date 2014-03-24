@@ -1,5 +1,9 @@
 package fourTheFlatServer.Model;
 
+import java.sql.Date;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
@@ -297,7 +301,7 @@ public class GroupMethods {
 
 	}
 
-	public static int shopCost(UUID groupID) {
+	public static int shopCost(UUID groupID, String shopper, String where) {
 		int cost = 0;
 
 		Map<String, Integer> list = getShoppingList(groupID);
@@ -306,12 +310,36 @@ public class GroupMethods {
 			if (m.getValue() != 0) {
 				cost += m.getValue();
 				removeItemFromShoppingList(groupID, m.getKey());
+				updateProductGroupDetails(groupID, m.getKey(), m.getValue(), shopper, where);
 			}
 		}
 
 		return cost;
 	}
 
+	
+	 //TOOOOOOOOOOOOOOOOOO DOOOOOOOOOOOOOOOOOOO
+	public static void updateProductGroupDetails(UUID groupID, String prod, int price, String shopper, String where) {
+
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+
+		Calendar now = Calendar.getInstance();
+		long seconds = now.getTimeInMillis();
+		Date date = new Date(seconds);
+	    Format format = new SimpleDateFormat("yyyy-MM-dd");
+	 System.out.println("WHERE: "+where);
+		String tStamp = format.format(date).toString();
+	PreparedStatement statment = session
+				.prepare("Update product_list SET last_bought_who = last_bought_who + {'"+tStamp+"':'"+shopper+"'}, last_bought_where = last_bought_where +{'"+tStamp+"':'"+where+"'} where product_name = ? and group_id = ?;");
+		BoundStatement boundStatement = new BoundStatement(statment);
+		boundStatement.bind(prod,groupID);
+		session.execute(boundStatement);
+		session.close();
+
+	}
+
+	
+	
 	public static boolean setProductPrice(UUID groupID, String prod, int price) {
 
 		Session session = CassandraConnection.getCluster().connect("flat_db");

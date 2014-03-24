@@ -106,8 +106,9 @@ public class NewSuggestionServlet extends HttpServlet {
 		//SUGGEST USER BE ADDED TO GROUP
 		else if(type == 1)
 		{
-			boolean userExists = UserMethods.userExists(user);
-			UUID groupID = UserMethods.getGroupIdByUsername(user);
+			boolean userExists = UserMethods.userExists(suggestion);
+			UUID groupID = UserMethods.getGroupIdByUsername(suggestion);
+			System.out.println(groupID);
 			if(userExists && groupID == null)
 			{
 				Approvals.groupUserApproved(user, suggestion);
@@ -136,10 +137,7 @@ public class NewSuggestionServlet extends HttpServlet {
 		else if(type == 2)
 		{
 			Approvals.groupAddressApproved(user, suggestion);
-			
 			MessageMethods.sendMessages(user, suggestion, 2);
-			
-			
 			response.getWriter().print("Change flat suggested.");
 		}
 		else

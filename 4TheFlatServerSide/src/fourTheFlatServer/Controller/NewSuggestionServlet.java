@@ -140,7 +140,7 @@ public class NewSuggestionServlet extends HttpServlet {
 			MessageMethods.sendMessages(user, suggestion, 2);
 			
 			
-			response.getWriter().print("Change flat address: "+suggestion);
+			response.getWriter().print("Change flat suggested.");
 		}
 		else
 		{

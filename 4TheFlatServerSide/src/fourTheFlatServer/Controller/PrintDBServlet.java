@@ -92,13 +92,16 @@ public class PrintDBServlet extends HttpServlet {
         
 	    LinkedList<Product> prods = GetAllData.getAllProds();
 	    
+	    
+	    if(prods != null)
+	    {
 	    for(Product p : prods)
         {
         	
 	    	response.getWriter().print(PojoMapper.toJson(p, true));
 	    	response.getWriter().println("");
         }
-	    
+	    }
 		//PRINT AVAILABLE_PRODUCTS TEXT FILE
 
 	    PrintWriter writer = response.getWriter();

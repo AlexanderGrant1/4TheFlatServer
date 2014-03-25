@@ -54,6 +54,60 @@ public class GroupMethods {
 
 	}
 	
+	public static boolean userRequestPending(UUID groupID, String username)
+	{
+		Group g = GroupMethods.getGroupByUUID(groupID);
+		Set<String> users = g.getUsers();
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+		for(String user : users)
+		{
+			PreparedStatement statement = session
+					.prepare("SELECT * FROM user_messages where user_name = ?");
+
+			BoundStatement boundStatement = new BoundStatement(statement);
+			boundStatement.bind(user);
+			ResultSet rs = session.execute(boundStatement);
+			
+			for(Row r : rs)
+			{
+				if(r.getInt("type") == 1 && r.getString("text").equals(username))
+				{
+					session.close();
+					return true;
+				}
+			}
+		}
+		session.close();
+		return false;
+	}
+	
+	public static boolean productRequestPending(UUID groupID, String product)
+	{
+		Group g = GroupMethods.getGroupByUUID(groupID);
+		Set<String> users = g.getUsers();
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+		for(String user : users)
+		{
+			PreparedStatement statement = session
+					.prepare("SELECT * FROM user_messages where user_name = ?");
+
+			BoundStatement boundStatement = new BoundStatement(statement);
+			boundStatement.bind(user);
+			ResultSet rs = session.execute(boundStatement);
+			
+			for(Row r : rs)
+			{
+				if(r.getInt("type") == 0 && r.getString("text").equals(product))
+				{
+					session.close();
+					return true;
+				}
+			}
+		}
+		session.close();
+		return false;
+	}
+	
 	public static boolean addressMessagePending(UUID groupID)
 	{
 		Group g = GroupMethods.getGroupByUUID(groupID);

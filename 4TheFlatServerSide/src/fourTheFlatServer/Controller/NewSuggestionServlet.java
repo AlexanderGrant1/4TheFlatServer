@@ -69,6 +69,11 @@ public class NewSuggestionServlet extends HttpServlet {
 					case 0:
 					{
 						//add a new product
+						if(GroupMethods.productRequestPending(userGroup, suggestion))
+						{
+							response.getWriter().print("Product request already pending.");
+							return;
+						}
 						GroupMethods.addAllowedProduct(UserMethods.getGroupIdByUsername(user), suggestion);
 						response.getWriter().print("Product added.");	
 						//success
@@ -76,6 +81,11 @@ public class NewSuggestionServlet extends HttpServlet {
 					}
 					case 1:
 					{
+						if(GroupMethods.userRequestPending(userGroup, suggestion))
+						{
+							response.getWriter().print("User request already pending.");
+							return;
+						}
 						GroupMethods.addUserToGroup(UserMethods.getGroupIdByUsername(user), suggestion);
 						response.getWriter().print("User added.");	
 						//success
@@ -103,6 +113,11 @@ public class NewSuggestionServlet extends HttpServlet {
 		//SUGGEST PRODUCT FOR ALLOWED PRODUCT LIST
 		if(type== 0)
 		{
+			if(GroupMethods.productRequestPending(userGroup, suggestion))
+			{
+				response.getWriter().print("Product request already pending.");
+				return;
+			}
 			Approvals.allowedProductApproved(user,suggestion);
 			
 			MessageMethods.sendMessages(user, suggestion, 0);
@@ -117,6 +132,11 @@ public class NewSuggestionServlet extends HttpServlet {
 			System.out.println(groupID);
 			if(userExists && groupID == null)
 			{
+				if(GroupMethods.userRequestPending(userGroup, suggestion))
+				{
+					response.getWriter().print("User request already pending.");
+					return;
+				}
 				Approvals.groupUserApproved(user, suggestion);
 				
 				MessageMethods.sendMessages(user, suggestion, 1);

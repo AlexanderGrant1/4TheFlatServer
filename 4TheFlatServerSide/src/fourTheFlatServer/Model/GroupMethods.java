@@ -53,6 +53,33 @@ public class GroupMethods {
 		return null;
 
 	}
+	
+	public static boolean addressMessagePending(UUID groupID)
+	{
+		Group g = GroupMethods.getGroupByUUID(groupID);
+		Set<String> users = g.getUsers();
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+		for(String user : users)
+		{
+			PreparedStatement statement = session
+					.prepare("SELECT * FROM user_messages where user_name = ?");
+
+			BoundStatement boundStatement = new BoundStatement(statement);
+			boundStatement.bind(user);
+			ResultSet rs = session.execute(boundStatement);
+			
+			for(Row r : rs)
+			{
+				if(r.getInt("type") == 2)
+				{
+					session.close();
+					return true;
+				}
+			}
+		}
+		session.close();
+		return false;
+	}
 
 	public static Set<String> getGroupUsers(UUID groupID) {
 		Set<String> users;

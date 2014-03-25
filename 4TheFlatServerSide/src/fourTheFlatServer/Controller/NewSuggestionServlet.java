@@ -83,6 +83,12 @@ public class NewSuggestionServlet extends HttpServlet {
 					}
 					case 2:
 					{
+						UUID groupID = UserMethods.getGroupIdByUsername(suggestion);
+						if(GroupMethods.addressMessagePending(groupID))
+						{
+							response.getWriter().print("Address change already pending.");
+							return;
+						}
 						GroupMethods.changeGroupAddress(UserMethods.getGroupIdByUsername(user), suggestion);
 						response.getWriter().print("Address changed.");	
 						//success
@@ -136,6 +142,12 @@ public class NewSuggestionServlet extends HttpServlet {
 		//CHANGE ADDRESS OF FLAT
 		else if(type == 2)
 		{
+			UUID groupID = UserMethods.getGroupIdByUsername(user);
+			if(GroupMethods.addressMessagePending(groupID))
+			{
+				response.getWriter().print("Address change already pending.");
+				return;
+			}
 			Approvals.groupAddressApproved(user, suggestion);
 			MessageMethods.sendMessages(user, suggestion, 2);
 			response.getWriter().print("Change flat suggested.");

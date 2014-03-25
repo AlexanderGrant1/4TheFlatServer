@@ -108,7 +108,7 @@ public class MessageServlet extends HttpServlet {
 					}
 					MessageMethods.deleteUserMessage(m.getMessageID(), username);
 					GroupMethods.addAllowedProduct(UserMethods.getGroupIdByUsername(username), subject);
-					String outcome = "Aprove product "+subject + " succeeded";
+					String outcome = "Approve product "+subject + " succeeded";
 					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, true);
 					//success
 					break;
@@ -184,7 +184,7 @@ public class MessageServlet extends HttpServlet {
 						UserMethods.removeApprovedProduct(s, subject);
 						MessageMethods.deleteUserMessage(messageGroupID, s);
 					}
-					String outcome = "Aprove product "+subject + " failed";
+					String outcome = "Approve product "+subject + " failed";
 					MessageMethods.sendSuggestionOutcome(groupUsers, outcome, false);
 					break;
 				}

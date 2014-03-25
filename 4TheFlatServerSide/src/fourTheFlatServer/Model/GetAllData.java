@@ -1,5 +1,6 @@
 package fourTheFlatServer.Model;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -15,6 +16,7 @@ import com.datastax.driver.core.Session;
 
 import fourTheFlatServer.Stores.Group;
 import fourTheFlatServer.Stores.Message;
+import fourTheFlatServer.Stores.Product;
 import fourTheFlatServer.Stores.User;
 import fourTheFlatServer.lib.CassandraConnection;
 
@@ -145,4 +147,58 @@ public class GetAllData {
 			return allM;
 	}
 
+	
+	public static LinkedList<Product> getAllProds() {
+
+		LinkedList<Product> prodList = new LinkedList<Product>();
+
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+
+		PreparedStatement statement = session
+				.prepare("SELECT * from product_list");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		ResultSet rs = session.execute(boundStatement);
+
+		if (rs.isExhausted()) {
+			System.out.println("No products found");
+
+			session.close();
+
+			return null;
+		} else {
+
+			for (Row row : rs) {	
+				Map<Date, String> emptyMap = new HashMap<Date, String>();
+				Product rowDetails = new Product();
+
+				rowDetails.setGroupID(row.getUUID("group_id"));
+				// groupDetails.setAddress(row.getString("address"));
+
+				try {
+					rowDetails.setLast_bought_where(row.getMap("last_bought_where", Date.class, String.class));
+				} catch (java.lang.NullPointerException e) {
+					rowDetails.setLast_bought_where(emptyMap);
+				}
+
+				try {
+					rowDetails.setLast_bought_who(row.getMap("last_bought_who",
+							Date.class, String.class));
+				} catch (java.lang.NullPointerException e) {
+					rowDetails.setLast_bought_who(emptyMap);
+				}
+
+				rowDetails.setProduct(row.getString("product_name"));
+
+				prodList.add(rowDetails);
+			}
+
+		}
+
+		session.close();
+		return prodList;
+	}
+	
+	
+	
 }

@@ -17,6 +17,7 @@ import fourTheFlatServer.Model.GetAllData;
 import fourTheFlatServer.Model.GroupMethods;
 import fourTheFlatServer.Stores.Group;
 import fourTheFlatServer.Stores.Message;
+import fourTheFlatServer.Stores.Product;
 import fourTheFlatServer.Stores.User;
 import fourTheFlatServer.lib.PojoMapper;
 
@@ -81,7 +82,23 @@ public class PrintDBServlet extends HttpServlet {
 	    	response.getWriter().print(PojoMapper.toJson(m, true));
 	    	 response.getWriter().println("");
         }
-
+        
+	    response.getWriter().println("");
+        
+        
+	    //PRINT PRODUCTS_LIST TABLE
+	    response.getWriter().println("Products table");
+	    response.getWriter().println("");
+        
+	    LinkedList<Product> prods = GetAllData.getAllProds();
+	    
+	    for(Product p : prods)
+        {
+        	
+	    	response.getWriter().print(PojoMapper.toJson(p, true));
+	    	response.getWriter().println("");
+        }
+	    
 		//PRINT AVAILABLE_PRODUCTS TEXT FILE
 
 	    PrintWriter writer = response.getWriter();
@@ -89,7 +106,6 @@ public class PrintDBServlet extends HttpServlet {
 
 	    response.getWriter().println("Available Products in text file!");
 	    response.getWriter().println("");
-        // foo.txt is at the root directory of the web app
         InputStream in = getServletContext().getResourceAsStream("/Available_Products.txt");
              
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -100,9 +116,8 @@ public class PrintDBServlet extends HttpServlet {
         }
    	 
         response.getWriter().println("");        
+       
         
-        
-	    //PRINT PRODUCTS_LIST TABLE
 	}
 
 	/**

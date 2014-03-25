@@ -1,30 +1,26 @@
 package fourTheFlatServer.Stores;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 public class Product {
-	private UUID productID;
-	private Date lastBought;
+	
+	private String product;
+	
+	private UUID groupID;
 	private int purchaseFrequency;
-	private Date[] purchaseDates;
+
+	private	Map<Date, String> last_bought_where ; 
+	private Map<Date, String> last_bought_who;
 	
-	public UUID getProductID()
+	
+	public UUID getGroupID()
 	{
-		return productID;
+		return groupID;
 	}
 	
-	public void setProductID(UUID productID)
+	public void setGroupID(UUID groupID)
 	{
-		this.productID = productID;
-	}
-	
-	public void setLastBought(Date lastBought)
-	{
-		this.lastBought = lastBought;
-	}
-	
-	public Date getLastBought()
-	{
-		return lastBought;
+		this.groupID = groupID;
 	}
 	
 	public int getPurchaseFrequency()
@@ -36,14 +32,30 @@ public class Product {
 	{
 		this.purchaseFrequency = purchaseFrequency;
 	}
-	
-	public Date[] getPurchaseDates()
-	{
-		return purchaseDates;
+
+	public Map<Date, String> getLast_bought_where() {
+		return last_bought_where;
+	}
+
+	public void setLast_bought_where(Map<Date, String> last_bought_where) {
+		this.last_bought_where = last_bought_where;
+	}
+
+	public Map<Date, String> getLast_bought_who() {
+		return last_bought_who;
+	}
+
+	public void setLast_bought_who(Map<Date, String> last_bought_who) {
+		this.last_bought_who = last_bought_who;
+	}
+
+	public String getProduct() {
+		return product;
+	}
+
+	public void setProduct(String product) {
+		this.product = product;
 	}
 	
-	public Date[] setPurchaseDates()
-	{
-		return purchaseDates;
-	}
+	
 }

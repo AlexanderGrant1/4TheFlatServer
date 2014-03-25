@@ -43,7 +43,7 @@ public final class KeyspaceCreator {
 					+ "product_name varchar," + "group_id timeuuid,"
 					+ "last_bought_where map<timestamp, varchar>," 
 					+ "last_bought_who map<timestamp, varchar>,"
-					+ "purchase_frquency int,"
+					+ "purchase_frequency int,"
 					+ "PRIMARY KEY((product_name), group_id));";
 
 			moreCreates[3] = "CREATE TABLE user_messages("

@@ -1,5 +1,10 @@
 package fourTheFlatServer.lib;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
@@ -47,7 +52,12 @@ public final class KeyspaceCreator {
 
 		session = c.connect("flat_db");
 //TODO LOAD IN DATABASE CREATES AND TEST DATA
-		
+		try {
+			System.out.println(new java.io.File( "." ).getCanonicalPath());
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		session.close();
 	}
 

@@ -34,7 +34,7 @@ public class ShoppingListServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
-		urlSplit = General.Utils.formatStringArray(urlSplit);
+		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
 		if(urlSplit.length != 4)
 		{
 			response.getWriter().print("Incorrect URL format.");
@@ -62,7 +62,7 @@ public class ShoppingListServlet extends HttpServlet {
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
-		urlSplit = General.Utils.formatStringArray(urlSplit);
+		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
 		if(urlSplit.length != 5)
 		{
 			response.getWriter().print("Incorrect URL format.");
@@ -102,7 +102,7 @@ public class ShoppingListServlet extends HttpServlet {
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
-		urlSplit = General.Utils.formatStringArray(urlSplit);
+		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
 		if(urlSplit.length != 5)
 		{
 			response.getWriter().print("Incorrect URL format.");

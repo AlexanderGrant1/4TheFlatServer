@@ -46,7 +46,7 @@ public class UserServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
-		urlSplit = General.Utils.formatStringArray(urlSplit);
+		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
 		if (urlSplit.length != 5) {
 			response.getWriter().print("Incorrect URL format.");
 			return;
@@ -79,7 +79,7 @@ public class UserServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
-		urlSplit = General.Utils.formatStringArray(urlSplit);
+		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
 		if(urlSplit.length != 5)
 		{
 			response.getWriter().print("Invalid URL.");
@@ -123,7 +123,7 @@ public class UserServlet extends HttpServlet {
 		
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
-		urlSplit = General.Utils.formatStringArray(urlSplit);
+		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
 		if(urlSplit.length != 6)
 		{
 			response.getWriter().print("Invalid URL.");

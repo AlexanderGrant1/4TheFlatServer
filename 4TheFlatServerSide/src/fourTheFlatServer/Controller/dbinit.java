@@ -73,7 +73,7 @@ public class dbinit extends HttpServlet {
 		}
 
 		session = c.connect("flat_db");
-//TODO LOAD IN DATABASE CREATES AND TEST DATA
+		
 		try {
 			System.out.println(new java.io.File( "." ).getCanonicalPath());
 		} catch (IOException e1) {
@@ -83,12 +83,18 @@ public class dbinit extends HttpServlet {
         InputStream in = getServletContext().getResourceAsStream("/scripts.txt");
         
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        
+        try{
         String text;
         while ((text = reader.readLine()) != null) {
         	System.out.println(text);
 			SimpleStatement cqlQuery = new SimpleStatement(text);
 			session.execute(cqlQuery);
+        }
+		response.getWriter().print("DB CREATED");
+        }
+        catch (Exception e)
+        {
+        	response.getWriter().print("SOMETHING WENT WRONG..... CHECK THE LOG?");
         }
 		session.close();
 	}

@@ -1,5 +1,6 @@
 package fourTheFlatServer.Stores;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -12,6 +13,9 @@ public class Group {
 	private Set<String> allowedProducts;
 	private Map<String, Integer> shoppingList;
 	private String userShopping;
+	private Map<Date,Integer> shopCost;
+	private Map<Date,String> lastShopWhere;
+	private Map<Date,String> lastShopWho;
 	
 	public UUID getGroupID()
 	{
@@ -72,6 +76,30 @@ public class Group {
 
 	public void setShoppingList(Map<String, Integer> shoppingList) {
 		this.shoppingList = shoppingList;
+	}
+
+	public Map<Date,Integer> getShopCost() {
+		return shopCost;
+	}
+
+	public void setShopCost(Map<Date,Integer> shopCost) {
+		this.shopCost = shopCost;
+	}
+
+	public Map<Date,String> getLastShopWhere() {
+		return lastShopWhere;
+	}
+
+	public void setLastShopWhere(Map<Date,String> lastShopWhere) {
+		this.lastShopWhere = lastShopWhere;
+	}
+
+	public Map<Date,String> getLastShopWho() {
+		return lastShopWho;
+	}
+
+	public void setLastShopWho(Map<Date,String> lastShopWho) {
+		this.lastShopWho = lastShopWho;
 	}
 
 	

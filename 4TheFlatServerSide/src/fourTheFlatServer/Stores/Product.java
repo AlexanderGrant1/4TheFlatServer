@@ -9,8 +9,7 @@ public class Product {
 	private UUID groupID;
 	private int purchaseFrequency;
 
-	private	Map<Date, String> last_bought_where ; 
-	private Map<Date, String> last_bought_who;
+	private	Map<Date, Integer> last_bought_cost; 
 	
 	
 	public UUID getGroupID()
@@ -33,28 +32,20 @@ public class Product {
 		this.purchaseFrequency = purchaseFrequency;
 	}
 
-	public Map<Date, String> getLast_bought_where() {
-		return last_bought_where;
-	}
-
-	public void setLast_bought_where(Map<Date, String> last_bought_where) {
-		this.last_bought_where = last_bought_where;
-	}
-
-	public Map<Date, String> getLast_bought_who() {
-		return last_bought_who;
-	}
-
-	public void setLast_bought_who(Map<Date, String> last_bought_who) {
-		this.last_bought_who = last_bought_who;
-	}
-
 	public String getProduct() {
 		return product;
 	}
 
 	public void setProduct(String product) {
 		this.product = product;
+	}
+
+	public Map<Date, Integer> getLast_bought_cost() {
+		return last_bought_cost;
+	}
+
+	public void setLast_bought_cost(Map<Date, Integer> last_bought_cost) {
+		this.last_bought_cost = last_bought_cost;
 	}
 	
 	

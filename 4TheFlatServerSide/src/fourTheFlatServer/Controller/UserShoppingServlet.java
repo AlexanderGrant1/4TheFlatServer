@@ -110,6 +110,7 @@ protected void doDelete(HttpServletRequest request, HttpServletResponse response
 	
 	//GET TOTAL SHOP COST 	//REMOVE BOUGHT ITEMS FROM LIST
 	int cost = GroupMethods.shopCost(groupID, username, where);
+			
 	
 	if(MoneyMethods.updateMoneyOwed(username, cost))
 	{

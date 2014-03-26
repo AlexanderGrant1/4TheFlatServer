@@ -18,3 +18,26 @@ Tin Foil
 Bleach
 Cheese
 Juice
+Light Bulbs
+Batteries
+Microwave
+Soft Drink
+Wine 
+Beer 
+Spirits
+Plates
+Cutlery
+Mugs
+Glasses
+Kitchen Roll
+Tissues
+Bin Liners
+Scourers 
+Rubber Gloves
+Toilet Cleaner
+Cider
+Clothes
+Handwash
+Bandages
+Kettle
+Toaster

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.LinkedList;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,8 +14,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fourTheFlatServer.Model.GetAllData;
 import fourTheFlatServer.Model.GroupMethods;
+import fourTheFlatServer.Model.MessageMethods;
+import fourTheFlatServer.Model.ProductMethods;
+import fourTheFlatServer.Model.UserMethods;
 import fourTheFlatServer.Stores.Group;
 import fourTheFlatServer.Stores.Message;
 import fourTheFlatServer.Stores.Product;
@@ -42,84 +45,59 @@ public class PrintDBServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		//PRINT USER_GROUPS TABLE
-		LinkedList<Group> groupList = GetAllData.getAllGroups();
+		LinkedList<Group> groupList = GroupMethods.getAllGroups();
 
-	    response.getWriter().println("GROUPS!");
+	    response.getWriter().println("GROUP!");
 	    response.getWriter().println("");
 
 	    for(Group g: groupList)
 	    {
 	    	response.getWriter().print(PojoMapper.toJson(g, true));
 	    	 response.getWriter().println("");
-	    }
-
-	    response.getWriter().println("");
-
-
-		//PRINT USERS TABLE
-	    LinkedList<User> userList = GetAllData.getAllUsers();
-
-	    response.getWriter().println("Users!");
-	    response.getWriter().println("");
-	    for(User u: userList)
-	    {
-	    	response.getWriter().print(PojoMapper.toJson(u, true));
+	    	 
+	    	 Set<String> users = GroupMethods.getGroupUsers(g.getGroupID());
+	    	 
 	    	 response.getWriter().println("");
-	    }
-
-	    response.getWriter().println("");
-
-
-	    //PRINT MESSAGE TABLE
-	    response.getWriter().println("Messages!");
-	    response.getWriter().println("");
-
-        LinkedList<Message> messages = GetAllData.getAllMessages();
-
-        for(Message m : messages)
-        {
-        	
-	    	response.getWriter().print(PojoMapper.toJson(m, true));
+	    	 response.getWriter().println("GROUP USERS!");
+	 	    response.getWriter().println("");
+	    	 
+	    	 for(String u : users)
+	    	 {
+	    		 response.getWriter().println("USER "+u);
+	    		 User user = UserMethods.getUserByUsername(u);
+	    		 
+	    		 response.getWriter().print(PojoMapper.toJson(user, true));
+		    	 response.getWriter().println("");
+		    	 response.getWriter().println(u+"'s Messages");
+	    		 
+		    	 LinkedList<Message> uM = MessageMethods.getUserMessages(u);
+		    	 
+		    	 for(Message m : uM)
+		    	 {
+		    		 response.getWriter().print(PojoMapper.toJson(m, true));
+			    	 response.getWriter().println("");
+		    	 }
+		    	 response.getWriter().println("");
+		    	 response.getWriter().println("");
+		    	 response.getWriter().println("");
+		    	 response.getWriter().println("/////////////////////////////");
+	    	 }
 	    	 response.getWriter().println("");
-        }
-        
-	    response.getWriter().println("");
-        
-        
-	    //PRINT PRODUCTS_LIST TABLE
-	    response.getWriter().println("Products table");
-	    response.getWriter().println("");
-        
-	    LinkedList<Product> prods = GetAllData.getAllProds();
-	    
-	    
-	    if(prods != null)
-	    {
-	    for(Product p : prods)
-        {
-        	
-	    	response.getWriter().print(PojoMapper.toJson(p, true));
-	    	response.getWriter().println("");
-        }
+	    	 response.getWriter().println("");
+	    	 response.getWriter().println("Product history");
+	    	 response.getWriter().println("");
+	    	 
+	    	 LinkedList<Product> prods = ProductMethods.getAllProds(g.getGroupID());
+	    	 
+	    	 for(Product p : prods)
+	    	 {
+	    		 response.getWriter().print(PojoMapper.toJson(p, true));
+		    	 response.getWriter().println("");
+	    	 }
 	    }
-		//PRINT AVAILABLE_PRODUCTS TEXT FILE
 
-	    PrintWriter writer = response.getWriter();
-
-
-	    response.getWriter().println("Available Products in text file!");
 	    response.getWriter().println("");
-        InputStream in = getServletContext().getResourceAsStream("/Available_Products.txt");
-             
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        
-        String text;
-        while ((text = reader.readLine()) != null) {
-            writer.println(text);
-        }
-   	 
-        response.getWriter().println("");        
-       
+              
         
 	}
 

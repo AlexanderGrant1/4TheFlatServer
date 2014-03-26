@@ -4,7 +4,9 @@ import java.sql.Date;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.UUID;
 import java.util.Set;
@@ -382,44 +384,55 @@ public class GroupMethods {
 
 	}
 
-	public static int shopCost(UUID groupID, String shopper, String where) {
+	public static int shopCost(UUID groupID, String who, String where) {
 		int cost = 0;
 
+		Calendar now = Calendar.getInstance();
+		long seconds = now.getTimeInMillis();
+		Date date = new Date(seconds);
+	    Format format = new SimpleDateFormat("yyyy-MM-dd");
+		String tStamp = format.format(date).toString();
+		
+		
 		Map<String, Integer> list = getShoppingList(groupID);
 
 		for (Map.Entry<String, Integer> m : list.entrySet()) {
 			if (m.getValue() != 0) {
 				cost += m.getValue();
 				removeItemFromShoppingList(groupID, m.getKey());
-				updateProductGroupDetails(groupID, m.getKey(), m.getValue(), shopper, where);
+				updateProductGroupDetails(groupID, m.getKey(), m.getValue(), tStamp);
 			}
 		}
 
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+
+		// ,last_shop_where = last_shop_where +{'2014-01-01':'Dundee Riverside Extra'
+		
+	PreparedStatement statment = session
+				.prepare("Update user_group SET shop_cost = shop_cost + {'"+tStamp+"':"+cost+"}, "
+						+ "last_shop_who = last_shop_who + {'"+tStamp+"':'"+who+"'},"
+						+ "last_shop_where = last_shop_where +{'"+tStamp+"':'"+where+"'}"
+						+ " where group_id = ?;");
+		BoundStatement boundStatement = new BoundStatement(statment);
+		boundStatement.bind(groupID);
+		session.execute(boundStatement);
+				
 		return cost;
 	}
-
 	
-	 //TOOOOOOOOOOOOOOOOOO DOOOOOOOOOOOOOOOOOOO
-	public static void updateProductGroupDetails(UUID groupID, String prod, int price, String shopper, String where) {
+
+	public static void updateProductGroupDetails(UUID groupID, String prod, int price, String tStamp) {
 
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 
-		Calendar now = Calendar.getInstance();
-		long seconds = now.getTimeInMillis();
-		Date date = new Date(seconds);
-	    Format format = new SimpleDateFormat("yyyy-MM-dd");
-	 System.out.println("WHERE: "+where);
-		String tStamp = format.format(date).toString();
 	PreparedStatement statment = session
-				.prepare("Update product_list SET last_bought_who = last_bought_who + {'"+tStamp+"':'"+shopper+"'}, last_bought_where = last_bought_where +{'"+tStamp+"':'"+where+"'} where product_name = ? and group_id = ?;");
+				.prepare("Update product_list SET last_bought_cost = last_bought_cost + {'"+tStamp+"':"+price+"} where product_name = ? and group_id = ?;");
 		BoundStatement boundStatement = new BoundStatement(statment);
 		boundStatement.bind(prod,groupID);
 		session.execute(boundStatement);
 		session.close();
 
 	}
-
-	
 	
 	public static boolean setProductPrice(UUID groupID, String prod, int price) {
 
@@ -435,4 +448,61 @@ public class GroupMethods {
 		return true;
 	}
 
+	
+	public static LinkedList<Group> getAllGroups() {
+
+		LinkedList<Group> groupList = new LinkedList<Group>();
+
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+
+		PreparedStatement statement = session
+				.prepare("SELECT * from user_group");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		ResultSet rs = session.execute(boundStatement);
+
+		if (rs.isExhausted()) {
+			System.out.println("No user_groups found");
+
+			session.close();
+
+			return null;
+		} else {
+
+			for (Row row : rs) {
+				Set<String> emptySet = new HashSet<String>();
+				Map<String, Integer> emptyMap = new HashMap<String, Integer>();
+				Group groupDetails = new Group();
+
+				groupDetails.setGroupID(row.getUUID("group_id"));
+				// groupDetails.setAddress(row.getString("address"));
+
+				try {
+					groupDetails.setAllowedProducts(row.getSet(
+							"allowed_products", String.class));
+				} catch (java.lang.NullPointerException e) {
+					groupDetails.setAllowedProducts(emptySet);
+				}
+
+				try {
+					groupDetails.setShoppingList(row.getMap("shopping_list",
+							String.class, Integer.class));
+				} catch (java.lang.NullPointerException e) {
+					groupDetails.setShoppingList(emptyMap);
+				}
+
+				groupDetails.setAddress(row.getString("address"));
+				groupDetails.setUsers(row.getSet("users", String.class));
+				groupDetails.setUserShopping(row.getString("user_shopping"));
+
+				groupList.add(groupDetails);
+			}
+
+		}
+
+		session.close();
+		return groupList;
+	}
+	
+	
 }

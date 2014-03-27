@@ -19,6 +19,7 @@ import fourTheFlatServer.Model.ProductMethods;
 import fourTheFlatServer.Stores.Group;
 import fourTheFlatServer.Stores.GroupAnalytics;
 import fourTheFlatServer.Stores.Product;
+import fourTheFlatServer.Stores.User;
 import fourTheFlatServer.lib.PojoMapper;
 
 /**
@@ -41,16 +42,23 @@ public class GroupAnalyticsServlet extends HttpServlet {
 	 *analytics/<groupId> returns the analytical data for that group
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String requestURI = request.getRequestURI();
-		String[] urlSplit = requestURI.split("/");
-		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
-		if(urlSplit.length != 4)
+
+		User activeUser = (User)request.getSession().getAttribute("activeUser");
+		
+		if(activeUser == null)
 		{
-			response.getWriter().print("Incorrect URL format.");
+			response.sendRedirect(request.getContextPath()+"/analyticslogin.jsp");
 			return;
 		}
-		String groupId = urlSplit[3];
-		UUID groupID = UUID.fromString(groupId);
+		
+		UUID groupID = activeUser.getGroupID();
+		
+		if(groupID == null)
+		{
+			request.setAttribute("errorMessage", "You are not part of a group.");
+			request.getRequestDispatcher(request.getContextPath()+"/analyticslogin.jsp");
+			return;
+		}
 		
 		Group group = GroupMethods.getGroupByUUIDAnalytics(groupID);
 		GroupAnalytics ga = AnalyticMethods.dataForAGroup(groupID);

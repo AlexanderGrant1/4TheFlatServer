@@ -89,10 +89,13 @@ public class PrintDBServlet extends HttpServlet {
 	    	 
 	    	 LinkedList<Product> prods = ProductMethods.getGroupProds(g.getGroupID());
 	    	 
+	    	 if(prods != null)
+	    	 {
 	    	 for(Product p : prods)
 	    	 {
 	    		 response.getWriter().print(PojoMapper.toJson(p, true));
 		    	 response.getWriter().println("");
+	    	 }
 	    	 }
 	    }
 

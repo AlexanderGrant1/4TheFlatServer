@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fourTheFlatServer.Model.Approvals;
+import fourTheFlatServer.Model.Authentication;
 import fourTheFlatServer.Model.GroupMethods;
 import fourTheFlatServer.Model.MessageMethods;
 import fourTheFlatServer.Model.UserMethods;
@@ -29,20 +30,11 @@ public class NewSuggestionServlet extends HttpServlet {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-	
-		
-	}
 	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
+	 *      newsuggestion/<username>/<password>/<type>/<suggestion>
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -50,13 +42,21 @@ public class NewSuggestionServlet extends HttpServlet {
 		String[] urlSplit = requestURI.split("/");
 		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
 		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
-		if (urlSplit.length != 6) {
+		if (urlSplit.length != 7) {
 			response.getWriter().print("Incorrect URL format.");
 			return;
 		}
 		String user = urlSplit[3];
-		int type = Integer.parseInt(urlSplit[4]);
-		String suggestion = urlSplit[5];
+		String password = urlSplit[4];
+		int type = Integer.parseInt(urlSplit[5]);
+		String suggestion = urlSplit[6];
+		
+		if(Authentication.validateLoginCredentials(user, password) != null)
+		{
+			response.getWriter().print("Invalid username or password.");
+			return;
+		}
+		
 		UUID userGroup = UserMethods.getGroupIdByUsername(user);
 		
 		if(userGroup != null)
@@ -177,21 +177,4 @@ public class NewSuggestionServlet extends HttpServlet {
 			response.getWriter().print("Not a valid type!");
 		}
 	}
-	
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPut(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-	}
-	
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doDelete(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-	}
-
 }

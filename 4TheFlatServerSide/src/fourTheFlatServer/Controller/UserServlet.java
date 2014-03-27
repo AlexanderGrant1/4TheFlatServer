@@ -17,7 +17,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 
-import fourTheFlatServer.Model.AuthenticateUser;
+import fourTheFlatServer.Model.Authentication;
 import fourTheFlatServer.Model.UserMethods;
 import fourTheFlatServer.Stores.User;
 import fourTheFlatServer.Stores.UserReturn;
@@ -54,7 +54,7 @@ public class UserServlet extends HttpServlet {
 		String username = urlSplit[3];
 		String password = urlSplit[4];
 
-		User user = AuthenticateUser.validateLoginCredentials(username,password);
+		User user = Authentication.validateLoginCredentials(username,password);
 
 		if (user == null) {
 			response.getWriter().print("Invalid username or password.");
@@ -95,7 +95,7 @@ public class UserServlet extends HttpServlet {
 			return;
 		}
 		
-		if(AuthenticateUser.registerUser(username, password))
+		if(Authentication.registerUser(username, password))
 		{
 			
 			User user = UserMethods.getUserByUsername(username);
@@ -134,13 +134,13 @@ public class UserServlet extends HttpServlet {
 		String newPassword = urlSplit[5];
 		
 		//Check that the username and current password provided are correct
-		if(AuthenticateUser.validateLoginCredentials(username, currentPassword) == null)
+		if(Authentication.validateLoginCredentials(username, currentPassword) == null)
 		{
 			response.getWriter().print("Incorrect username or password.");
 			return;
 		}
 		//Change the user's password
-		if(AuthenticateUser.changePassword(username, newPassword))
+		if(Authentication.changePassword(username, newPassword))
 		{
 			//Print a success message
 			response.getWriter().print("Password changed.");

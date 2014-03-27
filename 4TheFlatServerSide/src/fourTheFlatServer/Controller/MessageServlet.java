@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fourTheFlatServer.Model.Approvals;
+import fourTheFlatServer.Model.Authentication;
 import fourTheFlatServer.Model.GroupMethods;
 import fourTheFlatServer.Model.MessageMethods;
 import fourTheFlatServer.Model.UserMethods;
@@ -36,18 +37,25 @@ public class MessageServlet extends HttpServlet {
 	/**
 	 * Get user messages
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 * message/<username>
+	 * message/<username>/<password>
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
 		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
-		if(urlSplit.length != 4)
+		if(urlSplit.length != 5)
 		{
 			response.getWriter().print("Incorrect URL format.");
 			return;
 		}
 		String username = urlSplit[3];
+		String password = urlSplit[4];
+		
+		if(Authentication.validateLoginCredentials(username, password) != null)
+		{
+			response.getWriter().print("Invalid username or password.");
+			return;
+		}
 		
 		LinkedList<Message> messageList = MessageMethods.getUserMessages(username);
 		
@@ -60,6 +68,7 @@ public class MessageServlet extends HttpServlet {
 	/**
 	 * Respond to message
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 *message/<username>/<password>/<messageId>/<approves>
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
@@ -71,13 +80,21 @@ public class MessageServlet extends HttpServlet {
 			return;
 		}
 		String username = urlSplit[3];
-		UUID messageID = UUID.fromString(urlSplit[4]);
-		String approves = urlSplit[5];
+		String password = urlSplit[4];
+		UUID messageID = UUID.fromString(urlSplit[5]);
+		String approves = urlSplit[6];
 		if(!MessageMethods.messageExists(messageID, username))
 		{
 			response.getWriter().print("Message does not exist.");
 			return;
 		}
+		
+		if(Authentication.validateLoginCredentials(username, password) != null)
+		{
+			response.getWriter().print("Invalid username or password.");
+			return;
+		}
+		
 		Message m = MessageMethods.getMessageByUUIDAndUsername(messageID, username);
 		int type = m.getType();
 		String subject = m.getMessage();
@@ -219,18 +236,27 @@ public class MessageServlet extends HttpServlet {
 	/**
 	 *Delete message
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * message/<username>/<password>/<messageId>
 	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
 		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
-		if(urlSplit.length != 5)
+		if(urlSplit.length != 6)
 		{
 			response.getWriter().print("Incorrect URL format.");
 			return;
 		}
 		String username = urlSplit[3];
-		UUID messageID = UUID.fromString(urlSplit[4]);
+		String password = urlSplit[4];
+		UUID messageID = UUID.fromString(urlSplit[5]);
+		
+		if(Authentication.validateLoginCredentials(username, password) != null)
+		{
+			response.getWriter().print("Invalid username or password.");
+			return;
+		}
+		
 		if(MessageMethods.messageExists(messageID, username))
 		{
 			MessageMethods.deleteUserMessage(messageID, username);

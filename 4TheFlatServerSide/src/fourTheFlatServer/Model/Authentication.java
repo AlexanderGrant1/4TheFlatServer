@@ -9,7 +9,7 @@ import com.datastax.driver.core.Session;
 import fourTheFlatServer.Stores.User;
 import fourTheFlatServer.lib.CassandraConnection;
 
-public class AuthenticateUser {
+public class Authentication {
 
 	public static User validateLoginCredentials(java.lang.String username, String password) {
 		if (!UserMethods.userExists(username)) {

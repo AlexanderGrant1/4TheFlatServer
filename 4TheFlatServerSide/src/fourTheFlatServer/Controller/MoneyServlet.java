@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fourTheFlatServer.Model.Authentication;
 import fourTheFlatServer.Model.MoneyMethods;
 import fourTheFlatServer.Model.UserMethods;
 import fourTheFlatServer.Stores.MapStore;
@@ -35,12 +36,19 @@ public class MoneyServlet extends HttpServlet {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
 		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
-		if(urlSplit.length != 4)
+		if(urlSplit.length != 5)
 		{
 			response.getWriter().print("Incorrect URL format.");
 			return;
 		}
 		String username = urlSplit[3];
+		String password = urlSplit[4];
+		
+		if(Authentication.validateLoginCredentials(username, password) != null)
+		{
+			response.getWriter().print("Invalid username or password.");
+			return;
+		}
 		
 		MapStore ms = new MapStore();
 		
@@ -64,11 +72,11 @@ public class MoneyServlet extends HttpServlet {
 			response.getWriter().print("Incorrect URL format.");
 			return;
 		}
-		String reciver = urlSplit[3];
+		String receiver = urlSplit[3];
 		String giver = urlSplit[4];
 		
 		
-		MoneyMethods.clearDebt(reciver, giver);
+		MoneyMethods.clearDebt(receiver, giver);
 	}
 
 }

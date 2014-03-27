@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fourTheFlatServer.Model.Authentication;
 import fourTheFlatServer.Model.GroupMethods;
 import fourTheFlatServer.Model.MessageMethods;
 import fourTheFlatServer.Model.UserMethods;
@@ -32,19 +33,25 @@ public class GroupServlet extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 * group/<username> returns the group of that user
+	 * group/<username>/<password> returns the group of that user
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
 		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
-		if(urlSplit.length != 4)
+		if(urlSplit.length != 5)
 		{
 			response.getWriter().print("Incorrect URL format.");
 			return;
 		}
 		String username = urlSplit[3];
-
+		String password = urlSplit[4];
+		
+		if(Authentication.validateLoginCredentials(username, password) != null)
+		{
+			response.getWriter().print("Invalid username or password.");
+			return;
+		}
 		
 		UUID groupID = UserMethods.getGroupIdByUsername(username);
 		
@@ -65,24 +72,30 @@ public class GroupServlet extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 *group/<username>/<address> Create new group and add user to it
+	 *group/<username>/<password>/<address> Create new group and add user to it
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
 		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
-		if(urlSplit.length != 5)
+		if(urlSplit.length != 6)
 		{
 			response.getWriter().print("Incorrect URL format.");
 			return;
 		}
 		String username = urlSplit[3];
-		String address = urlSplit[4];
+		String password = urlSplit[4];
+		String address = urlSplit[5];
 		
 		//Check that the user exists
 		if(!UserMethods.userExists(username))
 		{
 			response.getWriter().print("User does not exist");
+			return;
+		}
+		if(Authentication.validateLoginCredentials(username, password) != null)
+		{
+			response.getWriter().print("Invalid username or password.");
 			return;
 		}
 		//If the user is not already in a group, add them to a group
@@ -105,13 +118,14 @@ public class GroupServlet extends HttpServlet {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
 		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
-		if(urlSplit.length != 5)
+		if(urlSplit.length != 6)
 		{
 			response.getWriter().print("Incorrect URL format.");
 			return;
 		}
 		String group = urlSplit[3];
 		String username = urlSplit[4];
+		String password = urlSplit[5];
 		
 		UUID groupID = UUID.fromString(group);
 		//Check that the group we're trying to add a user to exists
@@ -126,6 +140,11 @@ public class GroupServlet extends HttpServlet {
 			response.getWriter().print("User does not exist");
 			return;
 		}
+		if(Authentication.validateLoginCredentials(username, password) != null)
+		{
+			response.getWriter().print("Invalid username or password.");
+			return;
+		}
 		//If the user doesn't already have a group then add them to the given group
 		if(UserMethods.getGroupIdByUsername(username) == null)
 		{
@@ -137,19 +156,20 @@ public class GroupServlet extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 *group/<groupUUID>/<username> removes a user to a group
+	 *group/<groupUUID>/<username>/<password> removes a user to a group
 	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
 		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
-		if(urlSplit.length != 5)
+		if(urlSplit.length != 6)
 		{
 			response.getWriter().print("Incorrect URL format.");
 			return;
 		}
 		String group = urlSplit[3];
 		String username = urlSplit[4];
+		String password = urlSplit[5];
 		
 		UUID groupID = UUID.fromString(group);
 		
@@ -172,6 +192,12 @@ public class GroupServlet extends HttpServlet {
 		if(!UserMethods.userExists(username))
 		{
 			response.getWriter().print("User does not exist");
+			return;
+		}
+		
+		if(Authentication.validateLoginCredentials(username, password) != null)
+		{
+			response.getWriter().print("Invalid username or password.");
 			return;
 		}
 		

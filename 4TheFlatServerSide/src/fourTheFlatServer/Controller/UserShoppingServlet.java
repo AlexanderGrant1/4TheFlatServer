@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fourTheFlatServer.Model.Authentication;
 import fourTheFlatServer.Model.GroupMethods;
 import fourTheFlatServer.Model.MoneyMethods;
 import fourTheFlatServer.Model.UserMethods;
@@ -31,31 +32,30 @@ public class UserShoppingServlet extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-	}
-
 	
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 *usershopping/<username> start shopping session for a user
+	 *usershopping/<username>/<password> start shopping session for a user
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
 		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
-		if(urlSplit.length != 4)
+		if(urlSplit.length != 5)
 		{
 			response.getWriter().print("Incorrect URL format.");
 			return;
 		}
 		String username = urlSplit[3];
+		String password = urlSplit[4];
 		UUID groupID = UserMethods.getGroupIdByUsername(username);
+		
+		if(Authentication.validateLoginCredentials(username, password) != null)
+		{
+			response.getWriter().print("Invalid username or password.");
+			return;
+		}
 		
 		UserMethods.setIsShopping(true, username);
 		GroupMethods.setShopper(username, groupID);

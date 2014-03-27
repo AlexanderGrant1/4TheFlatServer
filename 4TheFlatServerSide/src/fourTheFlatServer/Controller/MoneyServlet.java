@@ -61,19 +61,20 @@ public class MoneyServlet extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 * money/<who is receiving>/<who is giving>
+	 * money/<who is receiving>/<who is giving>/<giverPassword>
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
 		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
-		if(urlSplit.length != 5)
+		if(urlSplit.length != 6)
 		{
 			response.getWriter().print("Incorrect URL format.");
 			return;
 		}
 		String receiver = urlSplit[3];
 		String giver = urlSplit[4];
+		String giverPassword = urlSplit[5];
 		
 		
 		MoneyMethods.clearDebt(receiver, giver);

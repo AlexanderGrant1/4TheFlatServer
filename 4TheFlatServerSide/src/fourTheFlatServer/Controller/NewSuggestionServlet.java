@@ -41,7 +41,7 @@ public class NewSuggestionServlet extends HttpServlet {
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
 		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
-		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
+
 		if (urlSplit.length != 7) {
 			response.getWriter().print("Incorrect URL format.");
 			return;

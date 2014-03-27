@@ -14,6 +14,7 @@ import fourTheFlatServer.Model.GroupMethods;
 import fourTheFlatServer.Model.MessageMethods;
 import fourTheFlatServer.Model.UserMethods;
 import fourTheFlatServer.Stores.Group;
+import fourTheFlatServer.Stores.GroupReturn;
 
 /**
  * Servlet implementation class NewSuggestionServlet
@@ -61,7 +62,7 @@ public class NewSuggestionServlet extends HttpServlet {
 		
 		if(userGroup != null)
 		{
-			Group group = GroupMethods.getGroupByUUID(userGroup);
+			GroupReturn group = GroupMethods.getGroupByUUID(userGroup);
 			if(group.getUsers().size() == 1)
 			{
 				switch(type)

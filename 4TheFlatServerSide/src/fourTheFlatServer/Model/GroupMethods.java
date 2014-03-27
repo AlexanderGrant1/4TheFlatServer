@@ -18,11 +18,12 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 
 import fourTheFlatServer.Stores.Group;
+import fourTheFlatServer.Stores.GroupReturn;
 import fourTheFlatServer.lib.CassandraConnection;
 
 public class GroupMethods {
 
-	public static Group getGroupByUUID(UUID groupID) {
+	public static GroupReturn getGroupByUUID(UUID groupID) {
 
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 
@@ -38,7 +39,7 @@ public class GroupMethods {
 		if (!details.equals(null)) {
 
 			Set<String> emptySet = new HashSet<String>();
-			Group groupDetails = new Group();
+			GroupReturn groupDetails = new GroupReturn();
 
 			groupDetails.setGroupID(details.getUUID("group_id"));
 			groupDetails.setAddress(details.getString("address"));
@@ -57,7 +58,7 @@ public class GroupMethods {
 	}
 
 	public static boolean userRequestPending(UUID groupID, String username) {
-		Group g = GroupMethods.getGroupByUUID(groupID);
+		GroupReturn g = GroupMethods.getGroupByUUID(groupID);
 		Set<String> users = g.getUsers();
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 		for (String user : users) {
@@ -81,7 +82,7 @@ public class GroupMethods {
 	}
 
 	public static boolean productRequestPending(UUID groupID, String product) {
-		Group g = GroupMethods.getGroupByUUID(groupID);
+		GroupReturn g = GroupMethods.getGroupByUUID(groupID);
 		Set<String> users = g.getUsers();
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 		for (String user : users) {
@@ -105,7 +106,7 @@ public class GroupMethods {
 	}
 
 	public static boolean addressMessagePending(UUID groupID) {
-		Group g = GroupMethods.getGroupByUUID(groupID);
+		GroupReturn g = GroupMethods.getGroupByUUID(groupID);
 		Set<String> users = g.getUsers();
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 		for (String user : users) {
@@ -294,7 +295,7 @@ public class GroupMethods {
 
 	}
 
-	public static Group createNewGroup(String userName) {
+	public static GroupReturn createNewGroup(String userName) {
 
 		UUID groupID = java.util.UUID.fromString(new com.eaio.uuid.UUID()
 				.toString());
@@ -309,7 +310,7 @@ public class GroupMethods {
 
 		addUserToGroup(groupID, userName);
 
-		Group newGroup = getGroupByUUID(groupID);
+		GroupReturn newGroup = getGroupByUUID(groupID);
 		session.close();
 		return newGroup;
 	}

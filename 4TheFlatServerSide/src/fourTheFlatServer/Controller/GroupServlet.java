@@ -13,6 +13,7 @@ import fourTheFlatServer.Model.GroupMethods;
 import fourTheFlatServer.Model.MessageMethods;
 import fourTheFlatServer.Model.UserMethods;
 import fourTheFlatServer.Stores.Group;
+import fourTheFlatServer.Stores.GroupReturn;
 import fourTheFlatServer.lib.PojoMapper;
 
 /**
@@ -54,7 +55,7 @@ public class GroupServlet extends HttpServlet {
 			return;
 		}
 		
-		Group group = GroupMethods.getGroupByUUID(groupID);
+		GroupReturn group = GroupMethods.getGroupByUUID(groupID);
 		
 		if(group != null){
 			response.getWriter().print(PojoMapper.toJson(group, true));
@@ -88,7 +89,7 @@ public class GroupServlet extends HttpServlet {
 		//If the user is not already in a group, add them to a group
 		if(UserMethods.getGroupIdByUsername(username) == null)
 		{
-			Group newGroup = GroupMethods.createNewGroup(username);
+			GroupReturn newGroup = GroupMethods.createNewGroup(username);
 			GroupMethods.changeGroupAddress(newGroup.getGroupID(), address);
 			newGroup = GroupMethods.getGroupByUUID(newGroup.getGroupID());
 			response.getWriter().print(PojoMapper.toJson(newGroup, true));
@@ -180,7 +181,7 @@ public class GroupServlet extends HttpServlet {
 		{
 			if(GroupMethods.removeUserFromGroup(username, groupID))
 			{
-				Group userGroup = GroupMethods.getGroupByUUID(groupID);
+				GroupReturn userGroup = GroupMethods.getGroupByUUID(groupID);
 				MessageMethods.deleteUserMessages(username);
 				response.getWriter().print(PojoMapper.toJson(userGroup, true));
 				return;

@@ -87,7 +87,7 @@ public class PrintDBServlet extends HttpServlet {
 	    	 response.getWriter().println("Product history");
 	    	 response.getWriter().println("");
 	    	 
-	    	 LinkedList<Product> prods = ProductMethods.getAllProds(g.getGroupID());
+	    	 LinkedList<Product> prods = ProductMethods.getGroupProds(g.getGroupID());
 	    	 
 	    	 for(Product p : prods)
 	    	 {

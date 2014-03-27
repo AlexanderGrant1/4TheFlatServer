@@ -280,4 +280,5 @@ public class AnalyticMethods {
 		else
 			return 0;
 	}
+	
 }

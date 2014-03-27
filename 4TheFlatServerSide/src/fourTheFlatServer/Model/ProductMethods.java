@@ -31,34 +31,7 @@ public class ProductMethods {
 		return r != null;
 	}
 
-	public static LinkedList<String> getAllProdNames() {
-		LinkedList<String> prodNames = new LinkedList<String>();
-
-		Session session = CassandraConnection.getCluster().connect("flat_db");
-
-		PreparedStatement statement = session
-				.prepare("SELECT product_name from product_list");
-
-		BoundStatement boundStatement = new BoundStatement(statement);
-		ResultSet rs = session.execute(boundStatement);
-
-		if (rs.isExhausted()) {
-			System.out.println("No Products found");
-
-		} else {
-
-			for (Row row : rs) {
-			prodNames.add(row.getString("product_name"));
-			}
-		}
-		
-		session.close();
-		return prodNames;
-	}
-	
-	
-	
-	public static LinkedList<Product> getAllProds(UUID groupID) {
+	public static LinkedList<Product> getGroupProds(UUID groupID) {
 
 		LinkedList<Product> prodList = new LinkedList<Product>();
 
@@ -79,21 +52,23 @@ public class ProductMethods {
 			return null;
 		} else {
 
-			for (Row row : rs) {	
+			for (Row row : rs) {
 				Map<Date, Integer> emptyMap = new HashMap<Date, Integer>();
 				Product rowDetails = new Product();
 
 				rowDetails.setGroupID(row.getUUID("group_id"));
 
 				try {
-					rowDetails.setLast_bought_cost(row.getMap("last_bought_cost", Date.class, Integer.class));
+					rowDetails.setLast_bought_cost(row.getMap(
+							"last_bought_cost", Date.class, Integer.class));
 				} catch (java.lang.NullPointerException e) {
 					rowDetails.setLast_bought_cost(emptyMap);
 				}
 
-				//purchase_frequency int,avg_buy_cost int
+				// purchase_frequency int,avg_buy_cost int
 				rowDetails.setProduct(row.getString("product_name"));
-				rowDetails.setPurchaseFrequency(row.getInt("purchase_frequency"));
+				rowDetails.setPurchaseFrequency(row
+						.getInt("purchase_frequency"));
 				rowDetails.setAvgCost(row.getInt("avg_buy_cost"));
 				prodList.add(rowDetails);
 			}
@@ -103,5 +78,5 @@ public class ProductMethods {
 		session.close();
 		return prodList;
 	}
-	
+
 }

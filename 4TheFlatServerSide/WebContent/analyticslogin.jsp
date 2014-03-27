@@ -56,7 +56,7 @@ function validateLogin()
       <p class="submit"><input type="submit" name="loginButton" value="Login"></p>
     </form>
     <c:if test="${errorMessage != null }">
-    <p><center><font color="#ff0000" >Invalid email address and/or password. </font></center></p>
+    <p><center><font color="#ff0000" >${errorMessage}</font></center></p>
     </c:if>
 </div>
  

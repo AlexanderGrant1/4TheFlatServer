@@ -47,21 +47,28 @@ public class AnalyticsLogin extends HttpServlet {
 
 		if(username == null || password == null)
 		{
-			System.out.println(username + password);
-			response.sendRedirect(request.getContextPath()+"/analyticslogin.jsp");
+			request.setAttribute("errorMessage", "Invalid username and/or password.");
+			request.getRequestDispatcher(request.getContextPath()+"/analyticslogin.jsp").forward(request, response);
 			return;
 		}
 		
 		if(AuthenticateUser.validateLoginCredentials(username, password) == null)
 		{
-			System.out.println("couldn't validate login details");
-			response.sendRedirect(request.getContextPath()+"/analyticslogin.jsp");
+			request.setAttribute("errorMessage", "Invalid username and/or password.");
+			request.getRequestDispatcher(request.getContextPath()+"/analyticslogin.jsp").forward(request, response);
 			return;
 		}
 				
 		User activeUser = UserMethods.getUserByUsername(username);
 		
 		UUID groupID = UserMethods.getGroupIdByUsername(username);
+		
+		if(groupID == null)
+		{
+			request.setAttribute("errorMessage", "You do not have a group.");
+			request.getRequestDispatcher(request.getContextPath()+"/analyticslogin.jsp").forward(request, response);
+			return;
+		}
 
 		request.getSession().setAttribute("activeUser", activeUser);
 		response.sendRedirect(request.getContextPath()+"/groupanalytics/");

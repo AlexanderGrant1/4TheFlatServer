@@ -56,6 +56,47 @@ public class GroupMethods {
 		return null;
 
 	}
+	
+	public static Group getGroupByUUIDAnalytics(UUID groupID) {
+
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+
+		PreparedStatement statement = session
+				.prepare("SELECT * from user_group where group_id = ?");
+
+		BoundStatement boundStatement = new BoundStatement(statement);
+		boundStatement.bind(groupID);
+		ResultSet rs = session.execute(boundStatement);
+
+		Row details = rs.one();
+
+		if (!details.equals(null)) {
+
+			Set<String> emptySet = new HashSet<String>();
+			Group groupDetails = new Group();
+
+			groupDetails
+			.setUserShopping(details.getString("user_shopping"));
+	groupDetails.setLastShopWhere(details.getMap("last_shop_where",
+			Date.class, String.class));
+	groupDetails.setLastShopWho(details.getMap("last_shop_who",
+			Date.class, String.class));
+	groupDetails.setShopCost(details.getMap("shop_cost", Date.class, Integer.class));
+	groupDetails.setAddress(details.getString("address"));
+	groupDetails.setUsers(details.getSet("users", String.class));
+	groupDetails.setUserShopping(details.getString("user_shopping"));
+	groupDetails.setAvgShopCost(details.getInt("avg_shop_cost"));
+	groupDetails.setBestShopper(details.getString("best_shopper"));
+	groupDetails.setTimeBetweenShops(details.getInt("time_between_shops"));
+	groupDetails.setBestStore(details.getString("best_store"));
+			session.close();
+			return groupDetails;
+		}
+		session.close();
+		return null;
+
+	}
+
 
 	public static boolean userRequestPending(UUID groupID, String username) {
 		GroupReturn g = GroupMethods.getGroupByUUID(groupID);

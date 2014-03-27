@@ -204,6 +204,23 @@ public class AnalyticMethods {
 
 		session.close();
 	}
+	
+	public static Map<String, Integer> occurencesMap(Map<Date,String> map)
+	{
+		Map<String, Integer> result = new HashMap<String, Integer>();
+
+		// create a map to count how many times each string appears
+		for (Entry<Date, String> mE : map.entrySet()) {
+
+			if (result.containsKey(mE.getValue())) {
+				result.put(mE.getValue(), result.get(mE.getValue()) + 1);
+			} else {
+				result.put(mE.getValue(), 1);
+			}
+
+		}
+		return result;
+	}
 
 	private static String mostStringMap(Map<Date, String> map) {
 		Map<String, Integer> result = new HashMap<String, Integer>();

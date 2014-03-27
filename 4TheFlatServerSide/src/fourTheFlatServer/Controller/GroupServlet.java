@@ -46,22 +46,22 @@ public class GroupServlet extends HttpServlet {
 		}
 		String username = urlSplit[3];
 
-		
+
 		UUID groupID = UserMethods.getGroupIdByUsername(username);
-		
+
 		if(groupID == null)
 		{
 			System.out.println("Group not found!");
 			return;
 		}
-		
+
 		GroupReturn group = GroupMethods.getGroupByUUID(groupID);
-		
+
 		if(group != null){
 			response.getWriter().print(PojoMapper.toJson(group, true));
-			
+
 		}
-		
+
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class GroupServlet extends HttpServlet {
 		}
 		String username = urlSplit[3];
 		String address = urlSplit[4];
-		
+
 		//Check that the user exists
 		if(!UserMethods.userExists(username))
 		{
@@ -96,7 +96,7 @@ public class GroupServlet extends HttpServlet {
 			return;
 		}
 	}
-	
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 *group/<groupID>/<username> add user to group
@@ -113,7 +113,7 @@ public class GroupServlet extends HttpServlet {
 		}
 		String group = urlSplit[3];
 		String username = urlSplit[4];
-		
+
 		UUID groupID = UUID.fromString(group);
 		//Check that the group we're trying to add a user to exists
 		if(GroupMethods.getGroupByUUID(groupID) == null)
@@ -151,31 +151,31 @@ public class GroupServlet extends HttpServlet {
 		}
 		String group = urlSplit[3];
 		String username = urlSplit[4];
-		
+
 		UUID groupID = UUID.fromString(group);
-		
+
 		UUID userGroupID = UserMethods.getGroupIdByUsername(username);
-		
+
 		if(userGroupID == null)
 		{
 			response.getWriter().print("User is not in the given group.");
 			return;
 		}
-		
+
 		//Check that the group exists before continuing
 		if(GroupMethods.getGroupByUUID(groupID) == null)
 		{
 			response.getWriter().print("Group does not exist");
 			return;
 		}
-		
+
 		//Check that the user exists before continuing
 		if(!UserMethods.userExists(username))
 		{
 			response.getWriter().print("User does not exist");
 			return;
 		}
-		
+
 		//If the user is in the given group then remove them and print the group's JSON
 		if(UserMethods.getGroupIdByUsername(username).equals(groupID))
 		{

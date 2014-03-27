@@ -4,6 +4,10 @@ body {
   background: #0ca3d2;
 }
 
+#titleImage{
+margin-bottom:50px;	
+}
+
 #largecontainer {
 	margin-top:100px;
   position: relative;

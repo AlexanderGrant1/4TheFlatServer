@@ -65,7 +65,9 @@ public class GroupAnalyticsServlet extends HttpServlet {
 		LinkedList<Product> productList = ProductMethods.getGroupProds(groupID);
 		Map<String, Integer> shopMap = AnalyticMethods.occurencesMap(group.getLastShopWhere());
 		Map<String, Integer> userMap = AnalyticMethods.occurencesMap(group.getLastShopWho());
-
+		
+		
+		
 		request.setAttribute("userShopAnalytics", userMap);
 		request.setAttribute("shopAnalytics", shopMap);
 		request.setAttribute("groupAnalytics", ga);

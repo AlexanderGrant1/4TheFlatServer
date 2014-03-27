@@ -94,7 +94,7 @@ public class NewSuggestionServlet extends HttpServlet {
 					}
 					case 2:
 					{
-						UUID groupID = UserMethods.getGroupIdByUsername(suggestion);
+						UUID groupID = UserMethods.getGroupIdByUsername(user);
 						if(GroupMethods.addressMessagePending(groupID))
 						{
 							response.getWriter().print("Address change already pending.");

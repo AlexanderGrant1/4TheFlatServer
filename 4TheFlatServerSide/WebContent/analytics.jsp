@@ -42,8 +42,8 @@
 				</tr>
 				<c:forEach items="${shopAnalytics.entrySet()}" var="individualItem">
 				<tr> 
-					<td><b>${individualItem.getKey() }</b></td>
-					<td>${individualItem.getValue() }</td>
+					<td><b>${individualItem.key }</b></td>
+					<td>${individualItem.value }</td>
 				</tr>
 				</c:forEach>
 			</table>
@@ -55,10 +55,10 @@
 					<td>Flat Member</td>
 					<td>Number of Shops</td>
 				</tr>
-				<c:forEach items="${userShopAnalytics.keySet()}" var="individualItem">
+				<c:forEach items="${userShopAnalytics.entrySet()}" var="individualItem">
 				<tr> 
-					<td><b>${individualItem.getKey() }</b></td>
-					<td>${individualItem.get(individualItem.getKey()) }</td>
+					<td><b>${individualItem.key }</b></td>
+					<td>${individualItem.value }</td>
 				</tr>
 				</c:forEach>
 			</table>

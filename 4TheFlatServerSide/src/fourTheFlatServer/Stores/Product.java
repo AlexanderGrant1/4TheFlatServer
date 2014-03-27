@@ -7,11 +7,12 @@ public class Product {
 	private String product;
 	
 	private UUID groupID;
-	private int purchaseFrequency;
+
 
 	private	Map<Date, Integer> last_bought_cost; 
-	
-	
+	private int purchaseFrequency;
+	private int avgCost;
+		
 	public UUID getGroupID()
 	{
 		return groupID;
@@ -46,6 +47,14 @@ public class Product {
 
 	public void setLast_bought_cost(Map<Date, Integer> last_bought_cost) {
 		this.last_bought_cost = last_bought_cost;
+	}
+
+	public int getAvgCost() {
+		return avgCost;
+	}
+
+	public void setAvgCost(int avgCost) {
+		this.avgCost = avgCost;
 	}
 	
 	

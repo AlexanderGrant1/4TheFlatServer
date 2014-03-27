@@ -91,9 +91,10 @@ public class ProductMethods {
 					rowDetails.setLast_bought_cost(emptyMap);
 				}
 
-
+				//purchase_frequency int,avg_buy_cost int
 				rowDetails.setProduct(row.getString("product_name"));
-
+				rowDetails.setPurchaseFrequency(row.getInt("purchase_frequency"));
+				rowDetails.setAvgCost(row.getInt("avg_buy_cost"));
 				prodList.add(rowDetails);
 			}
 

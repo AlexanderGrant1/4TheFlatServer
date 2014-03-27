@@ -1,6 +1,6 @@
 package fourTheFlatServer.Model;
 
-import java.sql.Date;
+import java.util.Date;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -47,7 +47,7 @@ public class GroupMethods {
 			groupDetails.setShoppingList(details.getMap("shopping_list",
 					String.class, Integer.class));
 			groupDetails.setUsers(details.getSet("users", String.class));
-			groupDetails.setUserShopping(details.getString("user_shopping"));
+
 			session.close();
 			return groupDetails;
 		}
@@ -55,25 +55,22 @@ public class GroupMethods {
 		return null;
 
 	}
-	
-	public static boolean userRequestPending(UUID groupID, String username)
-	{
+
+	public static boolean userRequestPending(UUID groupID, String username) {
 		Group g = GroupMethods.getGroupByUUID(groupID);
 		Set<String> users = g.getUsers();
 		Session session = CassandraConnection.getCluster().connect("flat_db");
-		for(String user : users)
-		{
+		for (String user : users) {
 			PreparedStatement statement = session
 					.prepare("SELECT * FROM user_messages where user_name = ?");
 
 			BoundStatement boundStatement = new BoundStatement(statement);
 			boundStatement.bind(user);
 			ResultSet rs = session.execute(boundStatement);
-			
-			for(Row r : rs)
-			{
-				if(r.getInt("type") == 1 && r.getString("text").equals(username))
-				{
+
+			for (Row r : rs) {
+				if (r.getInt("type") == 1
+						&& r.getString("text").equals(username)) {
 					session.close();
 					return true;
 				}
@@ -82,25 +79,22 @@ public class GroupMethods {
 		session.close();
 		return false;
 	}
-	
-	public static boolean productRequestPending(UUID groupID, String product)
-	{
+
+	public static boolean productRequestPending(UUID groupID, String product) {
 		Group g = GroupMethods.getGroupByUUID(groupID);
 		Set<String> users = g.getUsers();
 		Session session = CassandraConnection.getCluster().connect("flat_db");
-		for(String user : users)
-		{
+		for (String user : users) {
 			PreparedStatement statement = session
 					.prepare("SELECT * FROM user_messages where user_name = ?");
 
 			BoundStatement boundStatement = new BoundStatement(statement);
 			boundStatement.bind(user);
 			ResultSet rs = session.execute(boundStatement);
-			
-			for(Row r : rs)
-			{
-				if(r.getInt("type") == 0 && r.getString("text").equals(product))
-				{
+
+			for (Row r : rs) {
+				if (r.getInt("type") == 0
+						&& r.getString("text").equals(product)) {
 					session.close();
 					return true;
 				}
@@ -109,25 +103,21 @@ public class GroupMethods {
 		session.close();
 		return false;
 	}
-	
-	public static boolean addressMessagePending(UUID groupID)
-	{
+
+	public static boolean addressMessagePending(UUID groupID) {
 		Group g = GroupMethods.getGroupByUUID(groupID);
 		Set<String> users = g.getUsers();
 		Session session = CassandraConnection.getCluster().connect("flat_db");
-		for(String user : users)
-		{
+		for (String user : users) {
 			PreparedStatement statement = session
 					.prepare("SELECT * FROM user_messages where user_name = ?");
 
 			BoundStatement boundStatement = new BoundStatement(statement);
 			boundStatement.bind(user);
 			ResultSet rs = session.execute(boundStatement);
-			
-			for(Row r : rs)
-			{
-				if(r.getInt("type") == 2)
-				{
+
+			for (Row r : rs) {
+				if (r.getInt("type") == 2) {
 					session.close();
 					return true;
 				}
@@ -248,11 +238,11 @@ public class GroupMethods {
 
 	public static boolean addItemToShoppingList(UUID groupID, String product) {
 
-		
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 
 		PreparedStatement statement = session
-				.prepare("UPDATE user_group SET shopping_list= shopping_list+ {'"+product+"' : 0} WHERE group_id = ?");
+				.prepare("UPDATE user_group SET shopping_list= shopping_list+ {'"
+						+ product + "' : 0} WHERE group_id = ?");
 
 		BoundStatement boundStatement = new BoundStatement(statement);
 		boundStatement.bind(groupID);
@@ -390,50 +380,57 @@ public class GroupMethods {
 		Calendar now = Calendar.getInstance();
 		long seconds = now.getTimeInMillis();
 		Date date = new Date(seconds);
-	    Format format = new SimpleDateFormat("yyyy-MM-dd");
+		Format format = new SimpleDateFormat("yyyy-MM-dd");
 		String tStamp = format.format(date).toString();
-		
-		
+
 		Map<String, Integer> list = getShoppingList(groupID);
 
 		for (Map.Entry<String, Integer> m : list.entrySet()) {
 			if (m.getValue() != 0) {
 				cost += m.getValue();
 				removeItemFromShoppingList(groupID, m.getKey());
-				updateProductGroupDetails(groupID, m.getKey(), m.getValue(), tStamp);
+				updateProductGroupDetails(groupID, m.getKey(), m.getValue(),
+						tStamp);
 			}
 		}
 
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 
-		// ,last_shop_where = last_shop_where +{'2014-01-01':'Dundee Riverside Extra'
-		
-	PreparedStatement statment = session
-				.prepare("Update user_group SET shop_cost = shop_cost + {'"+tStamp+"':"+cost+"}, "
-						+ "last_shop_who = last_shop_who + {'"+tStamp+"':'"+who+"'},"
-						+ "last_shop_where = last_shop_where +{'"+tStamp+"':'"+where+"'}"
+		// ,last_shop_where = last_shop_where +{'2014-01-01':'Dundee Riverside
+		// Extra'
+
+		PreparedStatement statment = session
+				.prepare("Update user_group SET shop_cost = shop_cost + {'"
+						+ tStamp + "':" + cost + "}, "
+						+ "last_shop_who = last_shop_who + {'" + tStamp + "':'"
+						+ who + "'}," + "last_shop_where = last_shop_where +{'"
+						+ tStamp + "':'" + where + "'}"
 						+ " where group_id = ?;");
 		BoundStatement boundStatement = new BoundStatement(statment);
 		boundStatement.bind(groupID);
 		session.execute(boundStatement);
-				
+
 		return cost;
 	}
-	
 
-	public static void updateProductGroupDetails(UUID groupID, String prod, int price, String tStamp) {
+	public static void updateProductGroupDetails(UUID groupID, String prod,
+			int price, String tStamp) {
 
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 
-	PreparedStatement statment = session
-				.prepare("Update product_list SET last_bought_cost = last_bought_cost + {'"+tStamp+"':"+price+"} where product_name = ? and group_id = ?;");
+		PreparedStatement statment = session
+				.prepare("Update product_list SET last_bought_cost = last_bought_cost + {'"
+						+ tStamp
+						+ "':"
+						+ price
+						+ "} where product_name = ? and group_id = ?;");
 		BoundStatement boundStatement = new BoundStatement(statment);
-		boundStatement.bind(prod,groupID);
+		boundStatement.bind(prod, groupID);
 		session.execute(boundStatement);
 		session.close();
 
 	}
-	
+
 	public static boolean setProductPrice(UUID groupID, String prod, int price) {
 
 		Session session = CassandraConnection.getCluster().connect("flat_db");
@@ -448,7 +445,6 @@ public class GroupMethods {
 		return true;
 	}
 
-	
 	public static LinkedList<Group> getAllGroups() {
 
 		LinkedList<Group> groupList = new LinkedList<Group>();
@@ -491,10 +487,21 @@ public class GroupMethods {
 					groupDetails.setShoppingList(emptyMap);
 				}
 
+				groupDetails
+						.setUserShopping(row.getString("user_shopping"));
+				groupDetails.setLastShopWhere(row.getMap("last_shop_where",
+						Date.class, String.class));
+				groupDetails.setLastShopWho(row.getMap("last_shop_who",
+						Date.class, String.class));
+				groupDetails.setShopCost(row.getMap("shop_cost", Date.class, Integer.class));
 				groupDetails.setAddress(row.getString("address"));
 				groupDetails.setUsers(row.getSet("users", String.class));
 				groupDetails.setUserShopping(row.getString("user_shopping"));
-
+				groupDetails.setAvgShopCost(row.getInt("avg_shop_cost"));
+				groupDetails.setBestShopper(row.getString("best_shopper"));
+				groupDetails.setTimeBetweenShops(row
+						.getInt("time_between_shops"));
+				groupDetails.setBestStore(row.getString("best_store"));
 				groupList.add(groupDetails);
 			}
 
@@ -503,6 +510,5 @@ public class GroupMethods {
 		session.close();
 		return groupList;
 	}
-	
-	
+
 }

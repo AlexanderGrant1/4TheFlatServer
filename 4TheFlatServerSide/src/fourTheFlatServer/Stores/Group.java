@@ -16,6 +16,10 @@ public class Group {
 	private Map<Date,Integer> shopCost;
 	private Map<Date,String> lastShopWhere;
 	private Map<Date,String> lastShopWho;
+	private String bestShopper;
+	private int timeBetweenShops;
+	private int avgShopCost;
+	private String bestStore;
 	
 	public UUID getGroupID()
 	{
@@ -100,6 +104,38 @@ public class Group {
 
 	public void setLastShopWho(Map<Date,String> lastShopWho) {
 		this.lastShopWho = lastShopWho;
+	}
+
+	public String getBestShopper() {
+		return bestShopper;
+	}
+
+	public void setBestShopper(String bestShopper) {
+		this.bestShopper = bestShopper;
+	}
+
+	public int getTimeBetweenShops() {
+		return timeBetweenShops;
+	}
+
+	public void setTimeBetweenShops(int timeBetweenShops) {
+		this.timeBetweenShops = timeBetweenShops;
+	}
+
+	public int getAvgShopCost() {
+		return avgShopCost;
+	}
+
+	public void setAvgShopCost(int avgShopCost) {
+		this.avgShopCost = avgShopCost;
+	}
+
+	public String getBestStore() {
+		return bestStore;
+	}
+
+	public void setBestStore(String bestStore) {
+		this.bestStore = bestStore;
 	}
 
 	

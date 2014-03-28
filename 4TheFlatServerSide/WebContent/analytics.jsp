@@ -42,6 +42,19 @@ function showNewAnalytics()
     		        }                  
     	    });
 }
+
+function logout()
+{
+    	$.ajax({
+    		cache: false,//internet explorer support
+    	    type:'DELETE',
+    	    url: "${pageContext.request.contextPath}/analyticslogin/",
+    		    success: 
+    		        function(msg){
+    		    		document.location = "${pageContext.request.contextPath}/analyticslogin";
+    		        }                  
+    	    });
+}
 </script>
 </head>
 <body>
@@ -140,7 +153,7 @@ function showNewAnalytics()
 			</table>
 		</div>
 		</center>
-</html>
 </div>
 </body>
+<button type="button" onclick="logout()">Logout</button>
 </html>

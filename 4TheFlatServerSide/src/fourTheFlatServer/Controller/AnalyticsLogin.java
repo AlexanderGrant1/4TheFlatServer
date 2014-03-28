@@ -74,5 +74,9 @@ public class AnalyticsLogin extends HttpServlet {
 		request.getSession().setAttribute("activeUser", activeUser);
 		response.sendRedirect(request.getContextPath()+"/groupanalytics/");
 	}
+	
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	request.getSession().invalidate();
+	}
 
 }

@@ -106,6 +106,7 @@ function showNewAnalytics()
 					<td>Average Shop Cost</td>
 					<td>Favourite Shop</td>
 					<td>Favourite Product</td>
+					<td>Average Time Between Shops</td>
 				</tr>
 				<c:forEach items="${userList}" var="individualUser">
 				<tr> 
@@ -113,6 +114,7 @@ function showNewAnalytics()
 					<td>${individualUser.getAvgShopCost() }</td>
 					<td>${individualUser.getFavShop() }</td>
 					<td>${individualUser.getFavProduct() }</td>
+					<td>${individualUser.getAvgShopWhen() } days</td>
 				</tr>
 				</c:forEach>
 			</table>

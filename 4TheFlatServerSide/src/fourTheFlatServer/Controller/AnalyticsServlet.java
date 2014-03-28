@@ -93,6 +93,7 @@ public class AnalyticsServlet extends HttpServlet {
         	AnalyticMethods.userFavProd(user);
         	AnalyticMethods.userAvgShop(user);
         	AnalyticMethods.userFavShop(user);
+        	AnalyticMethods.userAvgShopWhen(user);
         }
         
        

@@ -16,7 +16,7 @@ public class User {
 	private String favProduct;
 	private String favShop;
 	private int avgShopCost;
-	
+	private int avgShopWhen;
 	
 	public String getUsername()
 	{
@@ -101,6 +101,14 @@ public class User {
 
 	public void setAvgShopCost(int avgShopCost) {
 		this.avgShopCost = avgShopCost;
+	}
+
+	public int getAvgShopWhen() {
+		return avgShopWhen;
+	}
+
+	public void setAvgShopWhen(int avgShopWhen) {
+		this.avgShopWhen = avgShopWhen;
 	}
 
 }

@@ -75,7 +75,7 @@
 				</c:forEach>
 			</table>
 		</div>
-								<h2><center>Product Price Analytics</center></h2>
+								<h2><center>Average Price Each User Pays Per Product</center></h2>
 				<div class="CSS_Table_Example" style="width:600px;">
 			<table >
 			<tr> 
@@ -89,7 +89,7 @@
 				<tr> 
 					<td><b>${individualProduct.getProduct() }</b></td>
 					<c:forEach items="${userList}" var="individualUser">
-						<td><b>${individualUser.getAveragePrice(${individualProduct.getProduct() })}</b></td>
+						<td><b>${individualUser.getAveragePrice(individualProduct.getProduct() )}</b></td>
 					</c:forEach>
 				</tr>
 				</c:forEach>

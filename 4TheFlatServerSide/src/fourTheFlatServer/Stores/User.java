@@ -120,4 +120,8 @@ public class User {
 		this.avgProdSpend = avgProdSpend;
 	}
 
+	public int getAveragePrice(String productName)
+	{
+		return avgProdSpend.get(productName);
+	}
 }

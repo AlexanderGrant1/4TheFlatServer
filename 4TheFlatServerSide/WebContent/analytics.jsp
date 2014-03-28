@@ -10,7 +10,7 @@
   <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Group Analytics</title>
-<div id="titleImage"><img src="${pageContext.request.contextPath}/img/title.jpg"></div>
+<div id="titleImage"><img src="${pageContext.request.contextPath}/img/title.jpg" width="100%"></div>
 <script>
 $(document).ready(function(){
 	
@@ -119,7 +119,28 @@ function showNewAnalytics()
 				</c:forEach>
 			</table>
 		</div>
+								<h2><center>Product Price Analytics</center></h2>
+				<div class="CSS_Table_Example" style="width:600px;">
+			<table >
+			<tr> 
+			<td><b>Products</b></td>
+				<c:forEach items="${userList}" var="individualUser">
+				<td><b>${individualUser.getUsername() }</b></td>
+				</c:forEach>
+				</tr>
+								
+				<c:forEach items="${groupProducts}" var="individualProduct">
+				<tr> 
+					<td><b>${individualProduct.getProduct() }</b></td>
+					<c:forEach items="${userList}" var="individualUser">
+						<td><b>${individualUser.getAveragePrice("Milk")}</b></td>
+					</c:forEach>
+				</tr>
+				</c:forEach>
+			</table>
+		</div>
 		</center>
+</html>
 </div>
 </body>
 </html>

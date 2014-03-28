@@ -75,5 +75,25 @@
 				</c:forEach>
 			</table>
 		</div>
+								<h2><center>Product Price Analytics</center></h2>
+				<div class="CSS_Table_Example" style="width:600px;">
+			<table >
+			<tr> 
+			
+				<c:forEach items="${userList}" var="individualUser">
+				<td><b>${individualUser.getUsername() }</b></td>
+				</c:forEach>
+				</tr>
+								
+				<c:forEach items="${groupProducts}" var="individualProduct">
+				<tr> 
+					<td><b>${individualProduct.getProduct() }</b></td>
+					<c:forEach items="${userList}" var="individualUser">
+						<td><b>${individualUser.getAveragePrice(individualProduct.getProduct()) }</b></td>
+					</c:forEach>
+				</tr>
+				</c:forEach>
+			</table>
+		</div>
 		</center>
 </html>

@@ -91,7 +91,7 @@ public class AnalyticsServlet extends HttpServlet {
 		
         for(String user : group.getUsers())
         {
-        	AnalyticMethods.userFavProd(user);
+        	AnalyticMethods.userCalcProdHistory(user);
         	AnalyticMethods.userAvgShop(user);
         	AnalyticMethods.userFavShop(user);
         	AnalyticMethods.userAvgShopWhen(user);

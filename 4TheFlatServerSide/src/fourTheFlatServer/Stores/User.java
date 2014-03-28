@@ -122,6 +122,18 @@ public class User {
 
 	public int getAveragePrice(String productName)
 	{
-		return avgProdSpend.get(productName);
+		if(avgProdSpend == null)
+		{
+			return 0;
+		}
+		System.out.println(productName + " hello");
+		if(avgProdSpend.containsKey(productName))
+		{
+			return avgProdSpend.get(productName);
+		}	
+		else
+		{
+			return 0;
+		}
 	}
 }

@@ -233,5 +233,12 @@ public class UserMethods {
 	
 	}
 	
+	public static int getAveragePrice(String productName, String username)
+	{
+		User user = getUserByUsername(username);
+		
+		Map<String, Integer> map = user.getAvgProdSpend();
+		return map.get(productName);
+	}
 	
 }

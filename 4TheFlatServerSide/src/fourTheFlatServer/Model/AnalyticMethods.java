@@ -253,6 +253,52 @@ public class AnalyticMethods {
 		return winner;
 	}
 
+	public static int userAvgShopWhen(String username)
+	{
+		UUID groupID = UserMethods.getGroupIdByUsername(username);
+
+		Group g = GroupMethods.getGroupByUUIDAnalytics(groupID);
+
+		Set<Date> when = whenUserShopped(g.getLastShopWho(), username);
+		
+		
+		DateTime first = null;
+		DateTime last = null;
+
+		int i = 0;
+		for (Date d : when) {
+
+			DateTime dt = new DateTime(d);
+			if (last == null || dt.compareTo(last) < 0) {
+				last = dt;
+			} else if (first == null || dt.compareTo(first) > 0) {
+				first = dt;
+			}
+
+			i++;
+		}
+
+		int days = 0;
+		System.out.println("FIRST: "+first+"      LAST: "+last);		
+		if (last != null && first != null) {
+	
+			days = (Days.daysBetween(last, first).getDays() / i);
+		}
+		
+		
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+		PreparedStatement statment = session
+				.prepare("UPDATE users SET avg_shop_when = ? where user_name = ?");
+
+		BoundStatement boundStatement = new BoundStatement(statment);
+		boundStatement.bind(days, username);
+		session.execute(boundStatement);
+
+		session.close();
+		
+		return days;
+	}
+	
 	public static String userFavProd(String username) {
 
 		return "";
@@ -269,7 +315,7 @@ public class AnalyticMethods {
 			Map<Date, Integer> costWhen = g.getShopCost();
 
 			int total = 0;
-			int counter = 0;
+			int counter = 1;
 
 			for (Date d : when) {		
 				total += costWhen.get(d);

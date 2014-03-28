@@ -48,7 +48,7 @@ public class GroupMethods {
 			groupDetails.setShoppingList(details.getMap("shopping_list",
 					String.class, Integer.class));
 			groupDetails.setUsers(details.getSet("users", String.class));
-
+			groupDetails.setUserShopping(details.getString("user_shopping"));
 			session.close();
 			return groupDetails;
 		}

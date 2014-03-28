@@ -4,10 +4,10 @@
 <html>
 <h1>Group Analytics</h1>
 <h2><center>Basic Group Analytics</center></h2>
-<p><b>Most Active Shopper: </b> ${groupAnalytics.bestShopper}</p>
-<p><b>Most Popular Shop: </b> ${groupAnalytics.bestStore }</p>
-<p><b>Average Shop Cost: </b> ${averageShopCost }</p>
-<p><b>Average Time Between Shops: </b> ${averageTimeBetween }</p>
+<p><b>Most Active Shopper: </b> ${groupAnalytics.bestShopper}.</p>
+<p><b>Most Popular Shop: </b> ${groupAnalytics.bestStore }.</p>
+<p><b>Average Shop Cost: </b> ${averageShopPrice } pence.</p>
+<p><b>Average Time Between Shops: </b> ${averageTimeBetween } days.</p>
 <h2><center>Average Price Paid Per Product</center></h2>
 <center>
 		<div class="CSS_Table_Example" style="width:600px;">

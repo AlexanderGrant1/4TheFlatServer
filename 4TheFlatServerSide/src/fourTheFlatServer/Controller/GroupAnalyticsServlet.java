@@ -68,6 +68,7 @@ public class GroupAnalyticsServlet extends HttpServlet {
 		Map<String, Integer> shopMap = AnalyticMethods.occurencesMap(group.getLastShopWhere());
 		Map<String, Integer> userMap = AnalyticMethods.occurencesMap(group.getLastShopWho());
 		int averageShopPrice = AnalyticMethods.calcAvgCost(groupID);
+		int averageTimeBetween = AnalyticMethods.calcAvgShopWhen(groupID);
 		
 		ValueComparator bvc =  new ValueComparator(shopMap);
 		
@@ -91,6 +92,7 @@ public class GroupAnalyticsServlet extends HttpServlet {
         	}); 
 		
 		request.setAttribute("user", request.getSession().getAttribute("activeUser"));
+		request.setAttribute("averageTimeBetween", averageTimeBetween);
 		request.setAttribute("averageShopPrice", averageShopPrice);
 		request.setAttribute("userShopAnalytics", sorted_user_map);
 		request.setAttribute("shopAnalytics", sorted_shop_map);

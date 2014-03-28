@@ -19,6 +19,7 @@ import fourTheFlatServer.General.ValueComparator;
 import fourTheFlatServer.Model.AnalyticMethods;
 import fourTheFlatServer.Model.GroupMethods;
 import fourTheFlatServer.Model.ProductMethods;
+import fourTheFlatServer.Model.UserMethods;
 import fourTheFlatServer.Stores.Group;
 import fourTheFlatServer.Stores.GroupAnalytics;
 import fourTheFlatServer.Stores.Product;
@@ -90,7 +91,14 @@ public class GroupAnalyticsServlet extends HttpServlet {
         	        return 0;
         	   }
         	}); 
-		
+        
+
+        LinkedList<User> userList = new LinkedList<User>();
+        for(String user: group.getUsers())
+        {
+        	userList.add(UserMethods.getUserByUsername(user));
+        }
+		request.setAttribute("userList", userList);
 		request.setAttribute("user", request.getSession().getAttribute("activeUser"));
 		request.setAttribute("averageTimeBetween", averageTimeBetween);
 		request.setAttribute("averageShopPrice", averageShopPrice);

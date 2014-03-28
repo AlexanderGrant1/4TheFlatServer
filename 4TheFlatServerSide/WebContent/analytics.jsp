@@ -98,6 +98,25 @@ function showNewAnalytics()
 				</c:forEach>
 			</table>
 		</div>
+						<h2><center>Group Member Statistics</center></h2>
+				<div class="CSS_Table_Example" style="width:600px;">
+			<table >
+				<tr> 
+					<td>Flat Member</td>
+					<td>Average Shop Cost</td>
+					<td>Favourite Shop</td>
+					<td>Favourite Product</td>
+				</tr>
+				<c:forEach items="${userList}" var="individualUser">
+				<tr> 
+					<td><b>${individualUser.getUsername() }</b></td>
+					<td>${individualUser.getAvgShopCost() }</td>
+					<td>${individualUser.getFavShop() }</td>
+					<td>${individualUser.getFavProduct() }</td>
+				</tr>
+				</c:forEach>
+			</table>
+		</div>
 		</center>
 </div>
 </body>

@@ -1,6 +1,7 @@
 package fourTheFlatServer.Controller;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.UUID;
 
 import javax.servlet.ServletException;
@@ -10,7 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fourTheFlatServer.Model.AnalyticMethods;
+import fourTheFlatServer.Model.GroupMethods;
+import fourTheFlatServer.Model.UserMethods;
+import fourTheFlatServer.Stores.Group;
 import fourTheFlatServer.Stores.GroupAnalytics;
+import fourTheFlatServer.Stores.User;
 import fourTheFlatServer.lib.PojoMapper;
 
 /**
@@ -74,13 +79,22 @@ public class AnalyticsServlet extends HttpServlet {
 		UUID groupID = UUID.fromString(groupId);
 		
 		GroupAnalytics ga = new GroupAnalytics();
-		
+		Group group = GroupMethods.getGroupByUUIDAnalytics(groupID);
 		
 		//BEST SHOPPER
 		ga.setBestShopper(AnalyticMethods.calcBestShopper(groupID));
 		ga.setBestStore(AnalyticMethods.calcBestStore(groupID));
 		ga.setTimeBetweenShops(AnalyticMethods.calcAvgShopWhen(groupID));
 		ga.setAvgShopCost(AnalyticMethods.calcAvgCost(groupID));
+		
+        for(String user : group.getUsers())
+        {
+        	AnalyticMethods.userFavProd(user);
+        	AnalyticMethods.userAvgShop(user);
+        	AnalyticMethods.userFavShop(user);
+        }
+        
+       
 				
 		
 		AnalyticMethods.upDateGroupProducts(groupID);

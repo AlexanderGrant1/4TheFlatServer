@@ -97,7 +97,6 @@ public class GroupMethods {
 
 	}
 
-
 	public static boolean userRequestPending(UUID groupID, String username) {
 		GroupReturn g = GroupMethods.getGroupByUUID(groupID);
 		Set<String> users = g.getUsers();

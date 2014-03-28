@@ -17,6 +17,7 @@ public class User {
 	private String favShop;
 	private int avgShopCost;
 	private int avgShopWhen;
+	private Map<String, Integer> avgProdSpend;
 	
 	public String getUsername()
 	{
@@ -109,6 +110,14 @@ public class User {
 
 	public void setAvgShopWhen(int avgShopWhen) {
 		this.avgShopWhen = avgShopWhen;
+	}
+
+	public Map<String, Integer> getAvgProdSpend() {
+		return avgProdSpend;
+	}
+
+	public void setAvgProdSpend(Map<String, Integer> avgProdSpend) {
+		this.avgProdSpend = avgProdSpend;
 	}
 
 }

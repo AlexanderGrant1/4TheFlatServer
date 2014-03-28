@@ -83,6 +83,7 @@ public class UserMethods {
 		user.setFavShop(r.getString("best_shop"));
 		user.setAvgShopCost(r.getInt("avg_shop_cost"));
 		user.setAvgShopWhen(r.getInt("avg_shop_when"));
+		user.setAvgProdSpend(r.getMap("avg_spend_prod", String.class, Integer.class));
 		session.close();
 		return user;
 	}

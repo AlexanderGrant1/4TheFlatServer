@@ -253,15 +253,13 @@ public class AnalyticMethods {
 		return winner;
 	}
 
-	public static int userAvgShopWhen(String username)
-	{
+	public static int userAvgShopWhen(String username) {
 		UUID groupID = UserMethods.getGroupIdByUsername(username);
 
 		Group g = GroupMethods.getGroupByUUIDAnalytics(groupID);
 
 		Set<Date> when = whenUserShopped(g.getLastShopWho(), username);
-		
-		
+
 		DateTime first = null;
 		DateTime last = null;
 
@@ -279,13 +277,12 @@ public class AnalyticMethods {
 		}
 
 		int days = 0;
-		System.out.println("FIRST: "+first+"      LAST: "+last);		
+		System.out.println("FIRST: " + first + "      LAST: " + last);
 		if (last != null && first != null) {
-	
+
 			days = (Days.daysBetween(last, first).getDays() / i);
 		}
-		
-		
+
 		Session session = CassandraConnection.getCluster().connect("flat_db");
 		PreparedStatement statment = session
 				.prepare("UPDATE users SET avg_shop_when = ? where user_name = ?");
@@ -295,13 +292,86 @@ public class AnalyticMethods {
 		session.execute(boundStatement);
 
 		session.close();
-		
+
 		return days;
 	}
-	
-	public static String userFavProd(String username) {
 
-		return "";
+	public static void userCalcProdHistory(String username) {
+
+		UUID groupID = UserMethods.getGroupIdByUsername(username);
+
+		Group g = GroupMethods.getGroupByUUIDAnalytics(groupID);
+
+		Set<Date> when = whenUserShopped(g.getLastShopWho(), username);
+
+		LinkedList<Product> prods = ProductMethods.getGroupProds(groupID);
+
+		// count how many times a user bought a product
+		Map<String, Integer> prodCount = new HashMap<String, Integer>();
+
+		// stores the avg spend on a product by a user
+		Map<String, Integer> userSpend = new HashMap<String, Integer>();
+
+		if (prods != null) {
+			// for every product bought by the group
+			for (Product p : prods) {
+				// count how many times the product appears
+				int count = 0;
+				// store when and for how much the prod was bought
+				Map<Date, Integer> prodDeets = p.getLast_bought_cost();
+				// stores total amount spent on product by user
+				int totalSpend = 0;
+				// for every date the user shopped
+				for (Date d : when) {
+					// if the product was bought on that date
+					if (prodDeets.containsKey(d)) {
+						count++;
+						totalSpend += prodDeets.get(d);
+					}
+				}
+				// store hoe many times the product was bought by the user
+				prodCount.put(p.getProduct(), count);
+				if (count > 0) {
+					// store the average amount the user spent on the prod
+					userSpend.put(p.getProduct(), (totalSpend / count));
+				}
+			}
+
+			System.out.println("COUNT: " + prodCount.toString());
+
+			int highest = 0;
+			String winner = "";
+			for (Entry<String, Integer> s : prodCount.entrySet()) {
+
+				if (s.getValue() >= highest) {
+					highest = s.getValue();
+					winner = s.getKey();
+				}
+
+			}
+
+			Session session = CassandraConnection.getCluster().connect(
+					"flat_db");
+
+			PreparedStatement statment = session
+					.prepare("UPDATE users SET best_prod = ? where user_name = ?");
+
+			BoundStatement boundStatement = new BoundStatement(statment);
+			boundStatement.bind(winner, username);
+			session.execute(boundStatement);
+
+			PreparedStatement storAvgSpend = session
+					.prepare("UPDATE users SET avg_spend_prod = ? where user_name = ?");
+
+			BoundStatement boundStatement2 = new BoundStatement(storAvgSpend);
+			boundStatement2.bind(userSpend, username);
+			session.execute(boundStatement2);
+
+			session.close();
+
+			System.out.println("PRICE: " + userSpend.toString());
+		}
+
 	}
 
 	public static int userAvgShop(String username) {
@@ -317,15 +387,15 @@ public class AnalyticMethods {
 			int total = 0;
 			int counter = 1;
 
-			for (Date d : when) {		
+			for (Date d : when) {
 				total += costWhen.get(d);
-				counter ++;
+				counter++;
 			}
-			
+
 			int avg = total / counter;
 
-			
-			Session session = CassandraConnection.getCluster().connect("flat_db");
+			Session session = CassandraConnection.getCluster().connect(
+					"flat_db");
 
 			PreparedStatement statment = session
 					.prepare("UPDATE users SET avg_shop_cost = ? where user_name = ?");
@@ -335,7 +405,7 @@ public class AnalyticMethods {
 			session.execute(boundStatement);
 
 			session.close();
-			
+
 			return avg;
 		}
 

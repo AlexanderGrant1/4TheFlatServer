@@ -52,6 +52,7 @@ public class AnalyticsServlet extends HttpServlet {
 		response.getWriter().println("SHOP: "+AnalyticMethods.userFavShop(groupId));
 		response.getWriter().println("COST: "+AnalyticMethods.userAvgShop(groupId));
 		response.getWriter().println("DAYS: "+AnalyticMethods.userAvgShopWhen(groupId));
+		AnalyticMethods.userCalcProdHistory(groupId);
 		//UUID groupID = UUID.fromString(groupId);
 		
 		/*

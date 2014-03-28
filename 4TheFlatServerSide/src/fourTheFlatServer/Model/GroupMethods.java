@@ -422,7 +422,7 @@ public class GroupMethods {
 		Calendar now = Calendar.getInstance();
 		long seconds = now.getTimeInMillis();
 		Date date = new Date(seconds);
-		Format format = new SimpleDateFormat("yyyy-MM-dd");
+		Format format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String tStamp = format.format(date).toString();
 
 		Map<String, Integer> list = getShoppingList(groupID);

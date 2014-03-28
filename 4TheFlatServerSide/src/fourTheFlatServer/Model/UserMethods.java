@@ -79,6 +79,9 @@ public class UserMethods {
 		user.setMoney(r.getMap("money", String.class, Integer.class));
 		user.setPendingProducts(r.getSet("products_to_add", String.class));
 		user.setPendingUsers(r.getSet("users_to_add", String.class));
+		user.setFavProduct(r.getString("best_prod"));
+		user.setFavShop(r.getString("best_shop"));
+		user.setAvgShopCost(r.getInt("avg_shop_cost"));
 		session.close();
 		return user;
 	}

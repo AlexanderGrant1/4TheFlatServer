@@ -33,6 +33,7 @@ public class AnalyticsServlet extends HttpServlet {
 	 *analytics/<groupId> returns the analytical data for that group
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
 		String requestURI = request.getRequestURI();
 		String[] urlSplit = requestURI.split("/");
 		urlSplit = fourTheFlatServer.General.Utils.formatStringArray(urlSplit);
@@ -42,13 +43,18 @@ public class AnalyticsServlet extends HttpServlet {
 			return;
 		}
 		String groupId = urlSplit[3];
-		UUID groupID = UUID.fromString(groupId);
 		
+		response.getWriter().println("SHOP: "+AnalyticMethods.userFavShop(groupId));
+		response.getWriter().println("COST: "+AnalyticMethods.userAvgShop(groupId));
+		//UUID groupID = UUID.fromString(groupId);
+		
+		/*
 		GroupAnalytics ga = AnalyticMethods.dataForAGroup(groupID);
 		
 		String s = PojoMapper.toJson(ga, true);
 		
 		response.getWriter().println(s);
+		*/
 	}
 
 	/**

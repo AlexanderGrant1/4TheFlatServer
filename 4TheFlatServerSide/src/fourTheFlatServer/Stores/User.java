@@ -13,6 +13,10 @@ public class User {
 	private Set<String> pendingUsers;
 	private Map<String, Integer> money;
 	private String preferedAddress; 
+	private String favProduct;
+	private String favShop;
+	private int avgShopCost;
+	
 	
 	public String getUsername()
 	{
@@ -73,6 +77,30 @@ public class User {
 
 	public void setMoney(Map<String, Integer> money) {
 		this.money = money;
+	}
+
+	public String getFavProduct() {
+		return favProduct;
+	}
+
+	public void setFavProduct(String favProduct) {
+		this.favProduct = favProduct;
+	}
+
+	public String getFavShop() {
+		return favShop;
+	}
+
+	public void setFavShop(String favShop) {
+		this.favShop = favShop;
+	}
+
+	public int getAvgShopCost() {
+		return avgShopCost;
+	}
+
+	public void setAvgShopCost(int avgShopCost) {
+		this.avgShopCost = avgShopCost;
 	}
 
 }

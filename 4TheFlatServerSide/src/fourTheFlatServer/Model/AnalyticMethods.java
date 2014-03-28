@@ -2,11 +2,13 @@ package fourTheFlatServer.Model;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.UUID;
 
 import org.joda.time.DateTime;
@@ -18,6 +20,7 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
 
+import fourTheFlatServer.Stores.Group;
 import fourTheFlatServer.Stores.GroupAnalytics;
 import fourTheFlatServer.Stores.Product;
 import fourTheFlatServer.lib.CassandraConnection;
@@ -196,7 +199,7 @@ public class AnalyticMethods {
 						.prepare("UPDATE product_list SET purchase_frequency = ?, avg_buy_cost = ? where product_name = ?  and group_id = ?");
 
 				BoundStatement boundStatement2 = new BoundStatement(updateProds);
-				boundStatement2.bind(days,cost,prod,groupID);
+				boundStatement2.bind(days, cost, prod, groupID);
 				session.execute(boundStatement2);
 			}
 
@@ -204,9 +207,113 @@ public class AnalyticMethods {
 
 		session.close();
 	}
-	
-	public static Map<String, Integer> occurencesMap(Map<Date,String> map)
-	{
+
+	public static String userFavShop(String username) {
+
+		UUID groupID = UserMethods.getGroupIdByUsername(username);
+
+		Group g = GroupMethods.getGroupByUUIDAnalytics(groupID);
+
+		Set<Date> when = whenUserShopped(g.getLastShopWho(), username);
+
+		Map<Date, String> shopWhere = g.getLastShopWhere();
+		Map<String, Integer> shopCount = new HashMap<String, Integer>();
+
+		for (Date d : when) {
+			String shop = shopWhere.get(d);
+			if (shopCount.containsKey(shop)) {
+				shopCount.put(shop, shopCount.get(shop) + 1);
+			} else {
+				shopCount.put(shop, 1);
+			}
+		}
+
+		int highest = 0;
+		String winner = "";
+		for (Entry<String, Integer> s : shopCount.entrySet()) {
+
+			if (s.getValue() >= highest) {
+				highest = s.getValue();
+				winner = s.getKey();
+			}
+
+		}
+
+		Session session = CassandraConnection.getCluster().connect("flat_db");
+
+		PreparedStatement statment = session
+				.prepare("UPDATE users SET best_shop = ? where user_name = ?");
+
+		BoundStatement boundStatement = new BoundStatement(statment);
+		boundStatement.bind(winner, username);
+		session.execute(boundStatement);
+
+		session.close();
+
+		return winner;
+	}
+
+	public static String userFavProd(String username) {
+
+		return "";
+	}
+
+	public static int userAvgShop(String username) {
+		UUID groupID = UserMethods.getGroupIdByUsername(username);
+
+		Group g = GroupMethods.getGroupByUUIDAnalytics(groupID);
+
+		Set<Date> when = whenUserShopped(g.getLastShopWho(), username);
+
+		if (when != null) {
+			Map<Date, Integer> costWhen = g.getShopCost();
+
+			int total = 0;
+			int counter = 0;
+
+			for (Date d : when) {		
+				total += costWhen.get(d);
+				counter ++;
+			}
+			
+			int avg = total / counter;
+
+			
+			Session session = CassandraConnection.getCluster().connect("flat_db");
+
+			PreparedStatement statment = session
+					.prepare("UPDATE users SET avg_shop_cost = ? where user_name = ?");
+
+			BoundStatement boundStatement = new BoundStatement(statment);
+			boundStatement.bind(avg, username);
+			session.execute(boundStatement);
+
+			session.close();
+			
+			return avg;
+		}
+
+		else {
+			return 0;
+		}
+	}
+
+	public static Set<Date> whenUserShopped(Map<Date, String> userShops,
+			String username) {
+		Set<Date> result = new HashSet<Date>();
+
+		for (Entry<Date, String> s : userShops.entrySet()) {
+
+			if (s.getValue().equals(username)) {
+				result.add(s.getKey());
+			}
+
+		}
+
+		return result;
+	}
+
+	public static Map<String, Integer> occurencesMap(Map<Date, String> map) {
 		Map<String, Integer> result = new HashMap<String, Integer>();
 
 		// create a map to count how many times each string appears
@@ -297,5 +404,5 @@ public class AnalyticMethods {
 		else
 			return 0;
 	}
-	
+
 }

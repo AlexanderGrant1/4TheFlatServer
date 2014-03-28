@@ -2,8 +2,10 @@ package fourTheFlatServer.Controller;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.Map.Entry;
 
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fourTheFlatServer.General.ValueComparator;
 import fourTheFlatServer.Model.AnalyticMethods;
 import fourTheFlatServer.Model.GroupMethods;
 import fourTheFlatServer.Model.ProductMethods;
@@ -45,7 +48,7 @@ public class GroupAnalyticsServlet extends HttpServlet {
 
 		User activeUser = (User)request.getSession().getAttribute("activeUser");
 		
-		if(activeUser == null)
+		if(activeUser == null && !"XMLHttpRequest".equals(request.getHeader("X-Requested-With")))
 		{
 			response.sendRedirect(request.getContextPath()+"/analyticslogin.jsp");
 			return;
@@ -53,13 +56,12 @@ public class GroupAnalyticsServlet extends HttpServlet {
 		
 		UUID groupID = activeUser.getGroupID();
 		
-		if(groupID == null)
+		if(groupID == null && !"XMLHttpRequest".equals(request.getHeader("X-Requested-With")))
 		{
 			request.setAttribute("errorMessage", "You are not part of a group.");
 			request.getRequestDispatcher(request.getContextPath()+"/analyticslogin.jsp");
 			return;
 		}
-		System.out.println("called");
 		Group group = GroupMethods.getGroupByUUIDAnalytics(groupID);
 		GroupAnalytics ga = AnalyticMethods.dataForAGroup(groupID);
 		LinkedList<Product> productList = ProductMethods.getGroupProds(groupID);
@@ -67,10 +69,31 @@ public class GroupAnalyticsServlet extends HttpServlet {
 		Map<String, Integer> userMap = AnalyticMethods.occurencesMap(group.getLastShopWho());
 		int averageShopPrice = AnalyticMethods.calcAvgCost(groupID);
 		
+		ValueComparator bvc =  new ValueComparator(shopMap);
+		
+        TreeMap<String,Integer> sorted_shop_map = new TreeMap<String,Integer>(bvc);
+        sorted_shop_map.putAll(shopMap);
+        ValueComparator bvc2 =  new ValueComparator(userMap);
+        TreeMap<String,Integer> sorted_user_map = new TreeMap<String,Integer>(bvc2);
+        sorted_user_map.putAll(userMap);
+        
+        Collections.sort(productList, new Comparator<Product>(){
+        	   @Override
+        	   public int compare(Product o1, Product o2){
+        	        if(o1.getAvgCost() > o2.getAvgCost()){
+        	           return -1; 
+        	        }
+        	        if(o1.getAvgCost() < o2.getAvgCost()){
+        	           return 1; 
+        	        }
+        	        return 0;
+        	   }
+        	}); 
+		
 		request.setAttribute("user", request.getSession().getAttribute("activeUser"));
 		request.setAttribute("averageShopPrice", averageShopPrice);
-		request.setAttribute("userShopAnalytics", userMap);
-		request.setAttribute("shopAnalytics", shopMap);
+		request.setAttribute("userShopAnalytics", sorted_user_map);
+		request.setAttribute("shopAnalytics", sorted_shop_map);
 		request.setAttribute("groupAnalytics", ga);
 		request.setAttribute("groupProducts", productList);
 		if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))){

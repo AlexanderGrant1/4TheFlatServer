@@ -79,7 +79,7 @@
 				<div class="CSS_Table_Example" style="width:600px;">
 			<table >
 			<tr> 
-			
+			<td><b>Products</b></td>
 				<c:forEach items="${userList}" var="individualUser">
 				<td><b>${individualUser.getUsername() }</b></td>
 				</c:forEach>
@@ -89,7 +89,7 @@
 				<tr> 
 					<td><b>${individualProduct.getProduct() }</b></td>
 					<c:forEach items="${userList}" var="individualUser">
-						<td><b>${individualUser.getAveragePrice(individualProduct.getProduct()) }</b></td>
+						<td><b>${individualUser.getAveragePrice(${individualProduct.getProduct() })}</b></td>
 					</c:forEach>
 				</tr>
 				</c:forEach>

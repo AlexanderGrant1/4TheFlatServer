@@ -34,7 +34,8 @@ public class AnalyticsLogin extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		response.sendRedirect(request.getContextPath()+"/analyticslogin.jsp");
+		return;
 	}
 
 	/**
@@ -55,7 +56,7 @@ public class AnalyticsLogin extends HttpServlet {
 		if(AuthenticateUser.validateLoginCredentials(username, password) == null)
 		{
 			request.setAttribute("errorMessage", "Invalid username and/or password.");
-			request.getRequestDispatcher(request.getContextPath()+"/analyticslogin.jsp").forward(request, response);
+			request.getRequestDispatcher("analyticslogin.jsp").forward(request, response);
 			return;
 		}
 				
@@ -66,7 +67,7 @@ public class AnalyticsLogin extends HttpServlet {
 		if(groupID == null)
 		{
 			request.setAttribute("errorMessage", "You do not have a group.");
-			request.getRequestDispatcher(request.getContextPath()+"/analyticslogin.jsp").forward(request, response);
+			request.getRequestDispatcher("analyticslogin.jsp").forward(request, response);
 			return;
 		}
 

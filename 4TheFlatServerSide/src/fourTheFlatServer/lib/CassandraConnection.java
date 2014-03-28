@@ -53,6 +53,7 @@ public  final class CassandraConnection {
 		   return sHosts;
 	}
 	public static Cluster initialiseCluster(){
+		System.out.println("hello");
 		cluster = Cluster.builder()
 		         .addContactPoint(Host).build();
 			getHosts(cluster);		

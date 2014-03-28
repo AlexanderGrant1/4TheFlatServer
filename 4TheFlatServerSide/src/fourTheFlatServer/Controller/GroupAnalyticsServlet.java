@@ -59,21 +59,36 @@ public class GroupAnalyticsServlet extends HttpServlet {
 			request.getRequestDispatcher(request.getContextPath()+"/analyticslogin.jsp");
 			return;
 		}
-		
+		System.out.println("called");
 		Group group = GroupMethods.getGroupByUUIDAnalytics(groupID);
 		GroupAnalytics ga = AnalyticMethods.dataForAGroup(groupID);
 		LinkedList<Product> productList = ProductMethods.getGroupProds(groupID);
 		Map<String, Integer> shopMap = AnalyticMethods.occurencesMap(group.getLastShopWhere());
 		Map<String, Integer> userMap = AnalyticMethods.occurencesMap(group.getLastShopWho());
+		int averageShopPrice = AnalyticMethods.calcAvgCost(groupID);
 		
-		
-		
+		request.setAttribute("user", request.getSession().getAttribute("activeUser"));
+		request.setAttribute("averageShopPrice", averageShopPrice);
 		request.setAttribute("userShopAnalytics", userMap);
 		request.setAttribute("shopAnalytics", shopMap);
 		request.setAttribute("groupAnalytics", ga);
 		request.setAttribute("groupProducts", productList);
-		request.getRequestDispatcher("/analytics.jsp").forward(request, response);	
+		if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))){
+			if(activeUser != null)
+			{
+				request.getRequestDispatcher("/analyticstable.jsp").forward(request, response);	
+			}
+			else
+			{
+				request.getRequestDispatcher("/notloggedin.jsp").forward(request, response);	
+			}
 		}
+		else
+		{
+			request.getRequestDispatcher("/analytics.jsp").forward(request, response);
+		
+		}
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
